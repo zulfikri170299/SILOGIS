@@ -46,20 +46,20 @@
     }
 
     .service-tile {
-        background: rgba(255, 255, 255, 0.82);
-        border: 1px solid rgba(0, 0, 0, 0.04);
-        border-radius: 1.25rem;
+        background: #ffffff;
+        border: 1px solid #f1f5f9;
+        border-radius: 1.5rem;
         transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         display: flex;
         flex-direction: row;
         align-items: center;
         text-align: left;
         gap: 1.5rem;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
-        min-height: 120px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
+        min-height: 125px;
         transform-style: preserve-3d;
         perspective: 1000px;
-        animation: card-float 6s ease-in-out infinite;
+        animation: card-float 8s ease-in-out infinite;
     }
 
     .service-tile:nth-child(even) {
@@ -252,7 +252,7 @@
 </section>
 
 <!-- ELITE HUB: Leader & Ecosystem -->
-<section id="layanan" class="pt-32 pb-12 bg-white/40 backdrop-blur-md px-8 relative">
+<section id="layanan" class="pt-4 pb-32 bg-white/40 backdrop-blur-md px-8 relative scroll-mt-32">
     <div class="max-w-[1440px] mx-auto">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
             <!-- Pimpinan Card - Compact Scale -->
@@ -262,13 +262,18 @@
                     <div class="aspect-[4/4.2] w-full rounded-[1.5rem] overflow-hidden mb-4 border-4 border-slate-100 shadow-sm mx-auto">
                          <img src="{{ $profile->photo ? (str_contains($profile->photo, 'pimpinan.png') ? asset($profile->photo) : asset('storage/' . $profile->photo)) : asset('pimpinan.png') }}" class="h-full w-full object-cover transition-all duration-1000 group-hover:scale-105" alt="Karolog">
                     </div>
-                    <div class="text-center md:text-left px-2">
-                        <span class="text-brand-primary font-black uppercase tracking-[0.4em] text-[10px] mb-1 block">KAROLOG POLDA NTB</span>
-                        <h3 class="text-lg font-black text-slate-800 italic uppercase font-outfit mb-2 leading-tight">{!! nl2br(e($profile->name ?? 'Kombes Pol. Puji Prayitno, S.I.K., M.H.')) !!}</h3>
+                    <div class="text-left px-4">
+                        <span class="text-brand-primary font-black uppercase tracking-[0.4em] text-[10px] mb-3 block">KAROLOG POLDA NTB</span>
+                        <h3 class="text-2xl font-black text-slate-800 italic uppercase font-outfit mb-4 leading-tight">
+                            {!! nl2br(e($profile->name ?? 'KOMBES POL SAPTO PRIYONO')) !!}
+                        </h3>
 
-                        <p class="text-slate-600 font-bold italic text-[10px] leading-snug border-l-2 border-brand-primary pl-3">
-                            "{{ $profile->quote ?? 'Inovasi logistik adalah fondasi dari kesuksesan operasional kepolisian modern.' }}"
-                        </p>
+                        <div class="relative">
+                            <svg class="absolute -top-3 -left-3 w-6 h-6 text-slate-200 opacity-50" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21L14.017 18C14.017 16.8954 14.9124 16 16.017 16H19.017C19.5693 16 20.017 15.5523 20.017 15V9C20.017 8.44772 19.5693 8 19.017 8H16.017C15.4647 8 15.017 8.44772 15.017 9V12C15.017 12.5523 14.5693 13 14.017 13H13.017V21H14.017ZM6.017 21L6.017 18C6.017 16.8954 6.91243 16 8.017 16H11.017C11.5693 16 12.017 15.5523 12.017 15V9C12.017 8.44772 11.5693 8 11.017 8H8.017C7.46472 8 7.017 8.44772 7.017 9V12C7.017 12.5523 6.5693 13 6.017 13H5.017V21H6.017Z" /></svg>
+                            <p class="text-slate-500 font-medium italic text-xs leading-relaxed pl-4">
+                                "{{ $profile->quote ?? 'Logistik bukan hanya tentang pengadaan, tapi tentang memastikan setiap personel memiliki dukungan terbaik untuk menjaga keamanan masyarakat NTB. Kami berkomitmen pada transparansi dan modernisasi layanan di era digital ini.' }}"
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -276,8 +281,12 @@
             <!-- Services Grid - Expanded -->
             <div class="lg:col-span-9 space-y-12 pt-6 reveal-on-scroll" style="transition-delay: 0.2s;">
                 <div class="space-y-4">
-                    <h2 class="text-4xl md:text-6xl font-black uppercase leading-none elite-3d-red inline-block mb-2">Layanan <span class="elite-3d-yellow">Digital</span></h2>
-                    <p class="text-slate-600 text-lg font-medium max-w-4xl leading-relaxed">{{ $profile->ecosystem_description ?? 'Akses cepat ke seluruh ekosistem digital biro logistik polda ntb dalam satu ubin kendali.' }}</p>
+                    <h2 class="text-5xl md:text-7xl font-black italic uppercase font-outfit tracking-tighter bg-gradient-to-r from-red-600 via-orange-500 via-yellow-500 via-amber-800 to-black bg-clip-text text-transparent leading-tight">
+                        Layanan Digital
+                    </h2>
+                    <p class="text-slate-600 text-lg font-medium max-w-2xl leading-relaxed border-l-4 border-brand-primary pl-6">
+                        {{ $profile->ecosystem_description ?? 'Biro Logistik Polda NTB menghadirkan layanan digital untuk mempermudah pendataan, pengajuan, monitoring, dan pelaporan logistik secara cepat, akurat, dan transparan.' }}
+                    </p>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -291,7 +300,7 @@
                                 @endif
                             </div>
                             <div class="flex-1 relative z-10 pr-4">
-                                <h4 class="text-sm font-black text-slate-800 uppercase font-outfit leading-tight group-hover:text-brand-primary transition-colors mb-1">{{ $app->title }}</h4>
+                                <h4 class="text-lg md:text-xl font-black text-slate-800 uppercase font-outfit leading-tight group-hover:text-white transition-colors mb-2">{{ $app->title }}</h4>
                                 <p class="text-[10px] font-medium text-slate-500 leading-relaxed line-clamp-2 italic">
                                     {{ $app->description ?? 'Portal akses digital biro logistik polda ntb untuk mendukung efisiensi operasional.' }}
                                 </p>
@@ -311,7 +320,7 @@
 </section>
 
 <!-- NEWS WALL: Instagram Style Feed -->
-<section id="berita" class="pt-12 pb-12 bg-slate-50 px-8 reveal-on-scroll">
+<section id="berita" class="pt-4 pb-32 bg-slate-50 px-8 reveal-on-scroll scroll-mt-32">
     <div class="max-w-[1440px] mx-auto">
         <div class="flex items-center justify-between gap-10 mb-12">
             <h2 class="text-3xl font-bold text-[#1e293b] font-jakarta tracking-tight">Berita Terbaru Biro Logistik</h2>
@@ -379,7 +388,7 @@
 </section>
 
 <!-- ELITE DOKUMEN REPOSITORY -->
-<section id="dokumen" class="pt-12 pb-12 bg-white px-8 relative overflow-hidden reveal-on-scroll">
+<section id="dokumen" class="pt-4 pb-32 bg-white px-8 relative overflow-hidden reveal-on-scroll scroll-mt-32">
     <div class="absolute top-0 right-0 w-1/3 h-full bg-slate-50/50 -skew-x-12 translate-x-1/2"></div>
     <div class="max-w-[1440px] mx-auto relative z-10 w-full">
         <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-8">
@@ -519,20 +528,41 @@
 </script>
 
 <!-- ELITE STRUKTUR: COMMAND -->
-<section id="struktur" class="pt-12 pb-40 bg-slate-50 px-8 relative overflow-hidden reveal-on-scroll">
+<section id="struktur" class="pt-4 pb-44 bg-slate-50 px-8 relative overflow-hidden reveal-on-scroll scroll-mt-32">
     <div class="absolute -bottom-1/4 -right-1/4 w-[800px] h-[800px] bg-brand-primary/10 blur-[150px] rounded-full point-events-none"></div>
-    <div class="max-w-[1440px] mx-auto flex flex-col items-center relative z-10 w-full">
-        <div class="text-center mb-20 space-y-6">
-            <span class="text-brand-primary font-black uppercase tracking-[0.5em] text-[10px] block">Institutional Core</span>
-            <h2 class="text-4xl font-black italic uppercase font-outfit tracking-tighter bg-gradient-to-r from-red-600 via-yellow-500 to-black bg-clip-text text-transparent">Alur Komando <br> Presisi Digital.</h2>
-            <div class="h-1 w-40 bg-brand-primary mx-auto rounded-full"></div>
+    <div class="max-w-[1440px] mx-auto relative z-10 w-full">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-8">
+            <div class="space-y-4">
+                <h2 class="text-2xl md:text-3xl font-black italic uppercase font-outfit tracking-[0.3em] bg-gradient-to-r from-red-600 via-orange-500 via-yellow-500 via-amber-800 to-black bg-clip-text text-transparent leading-none">
+                    Struktur Organisasi
+                </h2>
+                <div class="h-1.5 w-64 bg-brand-primary rounded-full"></div>
+            </div>
         </div>
 
-        <div class="w-full py-20 flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-[3rem] bg-white/50">
-             <div class="h-16 w-16 bg-white rounded-2xl shadow-sm flex items-center justify-center text-slate-300 mb-4">
-                <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
-             </div>
-             <p class="text-xs font-black text-slate-400 uppercase tracking-widest italic">Pembaruan Struktur Sedang Diproses</p>
+        <div class="w-full">
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-x-2 gap-y-12">
+                @php
+                    // Meratakan pohon menjadi list (opsional, atau bisa tampilkan root saja tergantung keinginan user)
+                    // Untuk sementara kita tampilkan semua personil secara flat agar rapi tanpa bagan.
+                    $allPersonnels = \App\Models\Organogram::orderBy('order')->get();
+                @endphp
+                
+                @foreach($allPersonnels as $person)
+                    <div class="reveal-on-scroll">
+                        @include('components.org-card', ['node' => $person])
+                    </div>
+                @endforeach
+
+                @if($allPersonnels->isEmpty())
+                    <div class="col-span-full py-20 bg-slate-50 rounded-[3rem] border border-dashed border-slate-200 flex flex-col items-center justify-center text-center px-8">
+                         <div class="h-20 w-20 bg-white rounded-3xl shadow-sm flex items-center justify-center text-slate-300 mb-6">
+                            <svg class="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+                         </div>
+                         <h4 class="text-sm font-black text-slate-400 uppercase tracking-widest italic">Data Personil Belum Diinput</h4>
+                    </div>
+                @endif
+            </div>
         </div>
     </div>
 </section>

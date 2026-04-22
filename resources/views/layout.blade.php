@@ -50,7 +50,7 @@
             border: 1px solid rgba(0, 0, 0, 0.05);
             border-radius: 2rem;
             z-index: 1000;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
             box-shadow: 0 10px 40px -10px rgba(0,0,0,0.08);
         }
         
@@ -85,6 +85,10 @@
             border-radius: 2px;
         }
         .nav-link:hover::after { width: 100%; }
+        
+        /* Active State */
+        .nav-link.active { color: #0062ff; }
+        .nav-link.active::after { width: 100%; }
 
 
         .dot-pattern {
@@ -230,7 +234,15 @@
             <!-- Desktop Links -->
             <div class="hidden lg:flex items-center gap-10">
                 <div class="flex items-center gap-8">
-                    @php $links = ['Beranda' => '/', 'Layanan' => '#layanan', 'Berita' => '#berita', 'Dokumen' => '#dokumen', 'Struktur' => '#struktur']; @endphp
+                    @php 
+                        $links = [
+                            'Beranda' => url('/'), 
+                            'Layanan' => url('/') . '#layanan', 
+                            'Berita' => url('/') . '#berita', 
+                            'Dokumen' => url('/') . '#dokumen', 
+                            'Struktur' => url('/') . '#struktur'
+                        ]; 
+                    @endphp
                     @foreach($links as $name => $url)
                         <a href="{{ $url }}" class="nav-link">{{ $name }}</a>
                     @endforeach
@@ -257,7 +269,7 @@
     </main>
 
     <!-- Elite Footer Light -->
-    <footer class="bg-white py-24 border-t border-slate-200 relative overflow-hidden">
+    <footer class="bg-white pt-10 pb-24 border-t border-slate-200 relative overflow-hidden">
         <div class="max-w-7xl mx-auto px-8 relative z-10">
             <div class="grid grid-cols-1 lg:grid-cols-4 gap-20">
                 <div class="col-span-2">
@@ -312,26 +324,60 @@ Peningkatan Layanan Dukungan Personel.')) !!}
     </a>
 
     <script>
+        // Scroll Management
         window.addEventListener('scroll', () => {
             const nav = document.getElementById('main-nav');
-            if (window.scrollY > 50) {
+            if (window.scrollY > 100) {
                 nav.classList.add('nav-scrolled');
             } else {
                 nav.classList.remove('nav-scrolled');
             }
+
+            // Scrollspy Logic
+            updateActiveLink();
         });
 
-        // Reveal on Scroll
-        const observerOptions = { threshold: 0.1 };
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
+        // Scrollspy Function
+        function updateActiveLink() {
+            const sections = ['layanan', 'berita', 'dokumen', 'struktur'];
+            const scrollPos = window.scrollY + 200; // Offset for navbar
+
+            let currentSection = '';
+            
+            sections.forEach(id => {
+                const el = document.getElementById(id);
+                if (el && scrollPos >= el.offsetTop) {
+                    currentSection = id;
                 }
             });
-        }, observerOptions);
 
-        document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+                const href = link.getAttribute('href');
+                if (href.includes('#' + currentSection) || (currentSection === '' && href === "{{ url('/') }}")) {
+                    if (currentSection !== '' || href === "{{ url('/') }}") {
+                        link.classList.add('active');
+                    }
+                }
+            });
+        }
+
+        // Initialize on Load
+        document.addEventListener('DOMContentLoaded', () => {
+            updateActiveLink();
+            
+            // Intersection Observer for Reveal
+            const observerOptions = { threshold: 0.1 };
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
+        });
     </script>
 </body>
 </html>
