@@ -15,6 +15,7 @@ class Profile extends Model
         'years_of_service',
         'integrity_service',
         'photo',
-        'ecosystem_description'
+        'ecosystem_description',
+        'whatsapp'
     ];
 }

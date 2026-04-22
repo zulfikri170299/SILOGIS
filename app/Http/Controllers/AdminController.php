@@ -170,7 +170,12 @@ class AdminController extends Controller
             'integrity_service' => 'nullable|string',
             'ecosystem_description' => 'nullable|string',
             'photo' => 'nullable|image|max:2048',
+            'whatsapp' => 'nullable|string',
         ]);
+
+        if ($request->has('whatsapp') && !empty($validated['whatsapp'])) {
+            $validated['whatsapp'] = preg_replace('/^0/', '62', preg_replace('/[^0-9]/', '', $validated['whatsapp']));
+        }
 
         if ($request->hasFile('photo')) {
             // Delete old photo if it's not the default placeholder

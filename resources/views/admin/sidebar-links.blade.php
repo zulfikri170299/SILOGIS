@@ -18,6 +18,18 @@
     Kelola Berita
 </a>
 
+<a href="{{ route('admin.document-folders.index') }}" 
+   class="group flex items-center gap-x-3 rounded-xl p-3 text-sm font-bold leading-6 transition-all {{ request()->routeIs('admin.document-folders.*') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
+    <svg class="h-6 w-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" /></svg>
+    Folder Dokumen
+</a>
+
+<a href="{{ route('admin.documents.index') }}" 
+   class="group flex items-center gap-x-3 rounded-xl p-3 text-sm font-bold leading-6 transition-all {{ request()->routeIs('admin.documents.*') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
+    <svg class="h-6 w-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+    Kelola Dokumen
+</a>
+
 <a href="{{ route('admin.organograms.index') }}" 
    class="group flex items-center gap-x-3 rounded-xl p-3 text-sm font-bold leading-6 transition-all {{ request()->routeIs('admin.organograms.*') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
     <svg class="h-6 w-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>

@@ -3,9 +3,12 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PortalController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\DocumentFolderController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [PortalController::class, 'index'])->name('portal.index');
+Route::get('/folders/{documentFolder}/download', [PortalController::class, 'downloadFolder'])->name('portal.folders.download');
 Route::get('/news/{news:slug}', [PortalController::class, 'show'])->name('portal.news.show');
 
 Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
@@ -33,6 +36,10 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
 
     // Organograms Management
     Route::resource('organograms', App\Http\Controllers\OrganogramController::class)->except(['show']);
+
+    // Documents Management
+    Route::resource('documents', DocumentController::class);
+    Route::resource('document-folders', DocumentFolderController::class);
 });
 
 // Redirect default dashboard to admin dashboard

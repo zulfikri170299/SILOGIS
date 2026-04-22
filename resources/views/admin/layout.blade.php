@@ -72,8 +72,11 @@
 
         <!-- Static Sidebar for Desktop -->
         <div class="hidden lg:flex lg:w-72 lg:flex-col lg:bg-slate-900 border-r border-white/5">
-            <div class="flex h-16 shrink-0 items-center px-8 border-b border-white/5">
-                <span class="text-xl font-black text-white tracking-[0.2em] uppercase italic font-outfit">SILOGIS</span>
+            <div class="flex h-20 shrink-0 items-center px-8 border-b border-white/5">
+                <div class="flex flex-col">
+                    <span class="text-xl font-black italic font-outfit uppercase tracking-[0.2em] bg-gradient-to-r from-red-600 via-yellow-500 to-black bg-clip-text text-transparent">SILOGIS</span>
+                    <span class="text-[7px] font-black text-slate-400 uppercase tracking-[0.1em] mt-1">Sistem Informasi Logistik</span>
+                </div>
             </div>
             <nav class="mt-8 flex-1 px-4 space-y-1.5 overflow-y-auto">
                 @include('admin.sidebar-links')
