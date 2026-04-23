@@ -183,70 +183,111 @@
         filter: drop-shadow(15px 15px 30px rgba(0,0,0,0.2));
     }
 
-    .logo-3d-left .logo-3d {
-        transform: rotateY(25deg) rotateX(5deg);
-        animation: logo-tilt-left 10s ease-in-out infinite;
+    /* LOGO ANIMATION RIGHT */
+    .animate-logo-float {
+        animation: logo-float-3d 8s ease-in-out infinite;
+        transform-style: preserve-3d;
+        perspective: 1000px;
     }
 
-    .logo-3d-right .logo-3d {
-        transform: rotateY(-25deg) rotateX(5deg);
-        animation: logo-tilt-right 10s ease-in-out infinite;
+    @keyframes logo-float-3d {
+        0%, 100% { 
+            transform: translateY(0) rotateY(-20deg) rotateX(2deg); 
+            filter: drop-shadow(15px 15px 30px rgba(0,0,0,0.2));
+        }
+        50% { 
+            transform: translateY(-20px) rotateY(-10deg) rotateX(-2deg); 
+            filter: drop-shadow(25px 35px 50px rgba(0,0,0,0.3));
+        }
     }
 
-    @keyframes logo-tilt-left {
-        0%, 100% { transform: rotateY(25deg) rotateX(5deg) scale(1); }
-        50% { transform: rotateY(15deg) rotateX(2deg) scale(1.05); }
+    /* GLASS CARD HERO */
+    .hero-glass-card {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 1.5rem;
+        padding: 1.5rem;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        position: relative;
+        overflow: hidden;
+        transition: all 0.5s ease;
     }
-
-    @keyframes logo-tilt-right {
-        0%, 100% { transform: rotateY(-25deg) rotateX(5deg) scale(1); }
-        50% { transform: rotateY(-15deg) rotateX(2deg) scale(1.05); }
+    .hero-glass-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 3px;
+        height: 100%;
+        background: #0062ff;
+    }
+    .hero-glass-card:hover {
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateY(-5px);
     }
 </style>
 
 
 <!-- ELITE HERO SECTION -->
 <section class="elite-hero mesh-gradient overflow-hidden">
-    <!-- Floating Background Elements -->
-    <div class="absolute top-1/4 -left-20 w-96 h-96 bg-brand-primary/20 blur-[120px] rounded-full animate-float"></div>
-    <div class="absolute bottom-1/4 -right-20 w-[500px] h-[500px] bg-red-600/10 blur-[150px] rounded-full animate-float" style="animation-delay: -2s;"></div>
-
-    <!-- 3D Background Logos -->
-    <div class="logo-3d-left">
-        <img src="{{ asset('Lambang_Polda_NTB.png') }}" class="logo-3d" alt="Lambang Polda NTB 3D">
-    </div>
-    <div class="logo-3d-right">
-        <img src="{{ asset('log polri.png') }}" class="logo-3d" alt="POLRI 3D Logo Right">
-    </div>
-
-    <div class="max-w-7xl mx-auto px-8 relative z-20 text-center">
-        <div class="reveal-on-scroll">
-            <span class="inline-block px-4 py-2 rounded-full bg-white/10 border border-white/20 text-white text-[10px] font-black uppercase tracking-[0.3em] mb-8">
-                BIRO LOGISTIK POLDA NTB
-            </span>
-            <h1 class="text-6xl md:text-8xl font-black uppercase font-outfit tracking-[0.05em] leading-tight mb-6 reveal-on-scroll">
-                <span class="elite-shimmer-effect px-2 py-4 filter drop-shadow-[0_5px_15px_rgba(220,38,38,0.4)]">SILOGIS</span>
-            </h1>
-            <p class="text-xl md:text-2xl font-black italic text-white uppercase font-outfit tracking-widest mb-10 opacity-90">
-                Sistem Informasi Logistik
-            </p>
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
-                @auth
-                    <a href="{{ route('admin.dashboard') }}" class="group relative px-10 py-5 bg-red-600 text-white rounded-2xl font-black uppercase tracking-widest text-xs overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-2xl shadow-red-600/20 italic">
-                        <span class="relative z-10 flex items-center gap-2">Buka Dashboard &rarr;</span>
-                        <div class="absolute inset-0 shimmer-effect opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                    </a>
-                @else
-                    <a href="{{ route('login') }}" class="group relative px-10 py-5 bg-red-600 text-white rounded-2xl font-black uppercase tracking-widest text-xs overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-2xl shadow-red-600/20 italic">
-                        <span class="relative z-10">Akses Platform</span>
-                        <div class="absolute inset-0 shimmer-effect opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                    </a>
-                @endauth
-                <a href="#layanan" class="group relative px-10 py-5 bg-brand-primary text-white rounded-2xl font-black uppercase tracking-widest text-xs overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-2xl shadow-brand-primary/20 italic">
-                    <span class="relative z-10">Aplikasi Logistik</span>
-                    <div class="absolute inset-0 shimmer-effect opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                </a>
+    <div class="max-w-[1600px] mx-auto px-8 relative z-20 w-full pt-20">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+            
+            <!-- LEFT: Visi Misi (3/12) -->
+            <div class="lg:col-span-3 hidden lg:flex flex-col gap-6 reveal-on-scroll">
+                <div class="hero-glass-card">
+                    <h4 class="text-brand-primary font-black uppercase tracking-[0.2em] text-sm mb-3">Visi Kami</h4>
+                    <p class="text-white text-sm font-bold italic leading-snug drop-shadow-lg">
+                        "{{ $profile->vision ?? 'Menjadi Biro Logistik yang Modern, Profesional, dan Terpercaya.' }}"
+                    </p>
+                </div>
+                <div class="hero-glass-card">
+                    <h4 class="text-red-500 font-black uppercase tracking-[0.2em] text-sm mb-3">Misi Kami</h4>
+                    <div class="text-white text-sm font-bold italic leading-relaxed space-y-2 pr-4">
+                         {!! nl2br(e($profile->mission ?? 'Penyelenggaraan Manajemen Aset Transparan.
+Pengembangan Infrastruktur Digital Logistik.')) !!}
+                    </div>
+                </div>
             </div>
+
+            <!-- CENTER: Main Brand (6/12) -->
+            <div class="lg:col-span-6 text-center reveal-on-scroll">
+                <span class="inline-block px-4 py-2 rounded-full bg-white/10 border border-white/20 text-white text-[10px] font-black uppercase tracking-[0.3em] mb-8">
+                    BIRO LOGISTIK POLDA NTB
+                </span>
+                <h1 class="text-6xl md:text-8xl font-black uppercase font-outfit tracking-[0.05em] leading-tight mb-6">
+                    <span class="elite-shimmer-effect px-2 py-4 filter drop-shadow-[0_5px_15px_rgba(220,38,38,0.4)]">SILOGIS</span>
+                </h1>
+                <p class="text-xl md:text-2xl font-black italic text-white uppercase font-outfit tracking-widest mb-10 opacity-90">
+                    Sistem Informasi Logistik
+                </p>
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
+                    @auth
+                        <a href="{{ route('admin.dashboard') }}" class="group relative px-10 py-5 bg-red-600 text-white rounded-2xl font-black uppercase tracking-widest text-xs overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-2xl shadow-red-600/20 italic">
+                            <span class="relative z-10 flex items-center gap-2">Buka Dashboard &rarr;</span>
+                            <div class="absolute inset-0 shimmer-effect opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        </a>
+                    @else
+                        <a href="{{ route('login') }}" class="group relative px-10 py-5 bg-red-600 text-white rounded-2xl font-black uppercase tracking-widest text-xs overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-2xl shadow-red-600/20 italic">
+                            <span class="relative z-10">Akses Platform</span>
+                            <div class="absolute inset-0 shimmer-effect opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        </a>
+                    @endauth
+                    <a href="#layanan" class="group relative px-10 py-5 bg-brand-primary text-white rounded-2xl font-black uppercase tracking-widest text-xs overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-2xl shadow-brand-primary/20 italic">
+                        <span class="relative z-10">Aplikasi Logistik</span>
+                        <div class="absolute inset-0 shimmer-effect opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- RIGHT: Logo (3/12) -->
+            <div class="lg:col-span-3 hidden lg:flex justify-center reveal-on-scroll">
+                <div class="logo-outer group">
+                     <img src="{{ asset('log polri.png') }}" class="w-48 h-auto filter drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)] animate-logo-float brightness-110 contrast-110" alt="POLRI Logo">
+                </div>
+            </div>
+
         </div>
     </div>
 </section>
@@ -281,7 +322,7 @@
             <!-- Services Grid - Expanded -->
             <div class="lg:col-span-9 space-y-12 pt-6 reveal-on-scroll" style="transition-delay: 0.2s;">
                 <div class="space-y-4">
-                    <h2 class="text-5xl md:text-7xl font-black italic uppercase font-outfit tracking-tighter bg-gradient-to-r from-red-600 via-orange-500 via-yellow-500 via-amber-800 to-black bg-clip-text text-transparent leading-tight">
+                    <h2 class="text-3xl md:text-5xl font-black uppercase font-outfit tracking-[0.1em] bg-gradient-to-r from-red-600 via-orange-500 via-yellow-500 via-amber-800 to-black bg-clip-text text-transparent leading-tight">
                         Layanan Digital
                     </h2>
                     <p class="text-slate-600 text-lg font-medium max-w-2xl leading-relaxed border-l-4 border-brand-primary pl-6">
