@@ -230,7 +230,7 @@
 
 
 <!-- ELITE HERO SECTION -->
-<section class="elite-hero mesh-gradient overflow-hidden">
+<section x-show="activeSection === 'beranda'" x-cloak class="elite-hero mesh-gradient overflow-hidden">
     <div class="max-w-[1600px] mx-auto px-8 relative z-20 w-full pt-20">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
             
@@ -293,7 +293,7 @@ Pengembangan Infrastruktur Digital Logistik.')) !!}
 </section>
 
 <!-- ELITE HUB: Leader & Ecosystem -->
-<section id="layanan" class="pt-4 pb-32 bg-white/40 backdrop-blur-md px-8 relative scroll-mt-32">
+<section id="layanan" x-show="activeSection === 'layanan'" x-cloak class="pt-32 pb-32 bg-white/40 backdrop-blur-md px-8 relative">
     <div class="max-w-[1440px] mx-auto">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
             <!-- Pimpinan Card - Compact Scale -->
@@ -361,7 +361,7 @@ Pengembangan Infrastruktur Digital Logistik.')) !!}
 </section>
 
 <!-- NEWS WALL: Instagram Style Feed -->
-<section id="berita" class="pt-4 pb-32 bg-slate-50 px-8 reveal-on-scroll scroll-mt-32">
+<section id="berita" x-show="activeSection === 'berita'" x-cloak class="pt-32 pb-32 bg-slate-50 px-8 reveal-on-scroll">
     <div class="max-w-[1440px] mx-auto">
         <div class="flex items-center justify-between gap-10 mb-12">
             <h2 class="text-3xl font-bold text-[#1e293b] font-jakarta tracking-tight">Berita Terbaru Biro Logistik</h2>
@@ -429,7 +429,7 @@ Pengembangan Infrastruktur Digital Logistik.')) !!}
 </section>
 
 <!-- ELITE DOKUMEN REPOSITORY -->
-<section id="dokumen" class="pt-4 pb-32 bg-white px-8 relative overflow-hidden reveal-on-scroll scroll-mt-32">
+<section id="dokumen" x-show="activeSection === 'dokumen'" x-cloak class="pt-32 pb-32 bg-white px-8 relative overflow-hidden reveal-on-scroll">
     <div class="absolute top-0 right-0 w-1/3 h-full bg-slate-50/50 -skew-x-12 translate-x-1/2"></div>
     <div class="max-w-[1440px] mx-auto relative z-10 w-full">
         <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-8">
@@ -569,7 +569,7 @@ Pengembangan Infrastruktur Digital Logistik.')) !!}
 </script>
 
 <!-- ELITE STRUKTUR: COMMAND -->
-<section id="struktur" class="pt-4 pb-44 bg-slate-50 px-8 relative overflow-hidden reveal-on-scroll scroll-mt-32">
+<section id="struktur" x-show="activeSection === 'struktur'" x-cloak class="pt-32 pb-44 bg-slate-50 px-8 relative overflow-hidden reveal-on-scroll">
     <div class="absolute -bottom-1/4 -right-1/4 w-[800px] h-[800px] bg-brand-primary/10 blur-[150px] rounded-full point-events-none"></div>
     <div class="max-w-[1440px] mx-auto relative z-10 w-full">
         <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-8">
@@ -603,6 +603,68 @@ Pengembangan Infrastruktur Digital Logistik.')) !!}
                          <h4 class="text-sm font-black text-slate-400 uppercase tracking-widest italic">Data Personil Belum Diinput</h4>
                     </div>
                 @endif
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SEKSI BAGIAN/FUNGSI -->
+<section id="bagian" x-show="activeSection === 'bagian'" x-cloak class="pt-32 pb-32 bg-slate-50 px-8 relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-8 relative z-10">
+        <!-- Section Header -->
+        <div class="mb-16 text-center">
+            <span class="text-brand-primary font-black uppercase tracking-[0.4em] text-[10px] mb-4 block">Tugas Pokok & Fungsi</span>
+            <h2 class="text-4xl font-black text-slate-800 uppercase font-outfit tracking-wider text-center">Kegiatan Operasional Bagian</h2>
+        </div>
+
+        <!-- Sections Grid (3 per baris) -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- BAG PAL -->
+            <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-500 group">
+                <h5 class="text-brand-primary font-black uppercase tracking-widest text-xs mb-6 border-b border-slate-100 pb-4">BAG PAL</h5>
+                <p class="text-slate-500 text-sm leading-relaxed font-medium">
+                    Melaksanakan pemeliharaan dan perbaikan alat peralatan logistik kepolisian serta pengawasan teknis sarana prasarana operasional untuk mendukung tugas Polri.
+                </p>
+            </div>
+
+            <!-- BAG BEKUM -->
+            <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-500">
+                <h5 class="text-brand-primary font-black uppercase tracking-widest text-xs mb-6 border-b border-slate-100 pb-4">BAG BEKUM</h5>
+                <p class="text-slate-500 text-sm leading-relaxed font-medium">
+                    Mengelola perbekalan umum, distribusi seragam dinas, material logistik, serta kebutuhan dasar personel guna menunjang kesiapan operasional wilayah.
+                </p>
+            </div>
+
+            <!-- BAG FASKON -->
+            <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-500">
+                <h5 class="text-brand-primary font-black uppercase tracking-widest text-xs mb-6 border-b border-slate-100 pb-4">BAG FASKON</h5>
+                <p class="text-slate-500 text-sm leading-relaxed font-medium">
+                    Bertanggung jawab atas pembangunan, pemeliharaan, dan pengawasan fasilitas gedung, lahan, serta infrastruktur fisik Kepolisian di tingkat Polda dan Polres.
+                </p>
+            </div>
+
+            <!-- BAG INFOLOG -->
+            <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-500">
+                <h5 class="text-brand-primary font-black uppercase tracking-widest text-xs mb-6 border-b border-slate-100 pb-4">BAG INFOLOG</h5>
+                <p class="text-slate-500 text-sm leading-relaxed font-medium">
+                    Menyelenggarakan digitalisasi data logistik, pengelolaan sistem informasi inventaris (SILOGIS), serta pelaporan manajemen aset secara real-time.
+                </p>
+            </div>
+
+            <!-- BAG ADA -->
+            <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-500">
+                <h5 class="text-brand-primary font-black uppercase tracking-widest text-xs mb-6 border-b border-slate-100 pb-4">BAG ADA</h5>
+                <p class="text-slate-500 text-sm leading-relaxed font-medium">
+                    Melaksanakan administrasi pengadaan barang dan jasa secara transparan, akuntabel, dan profesional melalui sistem e-procurement yang terintegrasi.
+                </p>
+            </div>
+
+            <!-- SUBBAG RENMIN -->
+            <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-500">
+                <h5 class="text-brand-primary font-black uppercase tracking-widest text-xs mb-6 border-b border-slate-100 pb-4">SUBBAG RENMIN</h5>
+                <p class="text-slate-500 text-sm leading-relaxed font-medium">
+                    Menyelenggarakan perencanaan program kerja, administrasi sumber daya manusia, keuangan internal, serta pengawasan administrasi umum di Biro Logistik.
+                </p>
             </div>
         </div>
     </div>

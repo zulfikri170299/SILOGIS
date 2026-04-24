@@ -216,14 +216,15 @@
             -webkit-text-fill-color: transparent;
             animation: elite-text-shimmer 15s infinite linear;
         }
+        [x-cloak] { display: none !important; }
     </style>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="font-sans bg-slate-50 text-slate-800 antialiased selection:bg-brand-primary selection:text-white dot-pattern">
+<body x-data="{ activeSection: 'beranda' }" class="font-sans bg-slate-50 text-slate-800 antialiased selection:bg-brand-primary selection:text-white dot-pattern">
     <!-- Floating Island Navigation -->
     <nav id="main-nav" class="floating-nav">
         <div class="px-8 flex justify-between h-20 items-center">
-            <a href="{{ route('portal.index') }}" class="flex items-center gap-4 group">
+            <a href="#" @click.prevent="activeSection = 'beranda'" class="flex items-center gap-4 group">
                 <img src="{{ asset('log polri.png') }}" class="h-10 w-auto" alt="POLRI Logo">
                 <div class="flex flex-col">
                     <span class="text-2xl font-black italic leading-none font-outfit uppercase tracking-[0.2em] bg-gradient-to-r from-red-600 via-yellow-500 to-black bg-clip-text text-transparent">SILOGIS</span>
@@ -236,16 +237,19 @@
                 <div class="flex items-center gap-8">
                     @php 
                         $links = [
-                            'Beranda' => url('/'), 
-                            'Layanan' => url('/') . '#layanan', 
-                            'Berita' => url('/') . '#berita', 
-                            'Dokumen' => url('/') . '#dokumen', 
-                            'Struktur' => url('/') . '#struktur',
-                            'Bagian/Fungsi' => url('/') . '#bagian'
+                            'Beranda' => 'beranda', 
+                            'Layanan' => 'layanan', 
+                            'Berita' => 'berita', 
+                            'Dokumen' => 'dokumen', 
+                            'Struktur' => 'struktur',
+                            'Bagian/Fungsi' => 'bagian'
                         ]; 
                     @endphp
-                    @foreach($links as $name => $url)
-                        <a href="{{ $url }}" class="nav-link">{{ $name }}</a>
+                    @foreach($links as $name => $id)
+                        <a href="#" 
+                           @click.prevent="activeSection = '{{ $id }}'" 
+                           :class="{ 'active': activeSection === '{{ $id }}' }"
+                           class="nav-link">{{ $name }}</a>
                     @endforeach
                 </div>
                 
@@ -269,74 +273,7 @@
         @yield('content')
     </main>
 
-    <!-- Elite Footer Light - Kegiatan Bagian Section -->
-    <footer id="bagian" class="bg-slate-50 pt-20 pb-24 border-t border-slate-200 relative overflow-hidden">
-        <div class="max-w-7xl mx-auto px-8 relative z-10">
-            <!-- Section Header -->
-            <div class="mb-16 text-center">
-                <span class="text-brand-primary font-black uppercase tracking-[0.4em] text-[10px] mb-4 block">Tugas Pokok & Fungsi</span>
-                <h2 class="text-4xl font-black text-slate-800 uppercase font-outfit tracking-wider">Kegiatan Operasional Bagian</h2>
-            </div>
-
-            <!-- Sections Grid (3 per baris) -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- BAG PAL -->
-                <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-500 group">
-                    <h5 class="text-brand-primary font-black uppercase tracking-widest text-xs mb-6 border-b border-slate-100 pb-4">BAG PAL</h5>
-                    <p class="text-slate-500 text-sm leading-relaxed font-medium">
-                        Melaksanakan pemeliharaan dan perbaikan alat peralatan logistik kepolisian serta pengawasan teknis sarana prasarana operasional untuk mendukung tugas Polri.
-                    </p>
-                </div>
-
-                <!-- BAG BEKUM -->
-                <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-500">
-                    <h5 class="text-brand-primary font-black uppercase tracking-widest text-xs mb-6 border-b border-slate-100 pb-4">BAG BEKUM</h5>
-                    <p class="text-slate-500 text-sm leading-relaxed font-medium">
-                        Mengelola perbekalan umum, distribusi seragam dinas, material logistik, serta kebutuhan dasar personel guna menunjang kesiapan operasional wilayah.
-                    </p>
-                </div>
-
-                <!-- BAG FASKON -->
-                <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-500">
-                    <h5 class="text-brand-primary font-black uppercase tracking-widest text-xs mb-6 border-b border-slate-100 pb-4">BAG FASKON</h5>
-                    <p class="text-slate-500 text-sm leading-relaxed font-medium">
-                        Bertanggung jawab atas pembangunan, pemeliharaan, dan pengawasan fasilitas gedung, lahan, serta infrastruktur fisik Kepolisian di tingkat Polda dan Polres.
-                    </p>
-                </div>
-
-                <!-- BAG INFOLOG -->
-                <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-500">
-                    <h5 class="text-brand-primary font-black uppercase tracking-widest text-xs mb-6 border-b border-slate-100 pb-4">BAG INFOLOG</h5>
-                    <p class="text-slate-500 text-sm leading-relaxed font-medium">
-                        Menyelenggarakan digitalisasi data logistik, pengelolaan sistem informasi inventaris (SILOGIS), serta pelaporan manajemen aset secara real-time.
-                    </p>
-                </div>
-
-                <!-- BAG ADA -->
-                <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-500">
-                    <h5 class="text-brand-primary font-black uppercase tracking-widest text-xs mb-6 border-b border-slate-100 pb-4">BAG ADA</h5>
-                    <p class="text-slate-500 text-sm leading-relaxed font-medium">
-                        Melaksanakan administrasi pengadaan barang dan jasa secara transparan, akuntabel, dan profesional melalui sistem e-procurement yang terintegrasi.
-                    </p>
-                </div>
-
-                <!-- SUBBAG RENMIN -->
-                <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-500">
-                    <h5 class="text-brand-primary font-black uppercase tracking-widest text-xs mb-6 border-b border-slate-100 pb-4">SUBBAG RENMIN</h5>
-                    <p class="text-slate-500 text-sm leading-relaxed font-medium">
-                        Menyelenggarakan perencanaan program kerja, administrasi sumber daya manusia, keuangan internal, serta pengawasan administrasi umum di Biro Logistik.
-                    </p>
-                </div>
-            </div>
-            <div class="pt-20 mt-20 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-8 text-[10px] font-black uppercase tracking-widest text-slate-400">
-                <p>&copy; {{ date('Y') }} Bureau of Logistics NTB Regional Police. All rights reserved.</p>
-                <div class="flex gap-10">
-                    <a href="#" class="hover:text-brand-primary transition-colors">Official Website</a>
-                    <a href="#" class="hover:text-brand-primary transition-colors">Legal Info</a>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <!-- Footer Removed -->
     
     <!-- Floating WA Button -->
     @php
@@ -361,40 +298,10 @@
             } else {
                 nav.classList.remove('nav-scrolled');
             }
-
-            // Scrollspy Logic
-            updateActiveLink();
         });
-
-        // Scrollspy Function
-        function updateActiveLink() {
-            const sections = ['layanan', 'berita', 'dokumen', 'struktur', 'bagian'];
-            const scrollPos = window.scrollY + 200; // Offset for navbar
-
-            let currentSection = '';
-            
-            sections.forEach(id => {
-                const el = document.getElementById(id);
-                if (el && scrollPos >= el.offsetTop) {
-                    currentSection = id;
-                }
-            });
-
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.classList.remove('active');
-                const href = link.getAttribute('href');
-                if (href.includes('#' + currentSection) || (currentSection === '' && href === "{{ url('/') }}")) {
-                    if (currentSection !== '' || href === "{{ url('/') }}") {
-                        link.classList.add('active');
-                    }
-                }
-            });
-        }
 
         // Initialize on Load
         document.addEventListener('DOMContentLoaded', () => {
-            updateActiveLink();
-            
             // Intersection Observer for Reveal
             const observerOptions = { threshold: 0.1 };
             const observer = new IntersectionObserver((entries) => {
