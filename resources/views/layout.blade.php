@@ -53,6 +53,14 @@
             transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
             box-shadow: 0 10px 40px -10px rgba(0,0,0,0.08);
         }
+
+        @media (max-width: 768px) {
+            .floating-nav {
+                top: 1rem;
+                width: calc(100% - 1.5rem);
+                border-radius: 1.5rem;
+            }
+        }
         
         .nav-scrolled {
             top: 1rem;
@@ -89,6 +97,20 @@
         /* Active State */
         .nav-link.active { color: #0062ff; }
         .nav-link.active::after { width: 100%; }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            scroll-snap-type: y proximity;
+        }
+
+        section {
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+            scroll-margin-top: 0;
+        }
 
 
         .dot-pattern {
@@ -155,6 +177,68 @@
             letter-spacing: 0.1em;
         }
 
+        /* Bottom Nav Mobile */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #0f172a;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 0.5rem 0;
+            z-index: 2000;
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+            padding-bottom: env(safe-area-inset-bottom, 1rem);
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.3);
+        }
+
+        .bottom-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            color: #64748b;
+            transition: all 0.3s ease;
+            width: 20%;
+        }
+
+        .bottom-nav-item.active {
+            color: #fbbf24;
+        }
+
+        .bottom-nav-center-wrap {
+            position: relative;
+            width: 20%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .bottom-nav-center {
+            position: absolute;
+            bottom: 0.5rem;
+            width: 4.2rem;
+            height: 4.2rem;
+            background: #fbbf24;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(251, 191, 36, 0.4);
+            border: 5px solid #0f172a;
+            color: #0f172a;
+            transition: all 0.3s ease;
+        }
+
+        .bottom-nav-center:active {
+            transform: scale(0.9);
+        }
+
+        @media (max-width: 768px) {
+            body { padding-bottom: 5rem; }
+        }
+
         /* Floating WA Style */
         .wa-floating {
             position: fixed;
@@ -173,6 +257,12 @@
             z-index: 9999;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .wa-floating {
+                display: none;
+            }
         }
 
         .wa-floating:hover {
@@ -220,15 +310,20 @@
     </style>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body x-data="{ activeSection: 'beranda' }" class="font-sans bg-slate-50 text-slate-800 antialiased selection:bg-brand-primary selection:text-white dot-pattern">
+<body x-data="{ activeSection: 'beranda', isAutoScrolling: false }" @scroll-spy.window="if(!isAutoScrolling) activeSection = $event.detail" class="antialiased text-slate-900 selection:bg-brand-primary/10 selection:text-brand-primary">
+    @php
+        $waNumber = $profile?->whatsapp ?? '6281234567890';
+        $waNumber = preg_replace('/[^0-9]/', '', $waNumber);
+        $waNumber = preg_replace('/^0/', '62', $waNumber);
+    @endphp
     <!-- Floating Island Navigation -->
-    <nav id="main-nav" class="floating-nav">
-        <div class="px-8 flex justify-between h-20 items-center">
-            <a href="#" @click.prevent="activeSection = 'beranda'" class="flex items-center gap-4 group">
-                <img src="{{ asset('log polri.png') }}" class="h-10 w-auto" alt="POLRI Logo">
+    <nav id="main-nav" class="floating-nav hidden lg:block" x-data="{ mobileMenu: false }">
+        <div class="px-6 md:px-8 flex justify-between h-20 items-center">
+            <a href="#" @click.prevent="activeSection = 'beranda'" class="flex items-center gap-3 md:gap-4 group">
+                <img src="{{ asset('log polri.png') }}" class="h-8 md:h-10 w-auto" alt="POLRI Logo">
                 <div class="flex flex-col">
-                    <span class="text-2xl font-black italic leading-none font-outfit uppercase tracking-[0.2em] bg-gradient-to-r from-red-600 via-yellow-500 to-black bg-clip-text text-transparent">SILOGIS</span>
-                    <span class="text-[8px] font-black text-slate-500 uppercase tracking-[0.1em] mt-1">Sistem Informasi Logistik</span>
+                    <span class="text-lg md:text-2xl font-black italic leading-none font-outfit uppercase tracking-[0.2em] bg-gradient-to-r from-red-600 via-yellow-500 to-black bg-clip-text text-transparent">SILOGIS</span>
+                    <span class="text-[7px] md:text-[8px] font-black text-slate-500 uppercase tracking-[0.1em] mt-1">Sistem Informasi Logistik</span>
                 </div>
             </a>
             
@@ -238,16 +333,16 @@
                     @php 
                         $links = [
                             'Beranda' => 'beranda', 
-                            'Layanan' => 'layanan', 
                             'Berita' => 'berita', 
                             'Dokumen' => 'dokumen', 
+                            'Bagian/Fungsi' => 'bagian',
                             'Struktur' => 'struktur',
-                            'Bagian/Fungsi' => 'bagian'
+                            'Tentang Kami' => 'tentang'
                         ]; 
                     @endphp
                     @foreach($links as $name => $id)
-                        <a href="#" 
-                           @click.prevent="activeSection = '{{ $id }}'" 
+                        <a href="{{ route('portal.index') }}#{{ $id }}" 
+                           @click="activeSection = '{{ $id }}'; isAutoScrolling = true; setTimeout(() => { isAutoScrolling = false; history.replaceState(null, null, window.location.pathname); }, 1000)" 
                            :class="{ 'active': activeSection === '{{ $id }}' }"
                            class="nav-link">{{ $name }}</a>
                     @endforeach
@@ -261,12 +356,38 @@
                     <a href="{{ route('login') }}" class="bg-[#800000] text-white hover:bg-red-900 px-8 py-3 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all italic shadow-lg shadow-red-900/20">Login Access</a>
                 @endauth
             </div>
-
-            <!-- Mobile Menu Btn -->
-            <button class="lg:hidden p-2 text-slate-800">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-            </button>
         </div>
+    </nav>
+
+    <!-- Mobile Bottom Navigation -->
+    <nav class="lg:hidden bottom-nav">
+        <a href="{{ route('portal.index') }}#beranda" @click="activeSection = 'beranda'; isAutoScrolling = true; setTimeout(() => { isAutoScrolling = false; history.replaceState(null, null, window.location.pathname); }, 1000)" 
+           class="bottom-nav-item" :class="activeSection === 'beranda' ? 'active' : ''">
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+            <span class="text-[9px] font-bold uppercase tracking-tighter">Beranda</span>
+        </a>
+        <a href="{{ route('portal.index') }}#berita" @click="activeSection = 'berita'; isAutoScrolling = true; setTimeout(() => { isAutoScrolling = false; history.replaceState(null, null, window.location.pathname); }, 1000)" 
+           class="bottom-nav-item" :class="activeSection === 'berita' ? 'active' : ''">
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+            <span class="text-[9px] font-bold uppercase tracking-tighter">Berita</span>
+        </a>
+        <div class="bottom-nav-center-wrap">
+            <a href="https://api.whatsapp.com/send?phone={{ $waNumber }}&text=Halo%20Admin%20Silogis..." class="bottom-nav-center">
+                <svg class="w-8 h-8" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.414 0 .004 5.408.001 12.045a11.815 11.815 0 001.591 5.976L0 24l6.135-1.61a11.803 11.803 0 005.911 1.586h.005c6.635 0 12.045-5.408 12.048-12.047a11.8 11.8 0 00-3.543-8.514z"/>
+                </svg>
+            </a>
+        </div>
+        <a href="{{ route('portal.index') }}#dokumen" @click="activeSection = 'dokumen'; isAutoScrolling = true; setTimeout(() => { isAutoScrolling = false; history.replaceState(null, null, window.location.pathname); }, 1000)" 
+           class="bottom-nav-item" :class="activeSection === 'dokumen' ? 'active' : ''">
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6 10H6v-2h8v2zm4-4H6v-2h12v2z"/></svg>
+            <span class="text-[9px] font-bold uppercase tracking-tighter">Dokumen</span>
+        </a>
+        <a href="{{ route('portal.index') }}#bagian" @click="activeSection = 'bagian'; isAutoScrolling = true; setTimeout(() => { isAutoScrolling = false; history.replaceState(null, null, window.location.pathname); }, 1000)" 
+           class="bottom-nav-item" :class="activeSection === 'bagian' ? 'active' : ''">
+            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+            <span class="text-[9px] font-bold uppercase tracking-tighter">Bag</span>
+        </a>
     </nav>
 
     <main class="min-h-screen">
@@ -276,12 +397,7 @@
     <!-- Footer Removed -->
     
     <!-- Floating WA Button -->
-    @php
-        $waNumber = $profile->whatsapp ?? '6281234567890';
-        $waNumber = preg_replace('/[^0-9]/', '', $waNumber);
-        $waNumber = preg_replace('/^0/', '62', $waNumber);
-    @endphp
-    <a href="https://api.whatsapp.com/send?phone={{ $waNumber }}&text=Halo%20Admin%20Silogis,%20saya%20ingin%20konsultasi..." target="_blank" class="wa-floating group" title="Konsultasi via WhatsApp">
+    <a href="https://api.whatsapp.com/send?phone={{ $waNumber }}&text=Halo%20Admin%20Silogis,%20saya%20ingin%20konsultasi..." class="wa-floating group" title="Konsultasi via WhatsApp">
         <div class="wa-pulse"></div>
         <svg class="w-10 h-10 transition-transform group-hover:scale-110" viewBox="0 0 24 24" fill="currentColor">
             <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.414 0 .004 5.408.001 12.045a11.815 11.815 0 001.591 5.976L0 24l6.135-1.61a11.803 11.803 0 005.911 1.586h.005c6.635 0 12.045-5.408 12.048-12.047a11.8 11.8 0 00-3.543-8.514z"/>
@@ -290,6 +406,24 @@
     </a>
 
     <script>
+        // Force scroll to top on refresh
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        }
+        
+        // Remove hash on initial load to prevent browser from auto-scrolling
+        if (window.location.hash) {
+            history.replaceState(null, null, window.location.pathname);
+        }
+
+        // Ensure we scroll to top AFTER the page finishes rendering
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                window.scrollTo(0, 0);
+                window.dispatchEvent(new CustomEvent('scroll-spy', { detail: 'beranda' }));
+            }, 50);
+        });
+
         // Scroll Management
         window.addEventListener('scroll', () => {
             const nav = document.getElementById('main-nav');
@@ -300,19 +434,50 @@
             }
         });
 
-        // Initialize on Load
         document.addEventListener('DOMContentLoaded', () => {
-            // Intersection Observer for Reveal
-            const observerOptions = { threshold: 0.1 };
+            // Intersection Observer for Scroll Spy & Reveal
+            const observerOptions = { 
+                threshold: [0, 0.1, 0.25, 0.5, 0.75, 1.0],
+                rootMargin: '-10% 0px -10% 0px' 
+            };
+
+            const ratios = {};
             const observer = new IntersectionObserver((entries) => {
+                let checkScrollSpy = false;
+
                 entries.forEach(entry => {
+                    // Reveal animation
                     if (entry.isIntersecting) {
                         entry.target.classList.add('active');
                     }
+
+                    // Track intersection ratio for scroll spy
+                    if (entry.target.tagName === 'SECTION' && entry.target.id) {
+                        ratios[entry.target.id] = entry.intersectionRatio;
+                        checkScrollSpy = true;
+                    }
                 });
+
+                if (checkScrollSpy) {
+                    let maxRatio = 0;
+                    let activeId = null;
+                    const menuIds = ['beranda', 'layanan', 'berita', 'dokumen', 'struktur', 'bagian', 'tentang'];
+                    
+                    for (const id of menuIds) {
+                        if ((ratios[id] || 0) > maxRatio) {
+                            maxRatio = ratios[id];
+                            activeId = id;
+                        }
+                    }
+
+                    if (activeId && maxRatio > 0) {
+                        window.dispatchEvent(new CustomEvent('scroll-spy', { detail: activeId }));
+                    }
+                }
             }, observerOptions);
 
-            document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
+            // Observe sections and reveal elements
+            document.querySelectorAll('section[id], .reveal-on-scroll').forEach(el => observer.observe(el));
         });
     </script>
 </body>

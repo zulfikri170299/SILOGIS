@@ -58,4 +58,11 @@ class PortalController extends Controller
         $profile = \App\Models\Profile::first();
         return view('news.show', compact('news', 'profile'));
     }
+
+    public function newsIndex()
+    {
+        $news = News::latest()->paginate(12);
+        $profile = \App\Models\Profile::first();
+        return view('news.index', compact('news', 'profile'));
+    }
 }

@@ -55,12 +55,12 @@
                 x-transition:leave="transition ease-in-out duration-300 transform"
                 x-transition:leave-start="translate-x-0"
                 x-transition:leave-end="-translate-x-full"
-                class="relative flex w-full max-w-xs flex-1 flex-col bg-slate-900 pb-4 pt-5">
+                class="relative flex w-full max-w-[240px] flex-1 flex-col bg-slate-900 pb-4 pt-5">
                 
-                <div class="flex items-center justify-between px-6">
-                    <span class="text-2xl font-black text-white">AdminPortal</span>
+                <div class="flex items-center justify-between px-4">
+                    <span class="text-xl font-black text-white">AdminPortal</span>
                     <button type="button" class="text-slate-400 hover:text-white" @click="sidebarOpen = false">
-                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                     </button>
                 </div>
 
@@ -106,14 +106,14 @@
         <!-- Main Content Wrapper -->
         <div class="flex flex-1 flex-col overflow-hidden">
             <!-- Top Header -->
-            <header class="flex h-16 shrink-0 items-center gap-x-4 border-b border-white/5 bg-slate-900 px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
+            <header class="flex h-14 shrink-0 items-center gap-x-4 border-b border-white/5 bg-slate-900 px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
                 <button type="button" class="-m-2.5 p-2.5 text-slate-400 lg:hidden" @click="sidebarOpen = true">
-                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
+                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
                 </button>
                 
                 <div class="flex flex-1 gap-x-4 self-stretch lg:gap-x-6 items-center">
                     <div class="flex flex-1 items-center">
-                         <h1 class="text-sm font-black text-white uppercase tracking-widest font-outfit">@yield('title', 'Admin Dashboard')</h1>
+                         <h1 class="text-xs font-black text-white uppercase tracking-widest font-outfit">@yield('title', 'Admin Dashboard')</h1>
                     </div>
                     <div class="flex items-center gap-x-4 lg:gap-x-6">
                         <a href="/" target="_blank" class="text-[10px] font-black uppercase tracking-widest text-brand-primary hover:text-white transition-all flex items-center gap-2 italic">

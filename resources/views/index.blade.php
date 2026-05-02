@@ -1,9 +1,23 @@
 @extends('layout')
 
 @section('content')
+<div x-data="{ 
+    showAllServices: false, 
+    showAllDocs: false, 
+    searchService: '', 
+    searchDoc: '',
+    lockScroll(val) {
+        if (val) document.body.classList.add('overflow-hidden');
+        else document.body.classList.remove('overflow-hidden');
+    }
+}" x-init="$watch('showAllServices', v => lockScroll(v)); $watch('showAllDocs', v => lockScroll(v));"
+   class="bg-[#0f172a] md:bg-transparent relative">
+    <!-- Seamless Mobile Background Overlay -->
+    <div class="md:hidden fixed inset-0 z-0 bg-elite-mobile pointer-events-none"></div>
+    <div class="md:hidden fixed inset-0 z-0 opacity-10 pointer-events-none mesh-pattern"></div>
+
 <!-- Custom Modern CSS -->
 <style>
-    /* SILOGIS - Modern Light & High Contrast */
     .font-outfit { font-family: 'Outfit', sans-serif; }
     
     .elite-hero {
@@ -17,32 +31,24 @@
         padding-top: 60px;
     }
 
+    @media (max-width: 768px) {
+        .elite-hero {
+            min-height: 45vh;
+            padding-top: 0;
+        }
+    }
+
     .elite-hero::after {
         content: '';
         position: absolute;
         inset: 0;
-        background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.9));
+        background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.9));
     }
 
-    .grand-card {
-        background: rgba(255, 255, 255, 0.9);
-        backdrop-filter: blur(40px);
-        border: 1px solid rgba(0, 0, 0, 0.05);
-        border-radius: 2rem;
-        box-shadow: 0 20px 80px rgba(0, 98, 255, 0.08);
-        position: relative;
-        z-index: 10;
-        overflow: hidden;
-    }
-
-    .grand-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 2px;
-        background: linear-gradient(90deg, transparent, #0062ff, transparent);
+    @media (max-width: 768px) {
+        .elite-hero::after {
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.8) 70%, rgba(0, 0, 0, 1) 100%);
+        }
     }
 
     .service-tile {
@@ -56,631 +62,929 @@
         text-align: left;
         gap: 1.5rem;
         box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
-        min-height: 125px;
-        transform-style: preserve-3d;
-        perspective: 1000px;
-        animation: card-float 8s ease-in-out infinite;
-    }
-
-    .service-tile:nth-child(even) {
-        animation-delay: -3s;
-    }
-
-    @keyframes card-float {
-        0%, 100% { transform: translateY(0) rotateX(0deg) rotateY(0deg); }
-        50% { transform: translateY(-10px) rotateX(2deg) rotateY(1deg); }
+        min-height: 120px;
     }
 
     .service-tile:hover {
-        background: #dc2626; /* Red 600 */
-        transform: translateY(-15px) rotateX(5deg) rotateY(2deg) scale(1.08);
+        background: #dc2626;
+        transform: translateY(-10px);
         box-shadow: 0 40px 80px -15px rgba(220, 38, 38, 0.4);
         border-color: #dc2626;
-        animation-play-state: paused;
     }
 
-    .service-tile:hover h4,
-    .service-tile:hover p,
-    .service-tile:hover svg {
+    .service-tile:hover h4, .service-tile:hover p, .service-tile:hover svg {
         color: white !important;
     }
 
-    .service-tile:hover .tile-icon {
-        background: rgba(255, 255, 255, 0.2);
-        backdrop-filter: blur(10px);
-        border-color: rgba(255, 255, 255, 0.3);
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    }
-
     .tile-icon {
-        width: 75px;
-        height: 75px;
+        width: 70px; height: 70px;
         flex-shrink: 0;
         background: white;
-        border-radius: 1.5rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.4s ease;
+        border-radius: 1.25rem;
+        display: flex; align-items: center; justify-content: center;
         padding: 12px;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.06);
-        border: 1px solid rgba(0,0,0,0.03);
-    }
-
-    .service-tile:hover .tile-icon {
-        background: white;
-        color: #0062ff;
-        transform: scale(1.1);
-        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.05);
     }
 
     .news-card-elite {
         background: #ffffff;
         border: 1px solid #efefef;
-        border-radius: 1.25rem;
-        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
-        display: flex;
-        flex-direction: column;
+        border-radius: 1.5rem;
+        transition: all 0.4s ease;
+        overflow: hidden;
     }
 
     .news-card-elite:hover {
         transform: translateY(-8px);
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.12);
+        box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.15);
     }
 
-    .ig-header {
-        padding: 0.75rem 1rem;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-    .ig-badge {
-        background: #e0eaff;
-        color: #4338ca;
-        padding: 0.25rem 0.75rem;
-        border-radius: 0.5rem;
-        font-weight: 800;
-        font-size: 10px;
-        letter-spacing: 0.05em;
-    }
-
-    .elite-glow {
-        filter: drop-shadow(0 0 15px rgba(0, 98, 255, 0.3));
-    }
-
-    @keyframes shine {
-        0% { left: -100%; }
-        100% { left: 100%; }
-    }
-    .hover-shine:hover::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-        animation: shine 0.6s;
-    }
-
-    .logo-3d-left, .logo-3d-right {
-        position: absolute;
-        top: 55%;
-        transform: translateY(-50%) perspective(1000px);
-        z-index: 5;
-        pointer-events: none;
-        opacity: 0.4;
-    }
-
-    .logo-3d-left { left: 5%; }
-    .logo-3d-right { right: 5%; }
-
-    .logo-3d {
-        width: 180px;
-        height: auto;
-        filter: drop-shadow(15px 15px 30px rgba(0,0,0,0.2));
-    }
-
-    /* LOGO ANIMATION RIGHT */
-    .animate-logo-float {
-        animation: logo-float-3d 8s ease-in-out infinite;
-        transform-style: preserve-3d;
-        perspective: 1000px;
-    }
-
-    @keyframes logo-float-3d {
-        0%, 100% { 
-            transform: translateY(0) rotateY(-20deg) rotateX(2deg); 
-            filter: drop-shadow(15px 15px 30px rgba(0,0,0,0.2));
-        }
-        50% { 
-            transform: translateY(-20px) rotateY(-10deg) rotateX(-2deg); 
-            filter: drop-shadow(25px 35px 50px rgba(0,0,0,0.3));
-        }
-    }
-
-    /* GLASS CARD HERO */
-    .hero-glass-card {
-        background: rgba(255, 255, 255, 0.05);
-        backdrop-filter: blur(15px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+    .news-card-elite {
+        background: #ffffff;
+        border: 1px solid #efefef;
         border-radius: 1.5rem;
-        padding: 1.5rem;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-        position: relative;
+        transition: all 0.4s ease;
         overflow: hidden;
-        transition: all 0.5s ease;
     }
-    .hero-glass-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 3px;
-        height: 100%;
-        background: #0062ff;
+
+    .news-card-elite:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.15);
     }
-    .hero-glass-card:hover {
-        background: rgba(255, 255, 255, 0.1);
-        transform: translateY(-5px);
+
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    .glass-card {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 2rem;
+    }
+
+    /* Mobile Custom Animations */
+    @keyframes pulseSoft {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.08); }
+    }
+    
+    @keyframes floatSoft {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-5px); }
+    }
+
+    .animate-pulse-soft {
+        animation: pulseSoft 3s ease-in-out infinite;
+    }
+    
+    .animate-float-soft {
+        animation: floatSoft 4s ease-in-out infinite;
+    }
+
+    /* Active tap states for mobile */
+    .tap-effect {
+        transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .tap-effect:active {
+        transform: scale(0.92);
+    }
+
+    /* Premium Mobile Background Overrides */
+    @media (max-width: 768px) {
+        .bg-elite-mobile {
+            background: linear-gradient(-45deg, #0f172a, #020617, #1a0b02, #0f172a);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+        .mesh-pattern {
+            background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        section {
+            background-color: transparent !important;
+            position: relative;
+            z-index: 1;
+        }
+    }
+
+    @keyframes gradientBG {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
     }
 </style>
 
-
 <!-- ELITE HERO SECTION -->
-<section x-show="activeSection === 'beranda'" x-cloak class="elite-hero mesh-gradient overflow-hidden">
-    <div class="max-w-[1600px] mx-auto px-8 relative z-20 w-full pt-20">
+<section id="beranda" class="elite-hero overflow-hidden pb-16 md:pb-0">
+    <!-- MOBILE PROFILE HEADER INSIDE -->
+    <div class="md:hidden bg-transparent absolute top-0 left-0 right-0 pt-10 pb-4 px-6 z-30" x-data="{ showProfileMenu: false, showProfilePic: false }">
+        <div class="flex items-center gap-4 relative">
+            <div class="relative cursor-pointer" @click="showProfileMenu = !showProfileMenu">
+                <img src="{{ asset('log polri.png') }}" class="w-16 h-16 rounded-full border-4 border-white/10 bg-white p-2 shadow-2xl" alt="Logo">
+                <div class="absolute -bottom-1 -right-1 w-6 h-6 bg-amber-500 rounded-full border-2 border-[#0f172a] flex items-center justify-center">
+                    <svg class="w-3 h-3 text-[#0f172a]" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/></svg>
+                </div>
+            </div>
+            <div class="cursor-pointer flex-1" @click="showProfileMenu = !showProfileMenu">
+                <h3 class="text-xl font-black text-white uppercase tracking-wider font-outfit">{{ Auth::user()->name ?? 'PENGUNJUNG' }}</h3>
+                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">BIRO LOGISTIK POLDA NTB</p>
+            </div>
+            <div @click="showProfileMenu = !showProfileMenu" class="text-white/50 p-2 cursor-pointer">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" /></svg>
+            </div>
+
+            <!-- Dropdown Menu -->
+            <div x-show="showProfileMenu" @click.away="showProfileMenu = false" x-transition class="absolute top-full left-0 mt-2 w-56 bg-[#1e293b]/95 backdrop-blur-md rounded-xl shadow-2xl border border-white/10 overflow-hidden z-50 origin-top-left">
+                <button @click="showProfilePic = true; showProfileMenu = false" class="w-full text-left px-5 py-4 text-sm text-white hover:bg-white/10 border-b border-white/5 font-semibold flex items-center gap-3 transition-colors">
+                    <svg class="w-4 h-4 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                    Lihat Profil
+                </button>
+                <a href="{{ route('login') }}" class="w-full text-left px-5 py-4 text-sm text-white hover:bg-white/10 font-semibold flex items-center gap-3 transition-colors">
+                    <svg class="w-4 h-4 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" /></svg>
+                    Login Portal
+                </a>
+            </div>
+        </div>
+
+        <!-- Full Profile Picture Modal -->
+        <template x-teleport="body">
+            <div x-show="showProfilePic" x-transition.opacity class="fixed inset-0 z-[100] bg-black/95 backdrop-blur-md flex items-center justify-center p-6" style="display: none;">
+                <button @click="showProfilePic = false" class="absolute top-8 right-6 text-white hover:text-amber-500 p-2 bg-white/10 rounded-full transition-colors z-10">
+                    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+                <img src="{{ asset('log polri.png') }}" class="max-w-full max-h-[70vh] object-contain rounded-[2rem] border-4 border-white/10 bg-white shadow-2xl" @click.away="showProfilePic = false">
+            </div>
+        </template>
+    </div>
+    <div class="max-w-[1600px] mx-auto px-6 md:px-8 relative z-20 w-full pt-36 md:pt-20">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
             
-            <!-- LEFT: Visi Misi (3/12) -->
-            <div class="lg:col-span-3 hidden lg:flex flex-col gap-6 reveal-on-scroll">
-                <div class="hero-glass-card">
-                    <h4 class="text-brand-primary font-black uppercase tracking-[0.2em] text-sm mb-3">Visi Kami</h4>
-                    <p class="text-white text-sm font-bold italic leading-snug drop-shadow-lg">
-                        "{{ $profile->vision ?? 'Menjadi Biro Logistik yang Modern, Profesional, dan Terpercaya.' }}"
-                    </p>
+            <!-- LEFT: Visi Misi (Desktop) -->
+            <div class="lg:col-span-3 hidden lg:flex flex-col gap-6">
+                <div class="glass-card p-6">
+                    <h4 class="text-amber-500 font-black uppercase tracking-widest text-[10px] mb-3">Visi Kami</h4>
+                    <p class="text-white text-sm font-bold italic leading-relaxed">"{{ $profile?->vision ?? 'Terwujudnya logistik yang modern, profesional dan terpercaya.' }}"</p>
                 </div>
-                <div class="hero-glass-card">
-                    <h4 class="text-red-500 font-black uppercase tracking-[0.2em] text-sm mb-3">Misi Kami</h4>
-                    <div class="text-white text-sm font-bold italic leading-relaxed space-y-2 pr-4">
-                         {!! nl2br(e($profile->mission ?? 'Penyelenggaraan Manajemen Aset Transparan.
-Pengembangan Infrastruktur Digital Logistik.')) !!}
+                <div class="glass-card p-6 border-l-4 border-red-600">
+                    <h4 class="text-red-500 font-black uppercase tracking-widest text-[10px] mb-3">Misi Kami</h4>
+                    <div class="text-white text-[11px] font-medium italic space-y-2">
+                        {!! nl2br(e($profile?->mission ?? 'Mewujudkan tata kelola logistik yang transparan dan akuntabel.')) !!}
                     </div>
                 </div>
             </div>
 
-            <!-- CENTER: Main Brand (6/12) -->
-            <div class="lg:col-span-6 text-center reveal-on-scroll">
-                <span class="inline-block px-4 py-2 rounded-full bg-white/10 border border-white/20 text-white text-[10px] font-black uppercase tracking-[0.3em] mb-8">
-                    BIRO LOGISTIK POLDA NTB
-                </span>
-                <h1 class="text-6xl md:text-8xl font-black uppercase font-outfit tracking-[0.05em] leading-tight mb-6">
-                    <span class="elite-shimmer-effect px-2 py-4 filter drop-shadow-[0_5px_15px_rgba(220,38,38,0.4)]">SILOGIS</span>
+            <!-- CENTER: Main Title -->
+            <div class="lg:col-span-6 text-center">
+                <h1 class="text-7xl md:text-9xl font-black uppercase font-outfit tracking-tighter leading-none mb-4">
+                    <span class="elite-shimmer-effect drop-shadow-2xl px-2">SILOGIS</span>
                 </h1>
-                <p class="text-xl md:text-2xl font-black italic text-white uppercase font-outfit tracking-widest mb-10 opacity-90">
+                <p class="text-[13px] md:text-2xl font-black italic text-white md:text-amber-500 uppercase font-outfit tracking-[0.1em] md:tracking-[0.3em] mb-0 md:mb-12 drop-shadow-lg whitespace-nowrap">
                     Sistem Informasi Logistik
                 </p>
-                <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
-                    @auth
-                        <a href="{{ route('admin.dashboard') }}" class="group relative px-10 py-5 bg-red-600 text-white rounded-2xl font-black uppercase tracking-widest text-xs overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-2xl shadow-red-600/20 italic">
-                            <span class="relative z-10 flex items-center gap-2">Buka Dashboard &rarr;</span>
-                            <div class="absolute inset-0 shimmer-effect opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                        </a>
-                    @else
-                        <a href="{{ route('login') }}" class="group relative px-10 py-5 bg-red-600 text-white rounded-2xl font-black uppercase tracking-widest text-xs overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-2xl shadow-red-600/20 italic">
-                            <span class="relative z-10">Akses Platform</span>
-                            <div class="absolute inset-0 shimmer-effect opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                        </a>
-                    @endauth
-                    <a href="#layanan" class="group relative px-10 py-5 bg-brand-primary text-white rounded-2xl font-black uppercase tracking-widest text-xs overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-2xl shadow-brand-primary/20 italic">
-                        <span class="relative z-10">Aplikasi Logistik</span>
-                        <div class="absolute inset-0 shimmer-effect opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                    </a>
+                
+                <div class="hidden md:flex flex-row items-center justify-center gap-3 md:gap-6">
+                    <a href="#layanan" class="flex-1 sm:flex-none px-4 py-4 md:px-12 md:py-5 bg-red-600 text-white rounded-2xl md:rounded-3xl font-black uppercase tracking-widest text-[9px] md:text-xs shadow-2xl shadow-red-600/30 hover:scale-105 active:scale-95 transition-all italic text-center">Layanan Digital &rarr;</a>
+                    <a href="#tentang" class="flex-1 sm:flex-none px-4 py-4 md:px-12 md:py-5 bg-blue-600 text-white rounded-2xl md:rounded-3xl font-black uppercase tracking-widest text-[9px] md:text-xs shadow-2xl shadow-blue-600/20 hover:scale-105 active:scale-95 transition-all italic text-center">Tentang Kami</a>
                 </div>
             </div>
 
-            <!-- RIGHT: Logo (3/12) -->
-            <div class="lg:col-span-3 hidden lg:flex justify-center reveal-on-scroll">
-                <div class="logo-outer group">
-                     <img src="{{ asset('log polri.png') }}" class="w-48 h-auto filter drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)] animate-logo-float brightness-110 contrast-110" alt="POLRI Logo">
-                </div>
+            <!-- RIGHT: Logo (Desktop) -->
+            <div class="lg:col-span-3 hidden lg:flex justify-center">
+                <img src="{{ asset('log polri.png') }}" class="w-56 h-auto filter drop-shadow-[0_20px_50px_rgba(251,191,36,0.3)] animate-float" alt="Logo">
             </div>
-
         </div>
+
+        <!-- Mobile Visi Misi Card Hidden -->
     </div>
 </section>
 
-<!-- ELITE HUB: Leader & Ecosystem -->
-<section id="layanan" x-show="activeSection === 'layanan'" x-cloak class="pt-32 pb-32 bg-white/40 backdrop-blur-md px-8 relative">
-    <div class="max-w-[1440px] mx-auto">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
-            <!-- Pimpinan Card - Compact Scale -->
-            <div class="lg:col-span-3 relative group reveal-on-scroll">
-                <div class="absolute -inset-10 bg-brand-primary/10 blur-[80px] rounded-full opacity-60"></div>
-                <div class="relative bg-white/80 backdrop-blur-2xl border border-slate-200 shadow-2xl rounded-[2.5rem] p-5 overflow-hidden">
-                    <div class="aspect-[4/4.2] w-full rounded-[1.5rem] overflow-hidden mb-4 border-4 border-slate-100 shadow-sm mx-auto">
-                         <img src="{{ $profile->photo ? (str_contains($profile->photo, 'pimpinan.png') ? asset($profile->photo) : asset('storage/' . $profile->photo)) : asset('pimpinan.png') }}" class="h-full w-full object-cover transition-all duration-1000 group-hover:scale-105" alt="Karolog">
-                    </div>
-                    <div class="text-left px-4">
-                        <span class="text-brand-primary font-black uppercase tracking-[0.4em] text-[10px] mb-3 block">KAROLOG POLDA NTB</span>
-                        <h3 class="text-2xl font-black text-slate-800 italic uppercase font-outfit mb-4 leading-tight">
-                            {!! nl2br(e($profile->name ?? 'KOMBES POL SAPTO PRIYONO')) !!}
-                        </h3>
-
-                        <div class="relative">
-                            <svg class="absolute -top-3 -left-3 w-6 h-6 text-slate-200 opacity-50" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21L14.017 18C14.017 16.8954 14.9124 16 16.017 16H19.017C19.5693 16 20.017 15.5523 20.017 15V9C20.017 8.44772 19.5693 8 19.017 8H16.017C15.4647 8 15.017 8.44772 15.017 9V12C15.017 12.5523 14.5693 13 14.017 13H13.017V21H14.017ZM6.017 21L6.017 18C6.017 16.8954 6.91243 16 8.017 16H11.017C11.5693 16 12.017 15.5523 12.017 15V9C12.017 8.44772 11.5693 8 11.017 8H8.017C7.46472 8 7.017 8.44772 7.017 9V12C7.017 12.5523 6.5693 13 6.017 13H5.017V21H6.017Z" /></svg>
-                            <p class="text-slate-500 font-medium italic text-xs leading-relaxed pl-4">
-                                "{{ $profile->quote ?? 'Logistik bukan hanya tentang pengadaan, tapi tentang memastikan setiap personel memiliki dukungan terbaik untuk menjaga keamanan masyarakat NTB. Kami berkomitmen pada transparansi dan modernisasi layanan di era digital ini.' }}"
-                            </p>
-                        </div>
-                    </div>
-                </div>
+<!-- ELITE HUB: Layanan Digital -->
+<section id="layanan" class="pt-6 md:pt-16 pb-1 md:pb-16 md:bg-white bg-[#0f172a] px-6 md:px-8 relative">
+    <div class="max-w-[1200px] mx-auto">
+        <!-- Section Header Mobile -->
+        <div class="md:hidden mb-6 border-b border-white/10 pb-4">
+            <div class="flex items-center gap-3">
+                <div class="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.8)]"></div>
+                <h2 class="text-xl font-black text-white tracking-wider uppercase font-outfit">Layanan Digital</h2>
             </div>
-
-            <!-- Services Grid - Expanded -->
-            <div class="lg:col-span-9 space-y-12 pt-6 reveal-on-scroll" style="transition-delay: 0.2s;">
-                <div class="space-y-4">
-                    <h2 class="text-3xl md:text-5xl font-black uppercase font-outfit tracking-[0.1em] bg-gradient-to-r from-red-600 via-orange-500 via-yellow-500 via-amber-800 to-black bg-clip-text text-transparent leading-tight">
-                        Layanan Digital
-                    </h2>
-                    <p class="text-slate-600 text-lg font-medium max-w-2xl leading-relaxed border-l-4 border-brand-primary pl-6">
-                        {{ $profile->ecosystem_description ?? 'Biro Logistik Polda NTB menghadirkan layanan digital untuk mempermudah pendataan, pengajuan, monitoring, dan pelaporan logistik secara cepat, akurat, dan transparan.' }}
-                    </p>
-                </div>
-
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                    @forelse ($apps as $app)
-                        <a href="{{ $app->url }}" target="_blank" class="service-tile p-5 hover-shine group overflow-hidden relative">
-                            <div class="tile-icon relative z-10">
-                                @if($app->icon)
-                                    <img src="{{ asset('storage/' . $app->icon) }}" class="h-full w-full object-contain" alt="">
-                                @else
-                                    <svg class="h-10 w-10 text-brand-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-                                @endif
-                            </div>
-                            <div class="flex-1 relative z-10 pr-4">
-                                <h4 class="text-lg md:text-xl font-black text-slate-800 uppercase font-outfit leading-tight group-hover:text-white transition-colors mb-2">{{ $app->title }}</h4>
-                                <p class="text-[10px] font-medium text-slate-500 leading-relaxed line-clamp-2 italic">
-                                    {{ $app->description ?? 'Portal akses digital biro logistik polda ntb untuk mendukung efisiensi operasional.' }}
-                                </p>
-                            </div>
-                            <!-- Arrow Indicator -->
-                            <div class="absolute right-6 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 group-hover:translate-x-2 transition-all">
-                                <svg class="w-4 h-4 text-brand-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7" /></svg>
-                            </div>
-                        </a>
-                    @empty
-                        <div class="col-span-full py-20 text-center border-2 border-dashed border-slate-200 rounded-[3rem] text-slate-400 font-black uppercase text-xs tracking-widest">No Active Digital Portals</div>
-                    @endforelse
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- NEWS WALL: Instagram Style Feed -->
-<section id="berita" x-show="activeSection === 'berita'" x-cloak class="pt-32 pb-32 bg-slate-50 px-8 reveal-on-scroll">
-    <div class="max-w-[1440px] mx-auto">
-        <div class="flex items-center justify-between gap-10 mb-12">
-            <h2 class="text-3xl font-bold text-[#1e293b] font-jakarta tracking-tight">Berita Terbaru Biro Logistik</h2>
-            <a href="#" class="text-sm font-semibold text-red-500 hover:text-red-700 transition-colors">Lihat semua</a>
+            <span class="block text-[9px] font-bold text-amber-500/60 uppercase tracking-[0.3em] mt-2 ml-5">Digital Ecosystem</span>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            @foreach ($news as $item)
-                <div class="news-card-elite group">
-                    <!-- Instagram Header -->
-                    <div class="ig-header">
-                        <div class="flex items-center gap-3">
-                            <div class="h-10 w-10 rounded-full border border-slate-100 overflow-hidden bg-slate-50 p-1">
-                                <img src="{{ asset('log polri.png') }}" class="h-full w-full object-contain" alt="Logo">
-                            </div>
-                            <div class="flex flex-col">
-                                <span class="text-xs font-black text-slate-800 tracking-tight">birologistik_ntb</span>
-                                <span class="text-[10px] text-slate-400 font-medium tracking-tight">Polda NTB</span>
-                            </div>
-                        </div>
-                        <a href="{{ route('portal.news.show', $item->slug) }}" class="px-4 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-[10px] font-black rounded-lg transition-colors">Detail</a>
-                    </div>
-
-                    <!-- Instagram Media -->
-                    <a href="{{ route('portal.news.show', $item->slug) }}" class="block relative aspect-square overflow-hidden bg-slate-100 group-hover:brightness-95 transition-all">
-                        @if($item->thumbnail)
-                            <img src="{{ asset('storage/' . $item->thumbnail) }}" class="h-full w-full object-cover" alt="{{ $item->title }}">
+        <!-- Mobile Grid (Icons) -->
+        <div class="md:hidden grid grid-cols-4 gap-y-10 mb-12">
+            @foreach ($apps->take(7) as $app)
+                <a href="{{ $app->url }}" target="_blank" class="flex flex-col items-center gap-3 reveal-on-scroll group">
+                    <div class="w-16 h-16 bg-slate-800 rounded-[1.5rem] flex items-center justify-center text-amber-500 border border-slate-700 shadow-xl animate-float-soft transition-all duration-300 transform group-hover:scale-110 group-hover:-translate-y-2 group-hover:shadow-[0_20px_40px_rgba(245,158,11,0.3)] group-active:scale-95 group-hover:bg-slate-700 group-hover:border-amber-500/50" style="animation-delay: {{ $loop->index * 200 }}ms">
+                        @if($app->icon)
+                            <img src="{{ asset('storage/' . $app->icon) }}" class="h-8 w-8 object-contain" alt="">
                         @else
-                            <div class="h-full w-full flex items-center justify-center text-slate-300">
-                                <svg class="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="0.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                            </div>
+                            <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                         @endif
-                    </a>
-
-                    <!-- Instagram Content -->
-                    <div class="p-4 space-y-4 flex-1 flex flex-col">
-                        <div class="flex items-center gap-3">
-                            <div class="ig-badge">BERITA</div>
-                            <a href="https://www.instagram.com/birologistik_ntb/" target="_blank" class="h-6 w-6 rounded-lg bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] flex items-center justify-center shadow-sm hover:scale-110 transition-transform cursor-pointer">
-                                <svg class="w-3.5 h-3.5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.332 3.608 1.308.975.975 1.247 2.242 1.308 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.061 1.366-.333 2.633-1.308 3.608-.975.975-2.242 1.247-3.608 1.308-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.061-2.633-.333-3.608-1.308-.975-.975-1.247-2.242-1.308-3.608-.058-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c.061-1.366.333-2.633 1.308-3.608.975-.975 2.242-1.247 3.608-1.308 1.266-.058 1.646-.07 4.85-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-1.62.074-2.812.333-3.846 1.367-1.037 1.034-1.295 2.225-1.369 3.846-.058 1.28-.072 1.688-.072 4.947s.014 3.667.072 4.947c.074 1.621.332 2.812 1.369 3.846 1.034 1.037 2.225 1.295 3.846 1.369 1.28.058 1.688.072 4.947.072s3.667-.014 4.947-.072c1.621-.074 2.812-.332 3.846-1.369 1.037-1.034 1.295-2.225 1.369-3.846.058-1.28.072-1.688.072-4.947s-.014-3.667-.072-4.947c-.074-1.621-.332-2.812-1.369-3.846-1.034-1.037-2.225-1.295-3.846-1.369-1.28-.058-1.688-.072-4.947-.072zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-                            </a>
-                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{{ $item->created_at->format('d M Y') }}</span>
-                        </div>
-
-                        <div class="flex-1">
-                            <h3 class="text-lg font-black text-slate-800 leading-tight mb-2 tracking-tight uppercase">
-                                {{ $item->title }}
-                            </h3>
-                            <p class="text-xs text-slate-500 line-clamp-2 leading-relaxed">
-                                {{ Str::limit(strip_tags($item->content), 100) }}
-                            </p>
-                        </div>
-
-                        <div class="pt-4 border-t border-slate-50">
-                            <a href="{{ route('portal.news.show', $item->slug) }}" class="text-xs font-bold text-slate-400 hover:text-blue-500 transition-colors flex items-center justify-between">
-                                <span>Baca Selengkapnya</span>
-                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
-                            </a>
-                        </div>
                     </div>
-                </div>
+                    <span class="text-[9px] font-black text-slate-300 text-center leading-tight uppercase tracking-tighter">{{ $app->title }}</span>
+                </a>
             @endforeach
+            <button type="button" @click.prevent="showAllServices = true" class="flex flex-col items-center gap-3 group">
+                <div class="w-16 h-16 bg-amber-500 rounded-[1.5rem] flex items-center justify-center text-[#0f172a] shadow-xl shadow-amber-500/20 animate-pulse-soft transition-all duration-300 transform group-hover:scale-110 group-hover:-translate-y-2 group-hover:shadow-[0_20px_40px_rgba(245,158,11,0.6)] group-active:scale-95 group-hover:bg-amber-400">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 6h16M4 12h16m-7 6h7"/></svg>
+                </div>
+                <span class="text-[9px] font-black text-amber-500 text-center uppercase">Lainnya</span>
+            </button>
+        </div>
+
+        <!-- Desktop View -->
+        <div class="hidden md:block">
+            <div class="flex items-end justify-between mb-16">
+                <div class="space-y-4">
+                    <span class="text-red-600 font-black uppercase tracking-[0.4em] text-[10px]">Digital Ecosystem</span>
+                    <h2 class="text-6xl font-black text-slate-900 uppercase font-outfit leading-none">Portal Layanan</h2>
+                </div>
+                <p class="text-slate-500 text-lg max-w-md italic font-medium border-r-4 border-red-600 pr-8 text-right">
+                    {{ $profile?->ecosystem_description ?? 'Satu pintu akses untuk seluruh kebutuhan operasional logistik Polri.' }}
+                </p>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                @foreach ($apps as $app)
+                    <a href="{{ $app->url }}" target="_blank" class="service-tile p-6 group">
+                        <div class="tile-icon group-hover:scale-110 transition-transform">
+                            @if($app->icon)
+                                <img src="{{ asset('storage/' . $app->icon) }}" class="h-full w-full object-contain" alt="">
+                            @else
+                                <svg class="h-10 w-10 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                            @endif
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="text-xl font-black text-slate-800 uppercase group-hover:text-white font-outfit">{{ $app->title }}</h4>
+                            <p class="text-[10px] text-slate-500 italic mt-1 group-hover:text-white/80 line-clamp-2">{{ $app->description }}</p>
+                        </div>
+                    </a>
+                @endforeach
+            </div>
         </div>
     </div>
 </section>
 
-<!-- ELITE DOKUMEN REPOSITORY -->
-<section id="dokumen" x-show="activeSection === 'dokumen'" x-cloak class="pt-32 pb-32 bg-white px-8 relative overflow-hidden reveal-on-scroll">
-    <div class="absolute top-0 right-0 w-1/3 h-full bg-slate-50/50 -skew-x-12 translate-x-1/2"></div>
-    <div class="max-w-[1440px] mx-auto relative z-10 w-full">
-        <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-8">
-            <div class="space-y-2">
-                <h2 class="text-3xl font-bold text-[#1e293b] font-jakarta tracking-tight">Dokumen</h2>
+<!-- ELITE NEWS: Instagram Feed -->
+<section id="berita" class="pt-6 md:pt-16 pb-1 md:pb-16 md:bg-slate-50 bg-[#0f172a] px-6 md:px-8">
+    <div class="max-w-[1200px] mx-auto">
+        <!-- Section Header Mobile -->
+        <div class="md:hidden mb-6 border-b border-white/10 pb-4">
+            <div class="flex items-center gap-3">
+                <div class="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.8)]"></div>
+                <h2 class="text-xl font-black text-white tracking-wider uppercase font-outfit">Berita Utama</h2>
             </div>
+            <span class="block text-[9px] font-bold text-amber-500/60 uppercase tracking-[0.3em] mt-2 ml-5">Polda NTB Updates</span>
         </div>
 
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-            @foreach($folders as $folder)
-            <div class="group relative bg-slate-50 rounded-[2rem] p-6 border border-slate-200 hover:border-brand-primary hover:bg-white hover:shadow-xl hover:shadow-brand-primary/5 transition-all duration-500 flex flex-col">
-                <div class="flex items-start justify-between mb-4">
-                    <div class="h-12 w-12 rounded-xl bg-white shadow-sm flex items-center justify-center text-amber-500 group-hover:scale-110 group-hover:bg-amber-500 group-hover:text-white transition-all duration-500">
-                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" /></svg>
-                    </div>
-                    <span class="text-[9px] font-black uppercase tracking-widest text-slate-400 group-hover:text-amber-600 transition-colors">
-                        {{ $folder->documents->count() }} Berkas
-                    </span>
-                </div>
+        <!-- Header Desktop -->
+        <div class="hidden md:flex items-center justify-between mb-12">
+            <div class="space-y-2">
+                <span class="text-amber-500 font-black uppercase tracking-[0.4em] text-[10px]">Polda NTB Updates</span>
+                <h2 class="text-6xl font-black text-slate-900 uppercase font-outfit leading-none">Berita Utama</h2>
+            </div>
+            <a href="https://www.instagram.com/birologistik_ntb/" target="_blank" class="flex items-center gap-3 px-6 py-3 bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] text-white text-[10px] font-black rounded-xl shadow-xl hover:scale-105 transition-all uppercase italic">
+                Follow IG @birologistik_ntb
+            </a>
+        </div>
 
-                <div class="mb-4 flex-grow">
-                    <h3 class="text-sm font-black text-slate-900 font-outfit uppercase tracking-tight leading-tight group-hover:text-brand-primary transition-colors line-clamp-2 min-h-[2.5rem]">
-                        {{ $folder->name }}
-                    </h3>
-                    @if($folder->description)
-                    <p class="text-[10px] text-slate-500 font-medium leading-relaxed line-clamp-2 mt-1">
-                        {{ $folder->description }}
-                    </p>
-                    @endif
-                </div>
-
-                <div class="space-y-3" x-data="{ open: false, selectedTitle: 'Pilih Berkas...' }">
-                    <!-- Custom Premium Dropdown -->
-                    <div class="relative">
-                        <button @click="open = !open" @click.outside="open = false" 
-                            type="button"
-                            class="w-full flex items-center justify-between bg-white border border-slate-200 rounded-xl py-2.5 px-4 text-[9px] font-black uppercase tracking-widest text-slate-700 hover:border-brand-primary transition-all shadow-sm outline-none">
-                            <span class="truncate pr-4" x-text="selectedTitle">Pilih Berkas...</span>
-                            <svg class="w-3 h-3 text-slate-400 transition-transform duration-300" :class="open ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7" /></svg>
-                        </button>
-                        
-                        <div x-show="open" 
-                             x-cloak
-                             x-transition:enter="transition ease-out duration-200"
-                             x-transition:enter-start="opacity-0 translate-y-1 scale-95"
-                             x-transition:enter-end="opacity-100 translate-y-0 scale-100"
-                             x-transition:leave="transition ease-in duration-100"
-                             x-transition:leave-start="opacity-100 translate-y-0 scale-100"
-                             x-transition:leave-end="opacity-0 translate-y-1 scale-95"
-                             class="absolute z-[100] w-full mt-2 bg-white border border-slate-100 rounded-2xl shadow-2xl shadow-brand-primary/10 py-2 max-h-48 overflow-y-auto outline-none pointer-events-auto">
-                            @foreach($folder->documents as $doc)
-                            <button type="button" @click="selectedTitle = '{{ $doc->title }}'; open = false; updateDownloadLinkManual('{{ asset('storage/' . $doc->file_path) }}', '{{ $folder->id }}')"
-                                    class="w-full text-left px-4 py-2 text-[9px] font-bold uppercase tracking-widest text-slate-600 hover:bg-slate-50 hover:text-brand-primary transition-colors border-b border-slate-50 last:border-none">
-                                {{ $doc->title }}
-                            </button>
-                            @endforeach
-                            @if($folder->documents->isEmpty())
-                            <div class="px-4 py-2 text-[9px] font-bold text-slate-400 italic">Kosong</div>
+        <!-- Mobile List -->
+        <div class="md:hidden space-y-6 mb-12" x-data="{ showAllNews: false }">
+            @foreach($news->take(3) as $post)
+                <a href="{{ route('portal.news.show', $post->slug) }}" class="bg-slate-800/40 p-4 rounded-[2rem] flex items-center gap-5 border border-white/5 transition-all duration-300 transform hover:scale-[1.03] hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(0,0,0,0.5)] hover:border-amber-500/30 hover:bg-slate-800 active:scale-95 cursor-pointer block">
+                    <img src="{{ asset('storage/' . $post->thumbnail) }}" class="w-24 h-24 rounded-2xl object-cover shadow-2xl transition-transform duration-500 group-hover:scale-105" alt="">
+                    <div class="flex-1">
+                        <span class="text-[8px] font-black text-amber-500 uppercase tracking-widest block mb-2">{{ $post->created_at->format('d M Y') }}</span>
+                        <h4 class="text-[11px] font-black text-white uppercase leading-tight line-clamp-3 font-outfit">{{ $post->title }}</h4>
+                        <div class="mt-3 flex flex-wrap items-center gap-3">
+                            <div class="flex items-center gap-1.5 text-amber-500">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                                <span class="text-[8px] font-black uppercase">Baca Berita</span>
+                            </div>
+                            @if($post->instagram_url)
+                                <button @click.prevent="openInstaModal('{{ $post->instagram_url }}')" class="flex items-center gap-1.5 text-[#ee2a7b] z-10 relative px-2 py-1 bg-[#ee2a7b]/10 rounded-lg border border-[#ee2a7b]/20 hover:bg-[#ee2a7b] hover:text-white transition-colors">
+                                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.332 3.608 1.308.975.975 1.247 2.242 1.308 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.061 1.366-.333 2.633-1.308 3.608-.975.975-2.242 1.247-3.608 1.308-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.061-2.633-.333-3.608-1.308-.975-.975-1.247-2.242-1.308-3.608-.058-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c.061-1.366.333-2.633 1.308-3.608.975-.975 2.242-1.247 3.608-1.308 1.266-.058 1.646-.07 4.85-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-1.62.074-2.812.333-3.846 1.367-1.037 1.034-1.295 2.225-1.369 3.846-.058 1.28-.072 1.688-.072 4.947s.014 3.667.072 4.947c.074 1.621.332 2.812 1.369 3.846 1.034 1.037 2.225 1.295 3.846 1.369 1.28.058 1.688.072 4.947.072s3.667-.014 4.947-.072c1.621-.074 2.812-.332 3.846-1.369 1.037-1.034 1.295-2.225 1.369-3.846.058-1.28.072-1.688.072-4.947s-.014-3.667-.072-4.947c-.074-1.621-.332-2.812-1.369-3.846-1.034-1.037-2.225-1.295-3.846-1.369-1.28-.058-1.688-.072-4.947-.072zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                                    <span class="text-[8px] font-black uppercase">Buka IG</span>
+                                </button>
                             @endif
                         </div>
                     </div>
-
-                    <div class="grid grid-cols-2 gap-2 mt-auto">
-                        <!-- Individual Download -->
-                        <a id="download-{{ $folder->id }}" href="#" target="_blank"
-                            class="flex items-center justify-center py-2.5 rounded-xl border text-[8px] font-black uppercase tracking-widest transition-all bg-slate-50 text-slate-300 border-slate-100 pointer-events-none">
-                            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-                        </a>
-                        <!-- Folder ZIP Download -->
-                        <a href="{{ route('portal.folders.download', $folder) }}" 
-                            class="flex items-center justify-center py-2.5 bg-amber-500 text-white border border-amber-500 rounded-xl text-[8px] font-black uppercase tracking-widest hover:bg-amber-600 hover:scale-[1.02] active:scale-95 transition-all shadow-sm"
-                            title="Download Semua (.ZIP)">
-                            <svg class="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" /></svg>
-                            ZIP
-                        </a>
-                    </div>
-                </div>
-            </div>
-            @endforeach
-
-            <!-- Standalone Documents -->
-            @foreach($standaloneDocuments as $doc)
-            <div class="group relative bg-slate-50 rounded-[2rem] p-6 border border-slate-200 hover:border-brand-primary hover:bg-white hover:shadow-xl hover:shadow-brand-primary/5 transition-all duration-500 flex flex-col">
-                <div class="flex items-start justify-between mb-4">
-                    <div class="h-10 w-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-brand-primary group-hover:scale-110 group-hover:bg-brand-primary group-hover:text-white transition-all duration-500">
-                        @if(in_array($doc->file_type, ['pdf']))
-                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
-                        @else
-                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-                        @endif
-                    </div>
-                </div>
-
-                <div class="mb-6 flex-grow">
-                    <h3 class="text-sm font-black text-slate-900 font-outfit uppercase tracking-tight leading-tight group-hover:text-brand-primary transition-colors line-clamp-3">
-                        {{ $doc->title }}
-                    </h3>
-                    <p class="text-[9px] font-bold uppercase tracking-widest text-slate-400 mt-2">
-                        {{ $doc->file_size }}
-                    </p>
-                </div>
-
-                <a href="{{ asset('storage/' . $doc->file_path) }}" target="_blank" class="w-full inline-flex items-center justify-center gap-2 py-3 bg-white border border-slate-200 rounded-xl text-[9px] font-black uppercase tracking-widest text-slate-900 hover:bg-brand-primary hover:text-white hover:border-brand-primary hover:scale-[1.02] active:scale-95 transition-all shadow-sm">
-                    Unduh
-                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
                 </a>
-            </div>
             @endforeach
 
-            @if($folders->count() === 0 && $standaloneDocuments->count() === 0)
-            <div class="col-span-full py-20 bg-slate-50 rounded-[3rem] border border-dashed border-slate-200 flex flex-col items-center justify-center text-center px-8">
-                 <div class="h-20 w-20 bg-white rounded-3xl shadow-sm flex items-center justify-center text-slate-300 mb-6">
-                    <svg class="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 12h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-                 </div>
-                 <h4 class="text-lg font-black text-slate-400 uppercase tracking-widest italic font-outfit">Arsip Belum Tersedia</h4>
-                 <p class="text-sm text-slate-400 mt-2 font-bold italic uppercase tracking-widest">Dokumen publik akan segera diunggah oleh admin.</p>
-            </div>
+            @if($news->count() > 3)
+                <a href="{{ route('portal.news.index') }}" class="w-full py-4 mt-2 border border-amber-500/30 text-amber-500 rounded-[2rem] font-black uppercase text-[10px] tracking-widest hover:bg-amber-500 hover:text-[#0f172a] transition-colors shadow-[0_0_15px_rgba(245,158,11,0.2)] flex items-center justify-center">
+                    Semua Berita
+                </a>
             @endif
+        </div>
+
+        <!-- Desktop Grid -->
+        <div class="hidden md:grid grid-cols-4 gap-8">
+            @foreach ($news as $item)
+                <a href="{{ $item->instagram_url ? '#' : route('portal.news.show', $item->slug) }}"
+                   @if($item->instagram_url) onclick="event.preventDefault(); openInstaModal('{{ $item->instagram_url }}')" @endif
+                   class="news-card-elite group cursor-pointer block">
+                    <div class="relative aspect-[4/5] overflow-hidden">
+                        <img src="{{ asset('storage/' . $item->thumbnail) }}" class="h-full w-full object-cover group-hover:scale-110 transition-transform duration-700" alt="">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
+                            <span class="text-white text-xs font-black uppercase italic">Baca Selengkapnya &rarr;</span>
+                        </div>
+                        <div class="absolute top-4 left-4">
+                            @if($item->instagram_url)
+                                <span class="px-3 py-1 bg-white/20 backdrop-blur-md text-white text-[8px] font-black rounded-lg border border-white/20 uppercase">INSTAGRAM</span>
+                            @else
+                                <span class="px-3 py-1 bg-red-600/80 backdrop-blur-md text-white text-[8px] font-black rounded-lg border border-red-500/50 uppercase">ARTIKEL</span>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="p-6 bg-white">
+                        <span class="text-[9px] font-black text-red-600 uppercase tracking-widest mb-3 block">{{ $item->created_at->format('d F Y') }}</span>
+                        <h4 class="text-sm font-black text-slate-800 uppercase line-clamp-2 leading-tight font-outfit">{{ $item->title }}</h4>
+                    </div>
+                </a>
+            @endforeach
         </div>
     </div>
 </section>
 
-<script>
-    function updateDownloadLinkManual(url, folderId) {
-        const btn = document.getElementById('download-' + folderId);
-        
-        if (url) {
-            btn.href = url;
-            btn.classList.remove('bg-slate-50', 'text-slate-300', 'border-slate-100', 'pointer-events-none');
-            btn.classList.add('bg-brand-primary', 'text-white', 'border-brand-primary', 'hover:scale-[1.02]', 'active:scale-95');
-        } else {
-            btn.href = '#';
-            btn.classList.add('bg-slate-50', 'text-slate-300', 'border-slate-100', 'pointer-events-none');
-            btn.classList.remove('bg-brand-primary', 'text-white', 'border-brand-primary', 'hover:scale-[1.02]', 'active:scale-95');
-        }
-    }
-</script>
+<!-- ELITE DOKUMEN: Dokumen & Arsip -->
+<section id="dokumen" class="pt-6 md:pt-16 pb-1 md:pb-16 md:bg-white bg-[#0f172a] px-6 md:px-8">
+    <div class="max-w-[1200px] mx-auto">
+        <!-- Section Header Mobile -->
+        <div class="md:hidden mb-6 border-b border-white/10 pb-4">
+            <div class="flex items-center gap-3">
+                <div class="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.8)]"></div>
+                <h2 class="text-xl font-black text-white tracking-wider uppercase font-outfit">Dokumen</h2>
+            </div>
+            <span class="block text-[9px] font-bold text-amber-500/60 uppercase tracking-[0.3em] mt-2 ml-5">Data & Archives Center</span>
+        </div>
 
-<!-- ELITE STRUKTUR: COMMAND -->
-<section id="struktur" x-show="activeSection === 'struktur'" x-cloak class="pt-32 pb-44 bg-slate-50 px-8 relative overflow-hidden reveal-on-scroll">
-    <div class="absolute -bottom-1/4 -right-1/4 w-[800px] h-[800px] bg-brand-primary/10 blur-[150px] rounded-full point-events-none"></div>
-    <div class="max-w-[1440px] mx-auto relative z-10 w-full">
-        <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-8">
+        <!-- Header Desktop -->
+        <div class="hidden md:flex flex-row items-end justify-between mb-16 gap-8">
             <div class="space-y-4">
-                <h2 class="text-2xl md:text-3xl font-black italic uppercase font-outfit tracking-[0.3em] bg-gradient-to-r from-red-600 via-orange-500 via-yellow-500 via-amber-800 to-black bg-clip-text text-transparent leading-none">
-                    Struktur Organisasi
-                </h2>
-                <div class="h-1.5 w-64 bg-brand-primary rounded-full"></div>
+                <span class="text-amber-500 font-black uppercase tracking-[0.4em] text-[10px]">Data & Archives Center</span>
+                <h2 class="text-6xl font-black text-slate-900 uppercase font-outfit leading-none">Dokumen</h2>
+            </div>
+            <div class="w-full max-w-sm">
+                <div class="relative group">
+                    <input type="text" x-model="searchDoc" placeholder="Cari Dokumen..." class="w-full bg-slate-50 border border-slate-200 rounded-2xl py-4 pl-12 pr-6 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all">
+                    <svg class="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                </div>
             </div>
         </div>
 
-        <div class="w-full">
-            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-x-2 gap-y-12">
-                @php
-                    // Meratakan pohon menjadi list (opsional, atau bisa tampilkan root saja tergantung keinginan user)
-                    // Untuk sementara kita tampilkan semua personil secara flat agar rapi tanpa bagan.
-                    $allPersonnels = \App\Models\Organogram::orderBy('order')->get();
-                @endphp
-                
-                @foreach($allPersonnels as $person)
-                    <div class="reveal-on-scroll">
-                        @include('components.org-card', ['node' => $person])
+        <!-- Mobile Quick Access Icons -->
+        <div class="md:hidden grid grid-cols-4 gap-y-10 mb-16" x-data="{ showAllDocs: false }">
+            @foreach ($folders->take(3) as $folder)
+                <div x-data="{ openFolder: false }">
+                    <button type="button" @click.prevent="openFolder = true" class="w-full flex flex-col items-center gap-3 reveal-on-scroll group focus:outline-none">
+                        <div class="w-16 h-16 bg-slate-800 rounded-[1.5rem] flex items-center justify-center text-amber-500 border border-slate-700 shadow-xl animate-float-soft transition-all duration-300 transform group-hover:scale-110 group-hover:-translate-y-2 group-hover:shadow-[0_20px_40px_rgba(245,158,11,0.3)] group-active:scale-95 group-hover:bg-slate-700 group-hover:border-amber-500/50" style="animation-delay: {{ $loop->index * 200 }}ms">
+                            <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" /></svg>
+                        </div>
+                        <span class="text-[9px] font-black text-slate-300 text-center leading-tight uppercase tracking-tighter">{{ $folder->name }}</span>
+                    </button>
+
+                    <!-- Modal Folder Details -->
+                    <template x-teleport="body">
+                        <div x-show="openFolder" x-cloak class="fixed inset-0 z-[99999] flex items-center justify-center p-6 bg-[#0f172a]/95 backdrop-blur-md" @click.self="openFolder = false" x-transition.opacity.duration.300ms>
+                            <div x-show="openFolder" class="bg-slate-900 border border-white/10 rounded-[2.5rem] p-6 w-full max-w-sm relative shadow-2xl flex flex-col max-h-[80vh]" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-8 scale-95" x-transition:enter-end="opacity-100 translate-y-0 scale-100">
+                                <button type="button" @click.prevent="openFolder = false" class="absolute top-4 right-4 h-10 w-10 bg-slate-800 rounded-full flex items-center justify-center text-slate-400 hover:text-white transition-colors z-10">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+                                </button>
+                                
+                                <div class="flex items-center gap-4 mb-6 pr-12">
+                                    <div class="w-12 h-12 rounded-2xl bg-slate-800 border border-white/5 flex items-center justify-center text-amber-500 shadow-inner shrink-0">
+                                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" /></svg>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-sm font-black text-white uppercase tracking-widest leading-tight">{{ $folder->name }}</h3>
+                                        <p class="text-[10px] text-slate-400 font-bold uppercase mt-1">{{ $folder->documents->count() }} Berkas</p>
+                                    </div>
+                                </div>
+
+                                @if($folder->documents->count() > 0)
+                                <a href="{{ route('portal.folders.download', $folder->id) }}" class="w-full py-3 mb-4 bg-amber-500 text-[#0f172a] rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 active:scale-95 transition-transform shrink-0">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                    Download Semua (.zip)
+                                </a>
+                                @endif
+
+                                <div class="flex-1 overflow-y-auto pr-2 space-y-3 custom-scrollbar">
+                                    @forelse($folder->documents as $doc)
+                                        <a href="{{ asset('storage/' . $doc->file_path) }}" target="_blank" class="flex items-center justify-between p-4 bg-slate-800/50 rounded-2xl border border-white/5 hover:bg-slate-800 transition-colors group">
+                                            <div class="flex items-center gap-3 overflow-hidden">
+                                                <svg class="w-5 h-5 text-amber-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                                                <span class="text-[11px] font-bold text-slate-300 truncate group-hover:text-white transition-colors">{{ $doc->title }}</span>
+                                            </div>
+                                            <svg class="w-4 h-4 text-slate-500 group-hover:text-amber-500 transition-colors shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                        </a>
+                                    @empty
+                                        <div class="p-6 text-center text-slate-500 text-xs font-bold italic">
+                                            Belum ada berkas di folder ini.
+                                        </div>
+                                    @endforelse
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            @endforeach
+
+            @if($folders->count() > 3)
+                @foreach ($folders->skip(3) as $folder)
+                    <div x-data="{ openFolder: false }" x-show="showAllDocs" x-cloak>
+                        <button type="button" @click.prevent="openFolder = true" class="w-full flex flex-col items-center gap-3 reveal-on-scroll group focus:outline-none">
+                            <div class="w-16 h-16 bg-slate-800 rounded-[1.5rem] flex items-center justify-center text-amber-500 border border-slate-700 shadow-xl animate-float-soft transition-all duration-300 transform group-hover:scale-110 group-hover:-translate-y-2 group-hover:shadow-[0_20px_40px_rgba(245,158,11,0.3)] group-active:scale-95 group-hover:bg-slate-700 group-hover:border-amber-500/50">
+                                <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" /></svg>
+                            </div>
+                            <span class="text-[9px] font-black text-slate-300 text-center leading-tight uppercase tracking-tighter">{{ $folder->name }}</span>
+                        </button>
+
+                        <template x-teleport="body">
+                            <div x-show="openFolder" x-cloak class="fixed inset-0 z-[99999] flex items-center justify-center p-6 bg-[#0f172a]/95 backdrop-blur-md" @click.self="openFolder = false" x-transition.opacity.duration.300ms>
+                                <div x-show="openFolder" class="bg-slate-900 border border-white/10 rounded-[2.5rem] p-6 w-full max-w-sm relative shadow-2xl flex flex-col max-h-[80vh]" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-8 scale-95" x-transition:enter-end="opacity-100 translate-y-0 scale-100">
+                                    <button type="button" @click.prevent="openFolder = false" class="absolute top-4 right-4 h-10 w-10 bg-slate-800 rounded-full flex items-center justify-center text-slate-400 hover:text-white transition-colors z-10">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+                                    </button>
+                                    
+                                    <div class="flex items-center gap-4 mb-6 pr-12">
+                                        <div class="w-12 h-12 rounded-2xl bg-slate-800 border border-white/5 flex items-center justify-center text-amber-500 shadow-inner shrink-0">
+                                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" /></svg>
+                                        </div>
+                                        <div>
+                                            <h3 class="text-sm font-black text-white uppercase tracking-widest leading-tight">{{ $folder->name }}</h3>
+                                            <p class="text-[10px] text-slate-400 font-bold uppercase mt-1">{{ $folder->documents->count() }} Berkas</p>
+                                        </div>
+                                    </div>
+
+                                    @if($folder->documents->count() > 0)
+                                    <a href="{{ route('portal.folders.download', $folder->id) }}" class="w-full py-3 mb-4 bg-amber-500 text-[#0f172a] rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 active:scale-95 transition-transform shrink-0">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                        Download Semua (.zip)
+                                    </a>
+                                    @endif
+
+                                    <div class="flex-1 overflow-y-auto pr-2 space-y-3 custom-scrollbar">
+                                        @forelse($folder->documents as $doc)
+                                            <a href="{{ asset('storage/' . $doc->file_path) }}" target="_blank" class="flex items-center justify-between p-4 bg-slate-800/50 rounded-2xl border border-white/5 hover:bg-slate-800 transition-colors group">
+                                                <div class="flex items-center gap-3 overflow-hidden">
+                                                    <svg class="w-5 h-5 text-amber-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                                                    <span class="text-[11px] font-bold text-slate-300 truncate group-hover:text-white transition-colors">{{ $doc->title }}</span>
+                                                </div>
+                                                <svg class="w-4 h-4 text-slate-500 group-hover:text-amber-500 transition-colors shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                            </a>
+                                        @empty
+                                            <div class="p-6 text-center text-slate-500 text-xs font-bold italic">
+                                                Belum ada berkas di folder ini.
+                                            </div>
+                                        @endforelse
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
                     </div>
                 @endforeach
 
-                @if($allPersonnels->isEmpty())
-                    <div class="col-span-full py-20 bg-slate-50 rounded-[3rem] border border-dashed border-slate-200 flex flex-col items-center justify-center text-center px-8">
-                         <div class="h-20 w-20 bg-white rounded-3xl shadow-sm flex items-center justify-center text-slate-300 mb-6">
-                            <svg class="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
-                         </div>
-                         <h4 class="text-sm font-black text-slate-400 uppercase tracking-widest italic">Data Personil Belum Diinput</h4>
+                <button type="button" x-show="!showAllDocs" @click.prevent="showAllDocs = true" class="flex flex-col items-center gap-3 group">
+                    <div class="w-16 h-16 bg-amber-500 rounded-[1.5rem] flex items-center justify-center text-[#0f172a] shadow-xl shadow-amber-500/20 animate-pulse-soft transition-all duration-300 transform group-hover:scale-110 group-hover:-translate-y-2 group-hover:shadow-[0_20px_40px_rgba(245,158,11,0.6)] group-active:scale-95 group-hover:bg-amber-400">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 6h16M4 12h16m-7 6h7"/></svg>
                     </div>
-                @endif
+                    <span class="text-[9px] font-black text-amber-500 text-center uppercase">Semua</span>
+                </button>
+
+                <button type="button" x-show="showAllDocs" @click.prevent="showAllDocs = false" x-cloak class="flex flex-col items-center gap-3 group">
+                    <div class="w-16 h-16 bg-slate-800 rounded-[1.5rem] flex items-center justify-center text-slate-400 shadow-xl transition-all duration-300 transform group-active:scale-95 border border-slate-700">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/></svg>
+                    </div>
+                    <span class="text-[9px] font-black text-slate-400 text-center uppercase">Tutup</span>
+                </button>
+            @endif
+        </div>
+
+        <!-- Desktop View (Grid) -->
+        <div class="hidden md:grid grid-cols-4 gap-8">
+            <!-- Folders -->
+            @foreach ($folders as $folder)
+                <div class="bg-slate-50 p-8 rounded-[3rem] border border-slate-100 group hover:bg-white hover:shadow-2xl hover:shadow-amber-500/5 transition-all duration-500">
+                    <div class="h-14 w-14 bg-white rounded-2xl flex items-center justify-center text-amber-500 mb-8 shadow-sm group-hover:bg-amber-500 group-hover:text-white transition-all">
+                        <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" /></svg>
+                    </div>
+                    <h4 class="text-sm font-black text-slate-800 uppercase mb-4 font-outfit">{{ $folder->name }}</h4>
+                    <select onchange="updateDownloadLinkManual(this.value, '{{ $folder->id }}')" class="w-full bg-white border border-slate-200 rounded-xl py-3 px-4 text-[10px] font-bold text-slate-600 outline-none mb-6 cursor-pointer hover:border-amber-500 transition-colors">
+                        <option value="">Pilih Berkas...</option>
+                        @foreach($folder->documents as $doc)
+                            <option value="{{ asset('storage/' . $doc->file_path) }}">{{ $doc->title }}</option>
+                        @endforeach
+                    </select>
+                    <a id="download-{{ $folder->id }}" href="#" target="_blank" class="w-full py-4 bg-slate-100 text-slate-300 rounded-2xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 pointer-events-none transition-all shadow-sm">
+                        Unduh Berkas
+                    </a>
+                </div>
+            @endforeach
+
+            <!-- Standalone Documents -->
+            @foreach ($standaloneDocuments as $doc)
+                <div class="bg-slate-900 p-8 rounded-[3rem] group hover:scale-[1.02] transition-all duration-500 flex flex-col justify-between">
+                    <div>
+                        <div class="h-14 w-14 bg-white/10 rounded-2xl flex items-center justify-center text-white mb-8">
+                            <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+                        </div>
+                        <h4 class="text-sm font-black text-white uppercase mb-4 font-outfit leading-snug">{{ $doc->title }}</h4>
+                    </div>
+                    <a href="{{ asset('storage/' . $doc->file_path) }}" target="_blank" class="w-full py-4 bg-amber-500 text-[#0f172a] rounded-2xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 shadow-xl shadow-amber-500/20 italic">
+                        Unduh Mandiri &rarr;
+                    </a>
+                </div>
+            @endforeach
+        </div>
+    </div>
+</section>
+
+<!-- ELITE BAGIAN: Tupoksi/Fungsi -->
+<section id="bagian" class="pt-6 md:pt-16 pb-1 md:pb-16 md:bg-white bg-[#0f172a] px-6 md:px-8 relative overflow-hidden">
+    <div class="max-w-[1200px] mx-auto">
+        <!-- Header Mobile -->
+        <div class="md:hidden mb-6 border-b border-white/10 pb-4">
+            <div class="flex items-center gap-3">
+                <div class="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.8)]"></div>
+                <h2 class="text-xl font-black text-white tracking-wider uppercase font-outfit">Bagian/Fungsi</h2>
+            </div>
+            <span class="block text-[9px] font-bold text-amber-500/60 uppercase tracking-[0.3em] mt-2 ml-5">Tugas Pokok & Fungsi</span>
+        </div>
+
+        @php
+            $sections = [
+                ['title' => 'BAG PAL', 'desc' => 'Melaksanakan pemeliharaan dan perbaikan alat peralatan logistik kepolisian serta pengawasan teknis sarana prasarana.'],
+                ['title' => 'BAG BEKUM', 'desc' => 'Mengelola perbekalan umum, distribusi seragam dinas, material logistik, serta kebutuhan dasar personel.'],
+                ['title' => 'BAG FASKON', 'desc' => 'Bertanggung jawab atas pembangunan, pemeliharaan, dan pengawasan fasilitas gedung serta infrastruktur fisik.'],
+                ['title' => 'BAG INFOLOG', 'desc' => 'Menyelenggarakan digitalisasi data logistik, pengelolaan sistem informasi inventaris (SILOGIS), serta pelaporan aset.'],
+                ['title' => 'BAG ADA', 'desc' => 'Melaksanakan administrasi pengadaan barang dan jasa secara transparan dan akuntabel melalui e-procurement.'],
+                ['title' => 'SUBBAG RENMIN', 'desc' => 'Menyelenggarakan perencanaan program kerja, administrasi SDM, keuangan internal, dan pengawasan umum.'],
+            ];
+        @endphp
+
+        <!-- Mobile List -->
+        <div class="md:hidden space-y-5 mb-16">
+            @foreach ($sections as $sec)
+                <div x-data="{ open: false }">
+                    <div @click="open = true" class="flex gap-5 bg-slate-800/40 p-5 rounded-[2.5rem] border border-white/5 shadow-2xl reveal-on-scroll group transition-all duration-300 transform hover:scale-[1.03] hover:-translate-x-2 hover:shadow-[0_20px_40px_rgba(245,158,11,0.15)] hover:border-amber-500/30 hover:bg-slate-800 active:scale-95 cursor-pointer">
+                        <div class="w-16 h-16 rounded-2xl bg-slate-900 flex items-center justify-center text-amber-500 border border-amber-500/10 animate-float-soft transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3 shrink-0" style="animation-delay: {{ $loop->index * 300 }}ms">
+                            <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+                        </div>
+                        <div class="flex-1 flex flex-col justify-center">
+                            <div class="flex justify-between items-center mb-1">
+                                <h3 class="text-xs font-black text-white uppercase tracking-widest">{{ $sec['title'] }}</h3>
+                            </div>
+                            <p class="text-[9px] text-slate-400 font-medium italic line-clamp-2 leading-relaxed">{{ $sec['desc'] }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Modal Detail Bagian -->
+                    <template x-teleport="body">
+                        <div x-show="open" x-cloak class="fixed inset-0 z-[99999] flex items-center justify-center p-6 bg-[#0f172a]/95 backdrop-blur-md" @click.self="open = false" x-transition.opacity.duration.300ms>
+                            <div x-show="open" class="bg-slate-900 border border-white/10 rounded-[2.5rem] p-8 w-full max-w-sm relative shadow-2xl" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-8 scale-95" x-transition:enter-end="opacity-100 translate-y-0 scale-100">
+                                <button @click="open = false" class="absolute top-4 right-4 h-10 w-10 bg-slate-800 rounded-full flex items-center justify-center text-slate-400 hover:text-white transition-colors">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+                                </button>
+                                <div class="w-16 h-16 rounded-2xl bg-slate-800 border border-white/5 flex items-center justify-center text-amber-500 mb-6 shadow-inner">
+                                    <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+                                </div>
+                                <h3 class="text-xl font-black text-white uppercase tracking-widest mb-4">{{ $sec['title'] }}</h3>
+                                <p class="text-sm text-slate-300 font-medium italic leading-relaxed">{{ $sec['desc'] }}</p>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            @endforeach
+        </div>
+
+        <!-- Desktop Grid -->
+        <div class="hidden md:block">
+            <div class="text-center mb-16">
+                <span class="text-red-600 font-black uppercase tracking-[0.4em] text-[10px] mb-4 block">Tugas Pokok & Fungsi</span>
+                <h2 class="text-5xl font-black text-slate-900 uppercase font-outfit italic">Bagian/Fungsi</h2>
+            </div>
+            <div class="grid grid-cols-3 gap-8">
+                @foreach ($sections as $sec)
+                    <div class="bg-white p-10 rounded-[3rem] border border-slate-100 shadow-sm hover:shadow-2xl transition-all duration-500 group">
+                        <h5 class="text-red-600 font-black uppercase tracking-widest text-xs mb-6 border-b border-slate-50 pb-5 group-hover:text-amber-500 transition-colors">{{ $sec['title'] }}</h5>
+                        <p class="text-slate-500 text-sm leading-relaxed font-medium italic">{{ $sec['desc'] }}</p>
+                    </div>
+                @endforeach
             </div>
         </div>
     </div>
 </section>
 
-<!-- SEKSI BAGIAN/FUNGSI -->
-<section id="bagian" x-show="activeSection === 'bagian'" x-cloak class="pt-32 pb-32 bg-slate-50 px-8 relative overflow-hidden">
-    <div class="max-w-7xl mx-auto px-8 relative z-10">
-        <!-- Section Header -->
-        <div class="mb-16 text-center">
-            <span class="text-brand-primary font-black uppercase tracking-[0.4em] text-[10px] mb-4 block">Tugas Pokok & Fungsi</span>
-            <h2 class="text-4xl font-black text-slate-800 uppercase font-outfit tracking-wider text-center">Kegiatan Operasional Bagian</h2>
+<!-- ELITE STRUKTUR: Personnel Discovery -->
+<section id="struktur" class="pt-6 md:pt-16 pb-1 md:pb-16 md:bg-slate-50 bg-[#0f172a] px-6 md:px-8">
+    <div class="max-w-[1200px] mx-auto">
+        <!-- Section Header Mobile -->
+        <div class="md:hidden mb-6 flex items-center justify-between border-b border-white/10 pb-4">
+            <div>
+                <div class="flex items-center gap-3">
+                    <div class="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.8)]"></div>
+                    <h2 class="text-xl font-black text-white tracking-wider uppercase font-outfit">Struktur</h2>
+                </div>
+                <span class="block text-[9px] font-bold text-amber-500/60 uppercase tracking-[0.3em] mt-2 ml-5">Command Center</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <button type="button" onclick="document.getElementById('struktur-scroll').scrollBy({ left: -window.innerWidth, behavior: 'smooth' })" class="flex items-center justify-center h-10 w-10 bg-white/5 rounded-2xl text-white shadow-xl shrink-0 active:scale-95 transition-all border border-white/10">
+                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"/></svg>
+                </button>
+                <button type="button" onclick="document.getElementById('struktur-scroll').scrollBy({ left: window.innerWidth, behavior: 'smooth' })" class="flex items-center justify-center h-10 w-10 bg-amber-500 rounded-2xl text-[#0f172a] shadow-xl shrink-0 active:scale-95 transition-all">
+                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"/></svg>
+                </button>
+            </div>
         </div>
 
-        <!-- Sections Grid (3 per baris) -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <!-- BAG PAL -->
-            <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-500 group">
-                <h5 class="text-brand-primary font-black uppercase tracking-widest text-xs mb-6 border-b border-slate-100 pb-4">BAG PAL</h5>
-                <p class="text-slate-500 text-sm leading-relaxed font-medium">
-                    Melaksanakan pemeliharaan dan perbaikan alat peralatan logistik kepolisian serta pengawasan teknis sarana prasarana operasional untuk mendukung tugas Polri.
+        <!-- Header Desktop -->
+        <div class="hidden md:flex items-center justify-between mb-12">
+            <div class="space-y-2">
+                <span class="text-amber-500 font-black uppercase tracking-[0.4em] text-[10px]">Command Center</span>
+                <h2 class="text-6xl font-black text-slate-900 uppercase font-outfit leading-none">Struktur</h2>
+            </div>
+        </div>
+
+        @php
+            $allPersonnels = \App\Models\Organogram::orderBy('order')->get();
+            $colors = ['bg-[#fbbf24]', 'bg-[#dc2626]', 'bg-[#0f172a]'];
+        @endphp
+
+        <!-- Mobile Scroll (Discovery Style) -->
+        <div id="struktur-scroll" class="md:hidden -mx-6 px-6 flex gap-5 overflow-x-auto pb-10 snap-x no-scrollbar">
+            @foreach($allPersonnels as $index => $person)
+                <div class="flex-shrink-0 w-[calc(100vw-3rem)] h-[450px] rounded-[3.5rem] relative overflow-hidden snap-center {{ $colors[$index % 3] }} shadow-2xl border border-white/5">
+                    <div class="absolute inset-0">
+                         @if($person->photo)
+                            <img src="{{ asset('storage/' . $person->photo) }}" class="w-full h-full object-cover" alt="{{ $person->name }}">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div>
+                         @else
+                            <div class="w-full h-full flex items-center justify-center bg-black/40 backdrop-blur-md">
+                                <div class="text-center">
+                                    <svg class="w-24 h-24 text-white/10 mx-auto mb-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                                    <span class="text-[10px] text-white/20 font-black uppercase tracking-widest">No Identity Photo</span>
+                                </div>
+                            </div>
+                         @endif
+                    </div>
+                    <div class="absolute bottom-12 inset-x-0 px-10 text-center">
+                        @if($person->rank)
+                            <div class="text-amber-400 font-black uppercase tracking-[0.2em] text-[10px] mb-1 drop-shadow-lg">{{ $person->rank }}</div>
+                        @endif
+                        <h5 class="text-white font-black uppercase text-2xl drop-shadow-2xl font-outfit leading-tight mb-2">{{ $person->name }}</h5>
+                        <div class="inline-block px-4 py-1.5 bg-amber-500 rounded-full text-[#0f172a] text-[10px] font-black uppercase tracking-widest">{{ $person->position }}</div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+
+        <!-- Desktop Grid -->
+        <div class="hidden md:grid grid-cols-7 gap-x-2 gap-y-16">
+            @foreach($allPersonnels as $person)
+                <div class="reveal-on-scroll">
+                    @include('components.org-card', ['node' => $person])
+                </div>
+            @endforeach
+        </div>
+    </div>
+</section>
+
+
+
+<!-- SEKSI TENTANG KAMI -->
+<section id="tentang" class="pt-6 md:pt-16 pb-10 md:pb-24 bg-[#0f172a] px-6 md:px-8 relative overflow-hidden">
+    <div class="absolute top-0 right-0 w-1/2 h-full bg-amber-500/5 -skew-x-12 translate-x-1/4"></div>
+    <div class="max-w-[1200px] mx-auto relative z-10 w-full">
+        <!-- Header Mobile -->
+        <div class="md:hidden mb-6 border-b border-white/10 pb-4">
+            <div class="flex items-center gap-3">
+                <div class="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.8)]"></div>
+                <h2 class="text-xl font-black text-white tracking-wider uppercase font-outfit">Tentang Kami</h2>
+            </div>
+            <span class="block text-[9px] font-bold text-amber-500/60 uppercase tracking-[0.3em] mt-2 ml-5">Biro Logistik Polda NTB</span>
+        </div>
+
+        <!-- Mobile Content -->
+        <div class="md:hidden space-y-6">
+            <div class="bg-slate-800/40 backdrop-blur-md p-8 rounded-[3.5rem] border border-white/5 shadow-2xl reveal-on-scroll group transition-all duration-500 active:scale-95 hover:border-amber-500/30">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-500">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                    </div>
+                    <h4 class="text-amber-500 font-black uppercase tracking-widest text-[10px]">Visi</h4>
+                </div>
+                <p class="text-slate-300 text-[11px] font-bold leading-relaxed italic text-justify opacity-90 group-hover:opacity-100 transition-opacity">
+                    {{ $profile?->vision ?? 'Menjadi biro logistik yang unggul dalam pelayanan.' }}
                 </p>
             </div>
 
-            <!-- BAG BEKUM -->
-            <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-500">
-                <h5 class="text-brand-primary font-black uppercase tracking-widest text-xs mb-6 border-b border-slate-100 pb-4">BAG BEKUM</h5>
-                <p class="text-slate-500 text-sm leading-relaxed font-medium">
-                    Mengelola perbekalan umum, distribusi seragam dinas, material logistik, serta kebutuhan dasar personel guna menunjang kesiapan operasional wilayah.
+            <div class="bg-slate-800/40 backdrop-blur-md p-8 rounded-[3.5rem] border border-white/5 shadow-2xl reveal-on-scroll group transition-all duration-500 active:scale-95 hover:border-red-500/30">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="w-10 h-10 rounded-xl bg-red-500/10 flex items-center justify-center text-red-500">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                    </div>
+                    <h4 class="text-red-500 font-black uppercase tracking-widest text-[10px]">Misi</h4>
+                </div>
+                <p class="text-slate-300 text-[11px] font-bold leading-relaxed italic text-justify opacity-90 group-hover:opacity-100 transition-opacity">
+                    {{ $profile?->mission ?? 'Melaksanakan manajemen logistik secara profesional.' }}
                 </p>
             </div>
 
-            <!-- BAG FASKON -->
-            <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-500">
-                <h5 class="text-brand-primary font-black uppercase tracking-widest text-xs mb-6 border-b border-slate-100 pb-4">BAG FASKON</h5>
-                <p class="text-slate-500 text-sm leading-relaxed font-medium">
-                    Bertanggung jawab atas pembangunan, pemeliharaan, dan pengawasan fasilitas gedung, lahan, serta infrastruktur fisik Kepolisian di tingkat Polda dan Polres.
+            @if($profile?->history)
+            <div class="bg-slate-800/20 p-8 rounded-[3.5rem] border border-white/5 reveal-on-scroll">
+                <h4 class="text-slate-500 font-black uppercase tracking-widest text-[10px] mb-4">Sejarah & Perjalanan</h4>
+                <p class="text-slate-400 text-[10px] font-medium leading-relaxed italic line-clamp-4">
+                    {{ $profile->history }}
                 </p>
             </div>
+            @endif
+        </div>
 
-            <!-- BAG INFOLOG -->
-            <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-500">
-                <h5 class="text-brand-primary font-black uppercase tracking-widest text-xs mb-6 border-b border-slate-100 pb-4">BAG INFOLOG</h5>
-                <p class="text-slate-500 text-sm leading-relaxed font-medium">
-                    Menyelenggarakan digitalisasi data logistik, pengelolaan sistem informasi inventaris (SILOGIS), serta pelaporan manajemen aset secara real-time.
-                </p>
-            </div>
-
-            <!-- BAG ADA -->
-            <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-500">
-                <h5 class="text-brand-primary font-black uppercase tracking-widest text-xs mb-6 border-b border-slate-100 pb-4">BAG ADA</h5>
-                <p class="text-slate-500 text-sm leading-relaxed font-medium">
-                    Melaksanakan administrasi pengadaan barang dan jasa secara transparan, akuntabel, dan profesional melalui sistem e-procurement yang terintegrasi.
-                </p>
-            </div>
-
-            <!-- SUBBAG RENMIN -->
-            <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-500">
-                <h5 class="text-brand-primary font-black uppercase tracking-widest text-xs mb-6 border-b border-slate-100 pb-4">SUBBAG RENMIN</h5>
-                <p class="text-slate-500 text-sm leading-relaxed font-medium">
-                    Menyelenggarakan perencanaan program kerja, administrasi sumber daya manusia, keuangan internal, serta pengawasan administrasi umum di Biro Logistik.
-                </p>
+        <!-- Desktop Content -->
+        <div class="hidden md:block">
+            <h2 class="text-6xl font-black text-white uppercase font-outfit mb-20 text-center">Biro Logistik Polda NTB</h2>
+            <div class="grid grid-cols-12 gap-12">
+                <div class="col-span-7 bg-white p-16 rounded-[4rem] shadow-2xl relative overflow-hidden group/card">
+                    <div class="absolute top-0 left-0 w-2 h-full bg-red-600 group-hover/card:w-4 transition-all duration-500"></div>
+                    <div class="space-y-12">
+                        <div class="group/item hover:translate-x-4 transition-transform duration-500">
+                            <div class="flex items-center gap-5 mb-4">
+                                <div class="w-12 h-12 rounded-2xl bg-amber-500/10 flex items-center justify-center text-amber-500 group-hover/item:scale-110 group-hover/item:bg-amber-500 group-hover/item:text-white transition-all duration-500 shadow-lg shadow-amber-500/5">
+                                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                                </div>
+                                <h3 class="text-4xl font-black text-slate-800 uppercase italic font-outfit">Visi</h3>
+                            </div>
+                            <p class="text-slate-500 text-xl font-bold italic leading-relaxed text-justify border-l-4 border-slate-100 pl-8 group-hover/item:border-amber-500 transition-colors">
+                                {{ $profile?->vision ?? 'Menjadi biro logistik yang unggul dalam pelayanan.' }}
+                            </p>
+                        </div>
+                        <div class="group/item hover:translate-x-4 transition-transform duration-500">
+                            <div class="flex items-center gap-5 mb-4">
+                                <div class="w-12 h-12 rounded-2xl bg-red-500/10 flex items-center justify-center text-red-600 group-hover/item:scale-110 group-hover/item:bg-red-600 group-hover/item:text-white transition-all duration-500 shadow-lg shadow-red-500/5">
+                                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                                </div>
+                                <h3 class="text-4xl font-black text-slate-800 uppercase italic font-outfit">Misi</h3>
+                            </div>
+                            <p class="text-slate-500 text-base font-medium italic leading-relaxed text-justify border-l-4 border-slate-100 pl-8 group-hover/item:border-red-600 transition-colors">
+                                {{ $profile?->mission ?? 'Melaksanakan manajemen logistik secara profesional.' }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="pt-12 mt-12 border-t border-slate-100 grid grid-cols-2 gap-10">
+                        <div class="group/stat">
+                            <span class="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] block mb-4 group-hover/stat:text-red-600 transition-colors">Nilai Utama</span>
+                            <p class="text-base font-black text-slate-800 italic uppercase">Profesionalisme & Integritas</p>
+                        </div>
+                        <div class="group/stat">
+                            <span class="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] block mb-4 group-hover/stat:text-red-600 transition-colors">Wilayah Tugas</span>
+                            <p class="text-base font-black text-slate-800 italic uppercase">Polda Nusa Tenggara Barat</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-5 space-y-8">
+                    <div class="bg-amber-500 p-12 rounded-[4rem] text-[#0f172a] shadow-2xl">
+                        <h4 class="text-[10px] font-black uppercase tracking-[0.4em] mb-6 opacity-60">Filosofi Kerja</h4>
+                        <p class="text-2xl font-black italic leading-snug">"{{ $profile?->quote ?? 'Melayani dengan hati, mengabdi dengan integritas.' }}"</p>
+                    </div>
+                    @if($profile?->values)
+                    <div class="bg-slate-900 p-12 rounded-[4rem] border border-white/5 text-white">
+                        <h4 class="text-[10px] font-black uppercase tracking-[0.4em] mb-6 text-red-500">Nilai Organisasi</h4>
+                        <p class="text-sm font-medium italic opacity-80 leading-relaxed">
+                            {{ $profile->values }}
+                        </p>
+                    </div>
+                    @endif
+                </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Instagram Modal -->
-<div id="instaModal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4">
-    <div onclick="closeInstaModal()" class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"></div>
-    <div class="relative bg-white w-full max-w-lg rounded-[2.5rem] shadow-2xl overflow-hidden animate-in zoom-in duration-300">
-        <button onclick="closeInstaModal()" class="absolute top-6 right-6 z-20 h-10 w-10 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 transition-colors shadow-sm">
-            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" /></svg>
+<!-- MODALS & OVERLAYS -->
+<div id="instaModal" class="fixed inset-0 z-[100] hidden items-center justify-center md:p-4">
+    <div onclick="closeInstaModal()" class="absolute inset-0 bg-slate-950/100 md:bg-slate-900/80 backdrop-blur-xl"></div>
+    <div class="relative bg-white w-full h-full md:h-auto md:max-w-lg md:rounded-[3rem] shadow-2xl overflow-hidden flex flex-col">
+        <button onclick="closeInstaModal()" class="absolute top-4 right-4 md:top-8 md:right-8 z-20 h-10 w-10 md:h-12 md:w-12 rounded-full bg-white/50 backdrop-blur-md md:bg-slate-100 flex items-center justify-center text-slate-700 md:text-slate-500 hover:bg-slate-200 transition-colors shadow-lg border border-black/10 md:border-transparent">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12" /></svg>
         </button>
-        <div id="instaContainer" class="aspect-[4/5] w-full bg-slate-50 flex items-center justify-center">
-            <div class="flex flex-col items-center gap-4 text-slate-400">
-                <svg class="h-12 w-12 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                <span class="text-xs font-black uppercase tracking-widest">Memuat Konten...</span>
+        <div id="instaContainer" class="flex-1 w-full md:aspect-[4/5] bg-slate-50 flex items-center justify-center">
+            <div class="flex flex-col items-center gap-4">
+                <div class="w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
+                <span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Memuat Feed...</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- GLOBAL MOBILE OVERLAYS (FULLSCREEN) -->
+<div x-show="showAllServices" x-cloak class="fixed inset-0 z-[9999] bg-[#0f172a] overflow-y-auto">
+    <div class="sticky top-0 bg-[#0f172a]/95 backdrop-blur-md px-6 py-4 flex items-center justify-between border-b border-white/5">
+        <button @click="showAllServices = false" class="h-10 w-10 bg-white/5 rounded-2xl flex items-center justify-center text-white"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"/></svg></button>
+        <h3 class="text-base font-black text-white uppercase font-outfit tracking-widest">Layanan</h3>
+        <div class="w-10"></div>
+    </div>
+    <div class="p-8">
+        <input type="text" x-model="searchService" placeholder="Cari Layanan Digital..." class="w-full bg-slate-800/50 border border-white/10 rounded-2xl py-5 px-6 text-white text-sm font-bold focus:ring-2 focus:ring-red-600 outline-none mb-10 transition-all">
+        <div class="grid grid-cols-3 gap-8">
+            @foreach ($apps as $app)
+                <a x-show="'{{ strtolower($app->title) }}'.includes(searchService.toLowerCase())" href="{{ $app->url }}" target="_blank" class="flex flex-col items-center gap-4">
+                    <div class="w-20 h-20 bg-slate-800 rounded-[2rem] flex items-center justify-center text-amber-500 border border-white/5 shadow-2xl">
+                        @if($app->icon) <img src="{{ asset('storage/' . $app->icon) }}" class="h-10 w-10 object-contain"> @else <svg class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M13 10V3L4 14h7v7l9-11h-7z" /></svg> @endif
+                    </div>
+                    <span class="text-[10px] font-black text-white text-center uppercase tracking-tighter leading-tight">{{ $app->title }}</span>
+                </a>
+            @endforeach
+        </div>
+    </div>
+</div>
+
+<div x-show="showAllDocs" x-cloak class="fixed inset-0 z-[9999] bg-[#0f172a] overflow-y-auto">
+    <div class="sticky top-0 bg-[#0f172a]/95 backdrop-blur-md px-6 py-4 flex items-center justify-between border-b border-white/5">
+        <button @click="showAllDocs = false" class="h-10 w-10 bg-white/5 rounded-2xl flex items-center justify-center text-white"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"/></svg></button>
+        <h3 class="text-base font-black text-white uppercase font-outfit tracking-widest">Dokumen</h3>
+        <div class="w-10"></div>
+    </div>
+    <div class="p-8">
+        <input type="text" x-model="searchDoc" placeholder="Cari Judul Berkas..." class="w-full bg-slate-800/50 border border-white/10 rounded-2xl py-5 px-6 text-white text-sm font-bold focus:ring-2 focus:ring-amber-500 outline-none mb-10 transition-all">
+        
+        <!-- Mixed List: Folders & Standalone -->
+        <div class="space-y-12">
+            <div class="space-y-4">
+                <span class="text-[9px] font-black text-amber-500 uppercase tracking-[0.4em] block mb-6">Folder Dokumen</span>
+                <div class="grid grid-cols-2 gap-4">
+                    @foreach ($folders as $folder)
+                        <div x-show="'{{ strtolower($folder->name) }}'.includes(searchDoc.toLowerCase())" x-data="{ openGlobalFolder: false }">
+                            <button type="button" @click.prevent="openGlobalFolder = true" class="w-full text-left bg-slate-800/40 p-6 rounded-[2.5rem] border border-white/5 hover:bg-slate-800 transition-colors group focus:outline-none">
+                                <div class="h-10 w-10 bg-slate-900 rounded-xl flex items-center justify-center text-amber-500 mb-4 group-hover:scale-110 transition-transform">
+                                    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" /></svg>
+                                </div>
+                                <h4 class="text-[10px] font-black text-white uppercase leading-tight">{{ $folder->name }}</h4>
+                            </button>
+
+                            <!-- Modal Folder Details (Global Overlay) -->
+                            <template x-teleport="body">
+                                <div x-show="openGlobalFolder" x-cloak class="fixed inset-0 z-[999999] flex items-center justify-center p-6 bg-[#0f172a]/95 backdrop-blur-md" @click.self="openGlobalFolder = false" x-transition.opacity.duration.300ms>
+                                    <div x-show="openGlobalFolder" class="bg-slate-900 border border-white/10 rounded-[2.5rem] p-6 w-full max-w-sm relative shadow-2xl flex flex-col max-h-[80vh]" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-8 scale-95" x-transition:enter-end="opacity-100 translate-y-0 scale-100">
+                                        <button type="button" @click.prevent="openGlobalFolder = false" class="absolute top-4 right-4 h-10 w-10 bg-slate-800 rounded-full flex items-center justify-center text-slate-400 hover:text-white transition-colors z-10">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+                                        </button>
+                                        
+                                        <div class="flex items-center gap-4 mb-6 pr-12">
+                                            <div class="w-12 h-12 rounded-2xl bg-slate-800 border border-white/5 flex items-center justify-center text-amber-500 shadow-inner shrink-0">
+                                                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" /></svg>
+                                            </div>
+                                            <div>
+                                                <h3 class="text-sm font-black text-white uppercase tracking-widest leading-tight">{{ $folder->name }}</h3>
+                                                <p class="text-[10px] text-slate-400 font-bold uppercase mt-1">{{ $folder->documents->count() }} Berkas</p>
+                                            </div>
+                                        </div>
+
+                                        @if($folder->documents->count() > 0)
+                                        <a href="{{ route('portal.folders.download', $folder->id) }}" class="w-full py-3 mb-4 bg-amber-500 text-[#0f172a] rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 active:scale-95 transition-transform shrink-0">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                            Download Semua (.zip)
+                                        </a>
+                                        @endif
+
+                                        <div class="flex-1 overflow-y-auto pr-2 space-y-3 custom-scrollbar">
+                                            @forelse($folder->documents as $doc)
+                                                <a href="{{ asset('storage/' . $doc->file_path) }}" target="_blank" class="flex items-center justify-between p-4 bg-slate-800/50 rounded-2xl border border-white/5 hover:bg-slate-800 transition-colors group">
+                                                    <div class="flex items-center gap-3 overflow-hidden">
+                                                        <svg class="w-5 h-5 text-amber-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                                                        <span class="text-[11px] font-bold text-slate-300 truncate group-hover:text-white transition-colors">{{ $doc->title }}</span>
+                                                    </div>
+                                                    <svg class="w-4 h-4 text-slate-500 group-hover:text-amber-500 transition-colors shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                                </a>
+                                            @empty
+                                                <div class="p-6 text-center text-slate-500 text-xs font-bold italic">
+                                                    Belum ada berkas di folder ini.
+                                                </div>
+                                            @endforelse
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <div class="space-y-4 pb-20">
+                <span class="text-[9px] font-black text-red-500 uppercase tracking-[0.4em] block mb-6">Dokumen Mandiri</span>
+                <div class="space-y-3">
+                    @foreach ($standaloneDocuments as $doc)
+                        <a x-show="'{{ strtolower($doc->title) }}'.includes(searchDoc.toLowerCase())" href="{{ asset('storage/' . $doc->file_path) }}" target="_blank" class="flex items-center gap-4 bg-slate-800/20 p-4 rounded-2xl border border-white/5">
+                            <div class="w-10 h-10 bg-red-600/10 text-red-500 flex items-center justify-center rounded-lg">
+                                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+                            </div>
+                            <span class="text-[10px] font-bold text-slate-300 uppercase leading-tight flex-1">{{ $doc->title }}</span>
+                        </a>
+                    @endforeach
+                </div>
             </div>
         </div>
     </div>
@@ -693,27 +997,33 @@ Pengembangan Infrastruktur Digital Logistik.')) !!}
         modal.classList.remove('hidden');
         modal.classList.add('flex');
         document.body.style.overflow = 'hidden';
-        const regex = /(?:p|reels|tv)\/([^\/?#&]+)/;
-        const match = url.match(regex);
-        const shortcode = match ? match[1] : null;
+        const shortcode = url.match(/(?:p|reel|reels|tv)\/([^\/?#&]+)/i)?.[1];
         if (shortcode) {
             container.innerHTML = `<iframe class="w-full h-full border-none" src="https://www.instagram.com/p/${shortcode}/embed" frameborder="0" scrolling="no" allowtransparency="true"></iframe>`;
         } else {
-            container.innerHTML = `<div class="p-12 text-center"><p class="text-slate-500 font-bold">Link Instagram tidak valid.</p></div>`;
+            container.innerHTML = `<div class="p-10 text-center"><p class="text-slate-500 font-black uppercase text-[10px] italic">Konten Media Tidak Tersedia</p></div>`;
         }
     }
 
     function closeInstaModal() {
         const modal = document.getElementById('instaModal');
-        const container = document.getElementById('instaContainer');
         modal.classList.add('hidden');
         modal.classList.remove('flex');
         document.body.style.overflow = 'auto';
-        container.innerHTML = `<div class="flex flex-col items-center gap-4 text-slate-400"><svg class="h-12 w-12 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><span class="text-xs font-black uppercase tracking-widest">Memuat Konten...</span></div>`;
     }
 
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') closeInstaModal();
-    });
+    function updateDownloadLinkManual(url, folderId) {
+        const btn = document.getElementById('download-' + folderId);
+        if (url) {
+            btn.href = url;
+            btn.classList.remove('bg-slate-100', 'text-slate-300', 'pointer-events-none');
+            btn.classList.add('bg-amber-500', 'text-[#0f172a]', 'shadow-lg', 'shadow-amber-500/20');
+        } else {
+            btn.href = '#';
+            btn.classList.add('bg-slate-100', 'text-slate-300', 'pointer-events-none');
+        }
+    }
 </script>
+
+</div>
 @endsection

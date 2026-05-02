@@ -26,7 +26,7 @@
 
             <div class="space-y-3">
                 <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400">Nama Lengkap</label>
-                <input type="text" name="name" value="{{ old('name') }}" class="w-full bg-slate-800/50 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:ring-2 focus:ring-brand-primary/50 focus:border-brand-primary outline-none transition-all placeholder:text-slate-600" placeholder="Contoh: SAPTO PRIYONO">
+                <input type="text" name="name" value="{{ old('name') }}" class="w-full bg-slate-800/50 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:ring-2 focus:ring-brand-primary/50 focus:border-brand-primary outline-none transition-all placeholder:text-slate-600" placeholder="Contoh: NAMA LENGKAP">
                 @error('name') <span class="text-xs text-rose-500 font-bold">{{ $message }}</span> @enderror
             </div>
 

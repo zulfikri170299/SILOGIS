@@ -93,6 +93,30 @@
                         @error('mission') <p class="text-xs text-rose-500 font-bold">{{ $message }}</p> @enderror
                     </div>
 
+                    <div class="space-y-2">
+                        <label for="about_short" class="text-[10px] font-black uppercase tracking-widest text-slate-500">Profil Singkat Organisasi</label>
+                        <textarea id="about_short" name="about_short" rows="4"
+                            class="block w-full bg-slate-800/50 rounded-2xl border-white/5 py-4 text-white shadow-sm focus:border-brand-primary focus:ring-brand-primary sm:text-sm font-bold transition-all placeholder:text-slate-600"
+                            placeholder="Masukkan Profil Singkat...">{{ old('about_short', $profile->about_short) }}</textarea>
+                        @error('about_short') <p class="text-xs text-rose-500 font-bold">{{ $message }}</p> @enderror
+                    </div>
+
+                    <div class="space-y-2">
+                        <label for="history" class="text-[10px] font-black uppercase tracking-widest text-slate-500">Sejarah Organisasi</label>
+                        <textarea id="history" name="history" rows="6"
+                            class="block w-full bg-slate-800/50 rounded-2xl border-white/5 py-4 text-white shadow-sm focus:border-brand-primary focus:ring-brand-primary sm:text-sm font-bold transition-all placeholder:text-slate-600"
+                            placeholder="Masukkan Sejarah...">{{ old('history', $profile->history) }}</textarea>
+                        @error('history') <p class="text-xs text-rose-500 font-bold">{{ $message }}</p> @enderror
+                    </div>
+
+                    <div class="space-y-2">
+                        <label for="values" class="text-[10px] font-black uppercase tracking-widest text-slate-500">Nilai-Nilai Organisasi (Gunakan tanda • untuk setiap poin)</label>
+                        <textarea id="values" name="values" rows="4"
+                            class="block w-full bg-slate-800/50 rounded-2xl border-white/5 py-4 text-white shadow-sm focus:border-brand-primary focus:ring-brand-primary sm:text-sm font-bold transition-all placeholder:text-slate-600"
+                            placeholder="Masukkan Nilai-nilai...">{{ old('values', $profile->values) }}</textarea>
+                        @error('values') <p class="text-xs text-rose-500 font-bold">{{ $message }}</p> @enderror
+                    </div>
+
                     <div class="space-y-4 pt-4">
                         <h3 class="text-brand-primary font-black uppercase tracking-widest text-[10px] italic border-b border-white/5 pb-2">Portal Configuration</h3>
                         <div class="space-y-2">

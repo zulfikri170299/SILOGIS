@@ -3,9 +3,9 @@
 @section('title', $news->title)
 
 @section('content')
-<div class="max-w-4xl mx-auto py-12">
+<div class="max-w-4xl mx-auto py-4 md:py-12 px-4 md:px-8">
     <!-- Breadcrumbs -->
-    <nav class="flex mb-8 text-xs font-black uppercase tracking-widest text-slate-400 gap-2 items-center" aria-label="Breadcrumb">
+    <nav class="hidden md:flex mb-8 text-xs font-black uppercase tracking-widest text-slate-400 gap-2 items-center" aria-label="Breadcrumb">
         <a href="{{ route('portal.index') }}" class="hover:text-indigo-600 transition-colors">Beranda</a>
         <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7" /></svg>
         <a href="{{ route('portal.index') }}#berita" class="hover:text-indigo-600 transition-colors">Berita</a>
@@ -31,30 +31,30 @@
             
         </div>
 
-        <div class="p-8 md:p-16">
+        <div class="p-5 md:p-16">
             <!-- Header -->
-            <header class="mb-12">
-                <div class="flex flex-wrap gap-3 mb-8">
-                    <span class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-indigo-100">
+            <header class="mb-8 md:mb-12">
+                <div class="flex flex-wrap gap-2 md:gap-3 mb-6 md:mb-8">
+                    <span class="inline-flex items-center px-3 py-1.5 md:px-4 md:py-2 bg-indigo-600 text-white rounded-lg md:rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest shadow-lg shadow-indigo-100">
                         BERITA TERKINI
                     </span>
-                    <span class="inline-flex items-center px-4 py-2 bg-slate-100 rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-600">
+                    <span class="inline-flex items-center px-3 py-1.5 md:px-4 md:py-2 bg-slate-100 rounded-lg md:rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest text-slate-600">
                         {{ $news->created_at->format('d F Y') }}
                     </span>
                 </div>
 
-                <h1 class="text-3xl md:text-5xl font-black text-slate-900 leading-tight uppercase italic mb-8">
+                <h1 class="text-3xl md:text-5xl font-black text-slate-900 leading-tight uppercase italic mb-6 md:mb-8 tracking-tight">
                     {{ $news->title }}
                 </h1>
                 
-                <div class="flex flex-wrap items-center gap-6 pb-8 border-b border-gray-100">
+                <div class="flex flex-wrap items-center gap-4 md:gap-6 pb-6 md:pb-8 border-b border-gray-100">
                     <div class="flex items-center gap-3">
-                        <div class="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-black text-xs">
+                        <div class="h-10 w-10 md:h-12 md:w-12 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-black text-xs md:text-sm">
                             {{ substr($news->user->name ?? 'A', 0, 1) }}
                         </div>
                         <div class="text-left">
-                            <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 leading-none mb-1">Penulis</p>
-                            <p class="text-xs font-bold text-slate-900 uppercase tracking-tighter">{{ $news->user->name ?? 'Administrator' }}</p>
+                            <p class="text-[9px] md:text-[10px] font-black uppercase tracking-widest text-slate-400 leading-none mb-1">Penulis</p>
+                            <p class="text-[11px] md:text-xs font-bold text-slate-900 uppercase tracking-tighter">{{ $news->user->name ?? 'Administrator' }}</p>
                         </div>
                     </div>
 
@@ -100,17 +100,17 @@
 </div>
 
 <!-- Instagram Modal -->
-<div id="instaModal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4">
+<div id="instaModal" class="fixed inset-0 z-[100] hidden items-center justify-center md:p-4">
     <!-- Backdrop -->
-    <div onclick="closeInstaModal()" class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm"></div>
+    <div onclick="closeInstaModal()" class="absolute inset-0 bg-slate-950/100 md:bg-slate-950/80 backdrop-blur-sm"></div>
     
     <!-- Modal Content -->
-    <div class="relative bg-white w-full max-w-lg rounded-[2.5rem] shadow-2xl overflow-hidden animate-in zoom-in duration-300">
-        <button onclick="closeInstaModal()" class="absolute top-6 right-6 z-20 h-10 w-10 rounded-full bg-white/10 hover:bg-slate-100 flex items-center justify-center text-slate-500 transition-colors shadow-sm border border-gray-100">
+    <div class="relative bg-white w-full h-full md:h-auto md:max-w-lg md:rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col animate-in zoom-in duration-300">
+        <button onclick="closeInstaModal()" class="absolute top-4 right-4 md:top-6 md:right-6 z-20 h-10 w-10 md:h-10 md:w-10 rounded-full bg-white/50 backdrop-blur-md md:bg-white/10 hover:bg-slate-100 flex items-center justify-center text-slate-700 md:text-slate-500 transition-colors shadow-lg border border-black/10 md:border-gray-100">
             <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" /></svg>
         </button>
         
-        <div id="instaContainer" class="aspect-[4/5] w-full bg-slate-50 flex items-center justify-center">
+        <div id="instaContainer" class="flex-1 w-full md:aspect-[4/5] bg-slate-50 flex items-center justify-center">
             <div class="flex flex-col items-center gap-4 text-slate-300">
                 <svg class="h-12 w-12 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
                 <span class="text-xs font-black uppercase tracking-widest">Memuat Konten...</span>

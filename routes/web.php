@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [PortalController::class, 'index'])->name('portal.index');
 Route::get('/folders/{documentFolder}/download', [PortalController::class, 'downloadFolder'])->name('portal.folders.download');
+Route::get('/news', [PortalController::class, 'newsIndex'])->name('portal.news.index');
 Route::get('/news/{news:slug}', [PortalController::class, 'show'])->name('portal.news.show');
 
 Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
