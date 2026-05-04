@@ -175,6 +175,56 @@
         50% { background-position: 100% 50%; }
         100% { background-position: 0% 50%; }
     }
+
+    /* Elite Icon Interactive States */
+    .elite-icon-container {
+        position: relative;
+        transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    }
+    
+    .elite-icon-container::before {
+        content: '';
+        position: absolute;
+        inset: -4px;
+        background: linear-gradient(45deg, #fbbf24, #ef4444, #fbbf24);
+        border-radius: inherit;
+        z-index: -1;
+        opacity: 0;
+        transition: all 0.4s ease;
+        filter: blur(12px);
+    }
+
+    .group:hover .elite-icon-container {
+        transform: scale(1.12) translateY(-8px) rotate(3deg) !important;
+        background: #1e293b !important;
+        border-color: rgba(251, 191, 36, 0.5) !important;
+        box-shadow: 0 25px 50px -12px rgba(245, 158, 11, 0.4) !important;
+    }
+
+    .group:hover .elite-icon-container::before {
+        opacity: 0.6;
+    }
+
+    .group:active .elite-icon-container {
+        transform: scale(0.92) !important;
+        transition: all 0.2s ease !important;
+    }
+
+    /* Red version for Documents */
+    .elite-icon-red::before {
+        background: linear-gradient(45deg, #ef4444, #dc2626, #ef4444) !important;
+    }
+    
+    .group:hover .elite-icon-red {
+        border-color: rgba(239, 68, 68, 0.5) !important;
+        box-shadow: 0 25px 50px -12px rgba(220, 38, 38, 0.4) !important;
+    }
+
+    .group:hover span {
+        color: #fff !important;
+        transform: translateY(2px);
+        transition: all 0.3s ease;
+    }
 </style>
 
 <!-- ELITE HERO SECTION -->
@@ -262,10 +312,10 @@
 </section>
 
 <!-- ELITE HUB: Layanan Digital -->
-<section id="layanan" class="pt-6 md:pt-16 pb-1 md:pb-16 md:bg-white bg-[#0f172a] px-6 md:px-8 relative">
+<section id="layanan" class="pt-6 md:pt-16 pb-1 md:pb-16 bg-[#0f172a] px-6 relative md:hidden">
     <div class="max-w-[1200px] mx-auto">
         <!-- Section Header Mobile -->
-        <div class="md:hidden mb-6 border-b border-white/10 pb-4">
+        <div class="mb-6 border-b border-white/10 pb-4">
             <div class="flex items-center gap-3">
                 <div class="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.8)]"></div>
                 <h2 class="text-xl font-black text-white tracking-wider uppercase font-outfit">Layanan Digital</h2>
@@ -274,55 +324,25 @@
         </div>
 
         <!-- Mobile Grid (Icons) -->
-        <div class="md:hidden grid grid-cols-4 gap-y-10 mb-12">
-            @foreach ($apps->take(7) as $app)
+        <div class="grid grid-cols-4 gap-y-10 mb-12">
+            @foreach ($apps->take(3) as $app)
                 <a href="{{ $app->url }}" target="_blank" class="flex flex-col items-center gap-3 reveal-on-scroll group">
-                    <div class="w-16 h-16 bg-slate-800 rounded-[1.5rem] flex items-center justify-center text-amber-500 border border-slate-700 shadow-xl animate-float-soft transition-all duration-300 transform group-hover:scale-110 group-hover:-translate-y-2 group-hover:shadow-[0_20px_40px_rgba(245,158,11,0.3)] group-active:scale-95 group-hover:bg-slate-700 group-hover:border-amber-500/50" style="animation-delay: {{ $loop->index * 200 }}ms">
+                    <div class="w-16 h-16 bg-slate-800 rounded-[1.5rem] flex items-center justify-center text-amber-500 border border-slate-700 shadow-xl elite-icon-container transition-all duration-300" style="animation-delay: {{ $loop->index * 200 }}ms">
                         @if($app->icon)
                             <img src="{{ asset('storage/' . $app->icon) }}" class="h-8 w-8 object-contain" alt="">
                         @else
                             <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                         @endif
                     </div>
-                    <span class="text-[9px] font-black text-slate-300 text-center leading-tight uppercase tracking-tighter">{{ $app->title }}</span>
+                    <span class="text-[9px] font-black text-slate-300 text-center leading-tight uppercase tracking-tighter transition-all">{{ $app->title }}</span>
                 </a>
             @endforeach
             <button type="button" @click.prevent="showAllServices = true" class="flex flex-col items-center gap-3 group">
-                <div class="w-16 h-16 bg-amber-500 rounded-[1.5rem] flex items-center justify-center text-[#0f172a] shadow-xl shadow-amber-500/20 animate-pulse-soft transition-all duration-300 transform group-hover:scale-110 group-hover:-translate-y-2 group-hover:shadow-[0_20px_40px_rgba(245,158,11,0.6)] group-active:scale-95 group-hover:bg-amber-400">
+                <div class="w-16 h-16 bg-amber-500 rounded-[1.5rem] flex items-center justify-center text-[#0f172a] shadow-xl shadow-amber-500/20 elite-icon-container transition-all duration-300">
                     <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 6h16M4 12h16m-7 6h7"/></svg>
                 </div>
-                <span class="text-[9px] font-black text-amber-500 text-center uppercase">Lainnya</span>
+                <span class="text-[9px] font-black text-amber-500 text-center uppercase transition-all">Lainnya</span>
             </button>
-        </div>
-
-        <!-- Desktop View -->
-        <div class="hidden md:block">
-            <div class="flex items-end justify-between mb-16">
-                <div class="space-y-4">
-                    <span class="text-red-600 font-black uppercase tracking-[0.4em] text-[10px]">Digital Ecosystem</span>
-                    <h2 class="text-6xl font-black text-slate-900 uppercase font-outfit leading-none">Portal Layanan</h2>
-                </div>
-                <p class="text-slate-500 text-lg max-w-md italic font-medium border-r-4 border-red-600 pr-8 text-right">
-                    {{ $profile?->ecosystem_description ?? 'Satu pintu akses untuk seluruh kebutuhan operasional logistik Polri.' }}
-                </p>
-            </div>
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                @foreach ($apps as $app)
-                    <a href="{{ $app->url }}" target="_blank" class="service-tile p-6 group">
-                        <div class="tile-icon group-hover:scale-110 transition-transform">
-                            @if($app->icon)
-                                <img src="{{ asset('storage/' . $app->icon) }}" class="h-full w-full object-contain" alt="">
-                            @else
-                                <svg class="h-10 w-10 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-                            @endif
-                        </div>
-                        <div class="flex-1">
-                            <h4 class="text-xl font-black text-slate-800 uppercase group-hover:text-white font-outfit">{{ $app->title }}</h4>
-                            <p class="text-[10px] text-slate-500 italic mt-1 group-hover:text-white/80 line-clamp-2">{{ $app->description }}</p>
-                        </div>
-                    </a>
-                @endforeach
-            </div>
         </div>
     </div>
 </section>
@@ -437,14 +457,14 @@
         </div>
 
         <!-- Mobile Quick Access Icons -->
-        <div class="md:hidden grid grid-cols-4 gap-y-10 mb-16" x-data="{ showAllDocs: false }">
+        <div class="md:hidden grid grid-cols-4 gap-y-10 mb-16">
             @foreach ($folders->take(3) as $folder)
                 <div x-data="{ openFolder: false }">
                     <button type="button" @click.prevent="openFolder = true" class="w-full flex flex-col items-center gap-3 reveal-on-scroll group focus:outline-none">
-                        <div class="w-16 h-16 bg-slate-800 rounded-[1.5rem] flex items-center justify-center text-amber-500 border border-slate-700 shadow-xl animate-float-soft transition-all duration-300 transform group-hover:scale-110 group-hover:-translate-y-2 group-hover:shadow-[0_20px_40px_rgba(245,158,11,0.3)] group-active:scale-95 group-hover:bg-slate-700 group-hover:border-amber-500/50" style="animation-delay: {{ $loop->index * 200 }}ms">
+                        <div class="w-16 h-16 bg-slate-800 rounded-[1.5rem] flex items-center justify-center text-amber-500 border border-slate-700 shadow-xl elite-icon-container transition-all duration-300" style="animation-delay: {{ $loop->index * 200 }}ms">
                             <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" /></svg>
                         </div>
-                        <span class="text-[9px] font-black text-slate-300 text-center leading-tight uppercase tracking-tighter">{{ $folder->name }}</span>
+                        <span class="text-[9px] font-black text-slate-300 text-center leading-tight uppercase tracking-tighter transition-all">{{ $folder->name }}</span>
                     </button>
 
                     <!-- Modal Folder Details -->
@@ -493,76 +513,16 @@
                 </div>
             @endforeach
 
-            @if($folders->count() > 3)
-                @foreach ($folders->skip(3) as $folder)
-                    <div x-data="{ openFolder: false }" x-show="showAllDocs" x-cloak>
-                        <button type="button" @click.prevent="openFolder = true" class="w-full flex flex-col items-center gap-3 reveal-on-scroll group focus:outline-none">
-                            <div class="w-16 h-16 bg-slate-800 rounded-[1.5rem] flex items-center justify-center text-amber-500 border border-slate-700 shadow-xl animate-float-soft transition-all duration-300 transform group-hover:scale-110 group-hover:-translate-y-2 group-hover:shadow-[0_20px_40px_rgba(245,158,11,0.3)] group-active:scale-95 group-hover:bg-slate-700 group-hover:border-amber-500/50">
-                                <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" /></svg>
-                            </div>
-                            <span class="text-[9px] font-black text-slate-300 text-center leading-tight uppercase tracking-tighter">{{ $folder->name }}</span>
-                        </button>
-
-                        <template x-teleport="body">
-                            <div x-show="openFolder" x-cloak class="fixed inset-0 z-[99999] flex items-center justify-center p-6 bg-[#0f172a]/95 backdrop-blur-md" @click.self="openFolder = false" x-transition.opacity.duration.300ms>
-                                <div x-show="openFolder" class="bg-slate-900 border border-white/10 rounded-[2.5rem] p-6 w-full max-w-sm relative shadow-2xl flex flex-col max-h-[80vh]" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-8 scale-95" x-transition:enter-end="opacity-100 translate-y-0 scale-100">
-                                    <button type="button" @click.prevent="openFolder = false" class="absolute top-4 right-4 h-10 w-10 bg-slate-800 rounded-full flex items-center justify-center text-slate-400 hover:text-white transition-colors z-10">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
-                                    </button>
-                                    
-                                    <div class="flex items-center gap-4 mb-6 pr-12">
-                                        <div class="w-12 h-12 rounded-2xl bg-slate-800 border border-white/5 flex items-center justify-center text-amber-500 shadow-inner shrink-0">
-                                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" /></svg>
-                                        </div>
-                                        <div>
-                                            <h3 class="text-sm font-black text-white uppercase tracking-widest leading-tight">{{ $folder->name }}</h3>
-                                            <p class="text-[10px] text-slate-400 font-bold uppercase mt-1">{{ $folder->documents->count() }} Berkas</p>
-                                        </div>
-                                    </div>
-
-                                    @if($folder->documents->count() > 0)
-                                    <a href="{{ route('portal.folders.download', $folder->id) }}" class="w-full py-3 mb-4 bg-amber-500 text-[#0f172a] rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 active:scale-95 transition-transform shrink-0">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                                        Download Semua (.zip)
-                                    </a>
-                                    @endif
-
-                                    <div class="flex-1 overflow-y-auto pr-2 space-y-3 custom-scrollbar">
-                                        @forelse($folder->documents as $doc)
-                                            <a href="{{ asset('storage/' . $doc->file_path) }}" target="_blank" class="flex items-center justify-between p-4 bg-slate-800/50 rounded-2xl border border-white/5 hover:bg-slate-800 transition-colors group">
-                                                <div class="flex items-center gap-3 overflow-hidden">
-                                                    <svg class="w-5 h-5 text-amber-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
-                                                    <span class="text-[11px] font-bold text-slate-300 truncate group-hover:text-white transition-colors">{{ $doc->title }}</span>
-                                                </div>
-                                                <svg class="w-4 h-4 text-slate-500 group-hover:text-amber-500 transition-colors shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                                            </a>
-                                        @empty
-                                            <div class="p-6 text-center text-slate-500 text-xs font-bold italic">
-                                                Belum ada berkas di folder ini.
-                                            </div>
-                                        @endforelse
-                                    </div>
-                                </div>
-                            </div>
-                        </template>
-                    </div>
-                @endforeach
-
-                <button type="button" x-show="!showAllDocs" @click.prevent="showAllDocs = true" class="flex flex-col items-center gap-3 group">
-                    <div class="w-16 h-16 bg-amber-500 rounded-[1.5rem] flex items-center justify-center text-[#0f172a] shadow-xl shadow-amber-500/20 animate-pulse-soft transition-all duration-300 transform group-hover:scale-110 group-hover:-translate-y-2 group-hover:shadow-[0_20px_40px_rgba(245,158,11,0.6)] group-active:scale-95 group-hover:bg-amber-400">
+            @if($folders->count() > 3 || $standaloneDocuments->count() > 0)
+                <button type="button" @click.prevent="showAllDocs = true" class="flex flex-col items-center gap-3 group">
+                    <div class="w-16 h-16 bg-amber-500 rounded-[1.5rem] flex items-center justify-center text-[#0f172a] shadow-xl shadow-amber-500/20 elite-icon-container transition-all duration-300">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 6h16M4 12h16m-7 6h7"/></svg>
                     </div>
-                    <span class="text-[9px] font-black text-amber-500 text-center uppercase">Semua</span>
-                </button>
-
-                <button type="button" x-show="showAllDocs" @click.prevent="showAllDocs = false" x-cloak class="flex flex-col items-center gap-3 group">
-                    <div class="w-16 h-16 bg-slate-800 rounded-[1.5rem] flex items-center justify-center text-slate-400 shadow-xl transition-all duration-300 transform group-active:scale-95 border border-slate-700">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/></svg>
-                    </div>
-                    <span class="text-[9px] font-black text-slate-400 text-center uppercase">Tutup</span>
+                    <span class="text-[9px] font-black text-amber-500 text-center uppercase transition-all">Semua</span>
                 </button>
             @endif
         </div>
+
 
         <!-- Desktop View (Grid) -->
         <div class="hidden md:grid grid-cols-4 gap-8">
@@ -891,11 +851,11 @@
         <input type="text" x-model="searchService" placeholder="Cari Layanan Digital..." class="w-full bg-slate-800/50 border border-white/10 rounded-2xl py-5 px-6 text-white text-sm font-bold focus:ring-2 focus:ring-red-600 outline-none mb-10 transition-all">
         <div class="grid grid-cols-3 gap-8">
             @foreach ($apps as $app)
-                <a x-show="'{{ strtolower($app->title) }}'.includes(searchService.toLowerCase())" href="{{ $app->url }}" target="_blank" class="flex flex-col items-center gap-4">
-                    <div class="w-20 h-20 bg-slate-800 rounded-[2rem] flex items-center justify-center text-amber-500 border border-white/5 shadow-2xl">
+                <a x-show="'{{ strtolower($app->title) }}'.includes(searchService.toLowerCase())" href="{{ $app->url }}" target="_blank" class="flex flex-col items-center gap-4 group">
+                    <div class="w-20 h-20 bg-slate-800 rounded-[2rem] flex items-center justify-center text-amber-500 border border-white/5 shadow-2xl elite-icon-container">
                         @if($app->icon) <img src="{{ asset('storage/' . $app->icon) }}" class="h-10 w-10 object-contain"> @else <svg class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M13 10V3L4 14h7v7l9-11h-7z" /></svg> @endif
                     </div>
-                    <span class="text-[10px] font-black text-white text-center uppercase tracking-tighter leading-tight">{{ $app->title }}</span>
+                    <span class="text-[10px] font-black text-white text-center uppercase tracking-tighter leading-tight transition-all">{{ $app->title }}</span>
                 </a>
             @endforeach
         </div>
@@ -911,81 +871,72 @@
     <div class="p-8">
         <input type="text" x-model="searchDoc" placeholder="Cari Judul Berkas..." class="w-full bg-slate-800/50 border border-white/10 rounded-2xl py-5 px-6 text-white text-sm font-bold focus:ring-2 focus:ring-amber-500 outline-none mb-10 transition-all">
         
-        <!-- Mixed List: Folders & Standalone -->
-        <div class="space-y-12">
-            <div class="space-y-4">
-                <span class="text-[9px] font-black text-amber-500 uppercase tracking-[0.4em] block mb-6">Folder Dokumen</span>
-                <div class="grid grid-cols-2 gap-4">
-                    @foreach ($folders as $folder)
-                        <div x-show="'{{ strtolower($folder->name) }}'.includes(searchDoc.toLowerCase())" x-data="{ openGlobalFolder: false }">
-                            <button type="button" @click.prevent="openGlobalFolder = true" class="w-full text-left bg-slate-800/40 p-6 rounded-[2.5rem] border border-white/5 hover:bg-slate-800 transition-colors group focus:outline-none">
-                                <div class="h-10 w-10 bg-slate-900 rounded-xl flex items-center justify-center text-amber-500 mb-4 group-hover:scale-110 transition-transform">
-                                    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" /></svg>
-                                </div>
-                                <h4 class="text-[10px] font-black text-white uppercase leading-tight">{{ $folder->name }}</h4>
-                            </button>
+        <div class="grid grid-cols-3 gap-8 pb-20">
+            <!-- Folders -->
+            @foreach ($folders as $folder)
+                <div x-show="'{{ strtolower($folder->name) }}'.includes(searchDoc.toLowerCase())" x-data="{ openGlobalFolder: false }">
+                    <button type="button" @click.prevent="openGlobalFolder = true" class="flex flex-col items-center gap-4 group">
+                        <div class="w-20 h-20 bg-slate-800 rounded-[2rem] flex items-center justify-center text-amber-500 border border-white/5 shadow-2xl elite-icon-container">
+                            <svg class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" /></svg>
+                        </div>
+                        <span class="text-[10px] font-black text-white text-center uppercase tracking-tighter leading-tight transition-all">{{ $folder->name }}</span>
+                    </button>
 
-                            <!-- Modal Folder Details (Global Overlay) -->
-                            <template x-teleport="body">
-                                <div x-show="openGlobalFolder" x-cloak class="fixed inset-0 z-[999999] flex items-center justify-center p-6 bg-[#0f172a]/95 backdrop-blur-md" @click.self="openGlobalFolder = false" x-transition.opacity.duration.300ms>
-                                    <div x-show="openGlobalFolder" class="bg-slate-900 border border-white/10 rounded-[2.5rem] p-6 w-full max-w-sm relative shadow-2xl flex flex-col max-h-[80vh]" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-8 scale-95" x-transition:enter-end="opacity-100 translate-y-0 scale-100">
-                                        <button type="button" @click.prevent="openGlobalFolder = false" class="absolute top-4 right-4 h-10 w-10 bg-slate-800 rounded-full flex items-center justify-center text-slate-400 hover:text-white transition-colors z-10">
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
-                                        </button>
-                                        
-                                        <div class="flex items-center gap-4 mb-6 pr-12">
-                                            <div class="w-12 h-12 rounded-2xl bg-slate-800 border border-white/5 flex items-center justify-center text-amber-500 shadow-inner shrink-0">
-                                                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" /></svg>
-                                            </div>
-                                            <div>
-                                                <h3 class="text-sm font-black text-white uppercase tracking-widest leading-tight">{{ $folder->name }}</h3>
-                                                <p class="text-[10px] text-slate-400 font-bold uppercase mt-1">{{ $folder->documents->count() }} Berkas</p>
-                                            </div>
-                                        </div>
-
-                                        @if($folder->documents->count() > 0)
-                                        <a href="{{ route('portal.folders.download', $folder->id) }}" class="w-full py-3 mb-4 bg-amber-500 text-[#0f172a] rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 active:scale-95 transition-transform shrink-0">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                                            Download Semua (.zip)
-                                        </a>
-                                        @endif
-
-                                        <div class="flex-1 overflow-y-auto pr-2 space-y-3 custom-scrollbar">
-                                            @forelse($folder->documents as $doc)
-                                                <a href="{{ asset('storage/' . $doc->file_path) }}" target="_blank" class="flex items-center justify-between p-4 bg-slate-800/50 rounded-2xl border border-white/5 hover:bg-slate-800 transition-colors group">
-                                                    <div class="flex items-center gap-3 overflow-hidden">
-                                                        <svg class="w-5 h-5 text-amber-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
-                                                        <span class="text-[11px] font-bold text-slate-300 truncate group-hover:text-white transition-colors">{{ $doc->title }}</span>
-                                                    </div>
-                                                    <svg class="w-4 h-4 text-slate-500 group-hover:text-amber-500 transition-colors shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                                                </a>
-                                            @empty
-                                                <div class="p-6 text-center text-slate-500 text-xs font-bold italic">
-                                                    Belum ada berkas di folder ini.
-                                                </div>
-                                            @endforelse
-                                        </div>
+                    <!-- Modal Folder Details (Global Overlay) -->
+                    <template x-teleport="body">
+                        <div x-show="openGlobalFolder" x-cloak class="fixed inset-0 z-[999999] flex items-center justify-center p-6 bg-[#0f172a]/95 backdrop-blur-md" @click.self="openGlobalFolder = false" x-transition.opacity.duration.300ms>
+                            <div x-show="openGlobalFolder" class="bg-slate-900 border border-white/10 rounded-[2.5rem] p-6 w-full max-w-sm relative shadow-2xl flex flex-col max-h-[80vh]" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-8 scale-95" x-transition:enter-end="opacity-100 translate-y-0 scale-100">
+                                <button type="button" @click.prevent="openGlobalFolder = false" class="absolute top-4 right-4 h-10 w-10 bg-slate-800 rounded-full flex items-center justify-center text-slate-400 hover:text-white transition-colors z-10">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+                                </button>
+                                
+                                <div class="flex items-center gap-4 mb-6 pr-12">
+                                    <div class="w-12 h-12 rounded-2xl bg-slate-800 border border-white/5 flex items-center justify-center text-amber-500 shadow-inner shrink-0">
+                                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" /></svg>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-sm font-black text-white uppercase tracking-widest leading-tight">{{ $folder->name }}</h3>
+                                        <p class="text-[10px] text-slate-400 font-bold uppercase mt-1">{{ $folder->documents->count() }} Berkas</p>
                                     </div>
                                 </div>
-                            </template>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
 
-            <div class="space-y-4 pb-20">
-                <span class="text-[9px] font-black text-red-500 uppercase tracking-[0.4em] block mb-6">Dokumen Mandiri</span>
-                <div class="space-y-3">
-                    @foreach ($standaloneDocuments as $doc)
-                        <a x-show="'{{ strtolower($doc->title) }}'.includes(searchDoc.toLowerCase())" href="{{ asset('storage/' . $doc->file_path) }}" target="_blank" class="flex items-center gap-4 bg-slate-800/20 p-4 rounded-2xl border border-white/5">
-                            <div class="w-10 h-10 bg-red-600/10 text-red-500 flex items-center justify-center rounded-lg">
-                                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+                                @if($folder->documents->count() > 0)
+                                <a href="{{ route('portal.folders.download', $folder->id) }}" class="w-full py-3 mb-4 bg-amber-500 text-[#0f172a] rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 active:scale-95 transition-transform shrink-0">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                    Download Semua (.zip)
+                                </a>
+                                @endif
+
+                                <div class="flex-1 overflow-y-auto pr-2 space-y-3 custom-scrollbar">
+                                    @forelse($folder->documents as $doc)
+                                        <a href="{{ asset('storage/' . $doc->file_path) }}" target="_blank" class="flex items-center justify-between p-4 bg-slate-800/50 rounded-2xl border border-white/5 hover:bg-slate-800 transition-colors group">
+                                            <div class="flex items-center gap-3 overflow-hidden">
+                                                <svg class="w-5 h-5 text-amber-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                                                <span class="text-[11px] font-bold text-slate-300 truncate group-hover:text-white transition-colors">{{ $doc->title }}</span>
+                                            </div>
+                                            <svg class="w-4 h-4 text-slate-500 group-hover:text-amber-500 transition-colors shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                        </a>
+                                    @empty
+                                        <div class="p-6 text-center text-slate-500 text-xs font-bold italic">
+                                            Belum ada berkas di folder ini.
+                                        </div>
+                                    @endforelse
+                                </div>
                             </div>
-                            <span class="text-[10px] font-bold text-slate-300 uppercase leading-tight flex-1">{{ $doc->title }}</span>
-                        </a>
-                    @endforeach
+                        </div>
+                    </template>
                 </div>
-            </div>
+            @endforeach
+
+            <!-- Standalone Documents -->
+            @foreach ($standaloneDocuments as $doc)
+                <a x-show="'{{ strtolower($doc->title) }}'.includes(searchDoc.toLowerCase())" href="{{ asset('storage/' . $doc->file_path) }}" target="_blank" class="flex flex-col items-center gap-4 group">
+                    <div class="w-20 h-20 bg-slate-800 rounded-[2rem] flex items-center justify-center text-red-500 border border-white/5 shadow-2xl elite-icon-container elite-icon-red">
+                        <svg class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+                    </div>
+                    <span class="text-[10px] font-black text-white text-center uppercase tracking-tighter leading-tight transition-all">{{ $doc->title }}</span>
+                </a>
+            @endforeach
         </div>
     </div>
 </div>
