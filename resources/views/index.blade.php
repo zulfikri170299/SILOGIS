@@ -226,6 +226,19 @@
         transition: all 0.3s ease;
     }
 
+    /* Professional Tech Enhancements */
+    .hero-mesh {
+        position: absolute;
+        inset: 0;
+        background-image: 
+            linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
+        background-size: 50px 50px;
+        mask-image: radial-gradient(circle at 50% 50%, black 30%, transparent 80%);
+        pointer-events: none;
+        z-index: 1;
+    }
+
     /* Ultra Premium Desktop Enhancements */
     @media (min-width: 769px) {
         .hero-spotlight {
@@ -237,53 +250,79 @@
         }
         
         .glass-card-premium {
-            background: rgba(15, 23, 42, 0.5) !important;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01)) !important;
             backdrop-filter: blur(24px) !important;
-            border: 1px solid rgba(255, 255, 255, 0.08) !important;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.4), 
+                inset 0 0 0 1px rgba(255, 255, 255, 0.05) !important;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1) !important;
         }
         
         .glass-card-premium:hover {
             border-color: rgba(251, 191, 36, 0.4) !important;
-            transform: translateY(-5px) scale(1.02) !important;
-            background: rgba(15, 23, 42, 0.7) !important;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02)) !important;
+            transform: translateY(-8px) scale(1.01) !important;
+            box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.6) !important;
         }
 
         .elite-dock {
-            background: linear-gradient(145deg, rgba(15, 23, 42, 0.4), rgba(30, 41, 59, 0.2));
-            backdrop-filter: blur(28px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 5rem;
-            padding: 3rem 5rem;
-            box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.1);
-            display: inline-flex;
-            gap: 3.5rem;
-            align-items: center;
-            position: relative;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 2rem;
+            padding: 2rem;
+            width: 100%;
+            max-width: 1400px;
+            box-shadow: 0 50px 100px -20px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
         }
-        
-        .elite-dock::after {
-            content: 'LAYANAN DIGITAL';
-            position: absolute;
-            top: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #ef4444;
-            color: white;
-            font-size: 9px;
-            font-weight: 900;
-            padding: 4px 16px;
-            border-radius: 100px;
-            letter-spacing: 0.3em;
-            box-shadow: 0 10px 20px rgba(239, 68, 68, 0.3);
+
+        .dock-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .dock-item-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 1.25rem;
+            padding: 1.25rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex: 1;
+            transition: all 0.3s ease;
+            min-width: 0;
+        }
+
+        .dock-item-card:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .item-icon-box {
+            width: 3.5rem;
+            height: 3.5rem;
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
     }
 </style>
 
 <!-- ELITE HERO SECTION -->
 <section id="beranda" class="elite-hero overflow-hidden pb-16 md:pb-0 relative">
-    <div class="hidden md:block hero-spotlight"></div>
     <!-- MOBILE PROFILE HEADER INSIDE -->
     <div class="md:hidden bg-transparent absolute top-0 left-0 right-0 pt-10 pb-4 px-6 z-30" x-data="{ showProfileMenu: false, showProfilePic: false }">
         <div class="flex items-center gap-4 relative">
@@ -327,8 +366,8 @@
     <div class="max-w-[1600px] mx-auto px-6 md:px-8 relative z-20 w-full pt-36 md:pt-20">
         
         <!-- Desktop Header: Logo above SILOGIS (Desktop Only) -->
-        <div class="hidden md:flex flex-col items-center mb-16">
-            <img src="{{ asset('log polri.png') }}" class="w-24 h-auto mb-8 filter drop-shadow-[0_10px_30px_rgba(251,191,36,0.3)] animate-float">
+        <div class="hidden md:flex flex-col items-center mb-8">
+            <img src="{{ asset('log polri.png') }}" class="w-16 h-auto mb-4 filter drop-shadow-[0_10px_30px_rgba(251,191,36,0.3)] animate-float">
             <h1 class="text-8xl font-black uppercase font-outfit tracking-[0.1em] leading-none text-center pl-[0.1em]">
                 <span class="elite-shimmer-effect drop-shadow-2xl">SILOGIS</span>
             </h1>
@@ -336,8 +375,8 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
             
-            <!-- LEFT: Visi Misi (Parallel with Dock on Desktop) -->
-            <div class="lg:col-span-6 hidden lg:flex flex-col gap-4">
+            <!-- LEFT: Visi Misi (Reduced width on Desktop) -->
+            <div class="lg:col-span-4 hidden lg:flex flex-col gap-4">
                 <div class="glass-card-premium p-8 rounded-[2.5rem] relative group overflow-hidden">
                     <div class="absolute top-0 left-0 w-1 h-full bg-amber-500 opacity-50 group-hover:opacity-100 transition-opacity"></div>
                     <h4 class="text-amber-500 font-black uppercase tracking-[0.3em] text-[10px] mb-4">Visi Kami</h4>
@@ -370,30 +409,48 @@
                 </div>
             </div>
 
-            <!-- RIGHT: App Dock (Parallel with Visi Misi on Desktop) -->
-            <div class="lg:col-span-6 hidden lg:flex items-center justify-center pt-8">
-                <div class="elite-dock flex-wrap justify-center">
-                    @foreach ($apps->take(4) as $app)
-                        <a href="{{ $app->url }}" target="_blank" class="group flex flex-col items-center gap-4">
-                            <div class="w-20 h-20 bg-slate-900/60 rounded-[2rem] flex items-center justify-center text-amber-500 border border-white/10 shadow-2xl elite-icon-container">
-                                @if($app->icon)
-                                    <img src="{{ asset('storage/' . $app->icon) }}" class="h-10 w-10 object-contain filter drop-shadow-lg group-hover:scale-110 transition-transform" alt="{{ $app->title }}">
-                                @else
-                                    <svg class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-                                @endif
-                            </div>
-                            <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest group-hover:text-amber-500 transition-colors">{{ $app->title }}</span>
-                        </a>
-                    @endforeach
+            <!-- RIGHT: App Dock (Portal Layout from Image) -->
+            <div class="lg:col-span-8 hidden lg:flex items-center justify-center pt-8">
+                <div class="elite-dock">
+                    <div class="dock-header">
+                        <div class="flex items-center gap-3">
+                            <div class="w-3 h-3 bg-blue-500 rounded-full shadow-[0_0_12px_rgba(59,130,246,0.8)]"></div>
+                            <h2 class="text-white font-black text-sm uppercase tracking-widest">Portal Layanan Digital</h2>
+                        </div>
+                        <div class="px-4 py-1.5 bg-white/5 rounded-full border border-white/10 text-[9px] font-bold text-white/40 uppercase tracking-widest">
+                            Akses Cepat
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-4 gap-4">
+                        @foreach ($apps->take(3) as $app)
+                            <a href="{{ $app->url }}" target="_blank" class="dock-item-card group">
+                                <div class="item-icon-box">
+                                    @if($app->icon)
+                                        <img src="{{ asset('storage/' . $app->icon) }}" class="h-8 w-8 object-contain" alt="{{ $app->title }}">
+                                    @else
+                                        <svg class="h-8 w-8 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                                    @endif
+                                </div>
+                                <div class="flex flex-col min-w-0">
+                                    <span class="text-[12px] font-black text-white uppercase tracking-tight truncate">{{ $app->title }}</span>
+                                    <span class="text-[9px] font-medium text-slate-400 italic truncate">{{ $app->description ?? 'Layanan Digital' }}</span>
+                                </div>
+                            </a>
+                        @endforeach
 
-                    @if($apps->count() > 4)
-                        <button type="button" @click.prevent="showAllServices = true" class="group flex flex-col items-center gap-4">
-                            <div class="w-20 h-20 bg-amber-500 rounded-[2rem] flex items-center justify-center text-[#0f172a] shadow-2xl elite-icon-container">
-                                <svg class="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 6h16M4 12h16m-7 6h7"/></svg>
-                            </div>
-                            <span class="text-[10px] font-black text-amber-500 uppercase tracking-widest group-hover:text-white transition-colors">Lainnya</span>
-                        </button>
-                    @endif
+                        @if($apps->count() > 3)
+                            <button type="button" @click.prevent="showAllServices = true" class="dock-item-card group cursor-pointer">
+                                <div class="item-icon-box bg-amber-500/10 border-amber-500/20">
+                                    <svg class="w-6 h-6 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+                                </div>
+                                <div class="flex flex-col min-w-0">
+                                    <span class="text-[12px] font-black text-amber-500 uppercase tracking-tight truncate">Lainnya</span>
+                                    <span class="text-[9px] font-medium text-amber-500/60 italic truncate">Lihat Semua</span>
+                                </div>
+                            </button>
+                        @endif
+                    </div>
                 </div>
             </div>
 
