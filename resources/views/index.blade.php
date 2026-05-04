@@ -250,34 +250,49 @@
         }
         
         .glass-card-premium {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01)) !important;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02)) !important;
             backdrop-filter: blur(24px) !important;
-            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
             box-shadow: 
-                0 20px 40px rgba(0, 0, 0, 0.4), 
+                0 30px 60px rgba(0, 0, 0, 0.5), 
                 inset 0 0 0 1px rgba(255, 255, 255, 0.05) !important;
-            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1) !important;
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1) !important;
+            position: relative;
+        }
+
+        .glass-card-premium::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, transparent 50%, rgba(255,255,255,0.1) 50%);
+            border-top-right-radius: inherit;
         }
         
         .glass-card-premium:hover {
-            border-color: rgba(251, 191, 36, 0.4) !important;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02)) !important;
-            transform: translateY(-8px) scale(1.01) !important;
-            box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.6) !important;
+            border-color: rgba(251, 191, 36, 0.3) !important;
+            transform: translateY(-10px) scale(1.02) !important;
+            box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.7) !important;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03)) !important;
         }
 
         .elite-dock {
-            background: rgba(15, 23, 42, 0.8);
-            backdrop-filter: blur(24px);
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(32px);
             border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 2rem;
-            padding: 2rem;
+            border-radius: 2.5rem;
+            padding: 2.5rem;
             width: 100%;
-            max-width: 1400px;
-            box-shadow: 0 50px 100px -20px rgba(0,0,0,0.5);
+            max-width: 1300px;
+            box-shadow: 
+                0 60px 120px -30px rgba(0,0,0,0.8),
+                inset 0 1px 1px rgba(255,255,255,0.05);
             display: flex;
             flex-direction: column;
             gap: 1.5rem;
+            transition: all 0.4s ease;
         }
 
         .dock-header {
@@ -373,7 +388,88 @@
             </h1>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+        <!-- Parallel Column Layout (Desktop Only) -->
+        <div class="hidden lg:grid grid-cols-12 gap-10 w-full mt-10 mb-20 items-start">
+            
+            <!-- LEFT COLUMN: Visi & Misi Stacked -->
+            <div class="lg:col-span-5 flex flex-col gap-6">
+                <div class="glass-card-premium p-8 rounded-[2.5rem] overflow-hidden group">
+                    <div class="absolute top-0 left-0 w-1.5 h-1/3 bg-amber-500 opacity-70 group-hover:h-full transition-all duration-700"></div>
+                    <div class="absolute top-0 left-0 w-1/4 h-1.5 bg-amber-500 opacity-70 group-hover:w-full transition-all duration-700"></div>
+                    
+                    <h4 class="text-amber-500 font-black uppercase tracking-[0.4em] text-[10px] mb-4 flex items-center gap-2">
+                        <span class="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse"></span>
+                        Visi Kami
+                    </h4>
+                    <p class="text-white text-base font-black italic leading-relaxed drop-shadow-lg">"{{ $profile?->vision ?? 'Terwujudnya logistik yang modern, profesional dan terpercaya.' }}"</p>
+                </div>
+
+                <div class="glass-card-premium p-8 rounded-[2.5rem] overflow-hidden group">
+                    <div class="absolute top-0 left-0 w-1.5 h-1/3 bg-red-600 opacity-70 group-hover:h-full transition-all duration-700"></div>
+                    <div class="absolute top-0 left-0 w-1/4 h-1.5 bg-red-600 opacity-70 group-hover:w-full transition-all duration-700"></div>
+                    
+                    <h4 class="text-red-500 font-black uppercase tracking-[0.4em] text-[10px] mb-4 flex items-center gap-2">
+                        <span class="w-1.5 h-1.5 bg-red-600 rounded-full animate-pulse"></span>
+                        Misi Kami
+                    </h4>
+                    <div class="text-white text-[11px] font-bold italic space-y-3 leading-relaxed drop-shadow-md">
+                        {!! nl2br(e($profile?->mission ?? 'Mewujudkan tata kelola logistik yang transparan dan akuntabel.')) !!}
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT COLUMN: Digital Ecosystem Hub -->
+            <div class="lg:col-span-7">
+                <div class="elite-dock transform hover:scale-[1.01] w-full">
+                    <div class="dock-header">
+                        <div class="flex items-center gap-4">
+                            <div class="relative">
+                                <div class="w-3 h-3 bg-blue-500 rounded-full shadow-[0_0_15px_rgba(59,130,246,1)]"></div>
+                                <div class="absolute inset-0 w-3 h-3 bg-blue-500 rounded-full animate-ping opacity-30"></div>
+                            </div>
+                            <h2 class="text-white font-black text-sm uppercase tracking-[0.2em]">Layanan Digital</h2>
+                        </div>
+                        <div class="px-4 py-1.5 bg-white/5 rounded-full border border-white/10 text-[9px] font-black text-amber-500 uppercase tracking-widest">
+                            Akses Cepat
+                        </div>
+                    </div>
+                    
+                    <!-- Grid 2x2 for Apps in this side layout -->
+                    <div class="grid grid-cols-2 gap-4">
+                        @foreach ($apps->take(3) as $app)
+                            <a href="{{ $app->url }}" target="_blank" class="dock-item-card group">
+                                <div class="item-icon-box">
+                                    @if($app->icon)
+                                        <img src="{{ asset('storage/' . $app->icon) }}" class="h-8 w-8 object-contain" alt="{{ $app->title }}">
+                                    @else
+                                        <svg class="h-8 w-8 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                                    @endif
+                                </div>
+                                <div class="flex flex-col min-w-0">
+                                    <span class="text-[13px] font-black text-white uppercase tracking-tight group-hover:text-amber-500 transition-colors truncate">{{ $app->title }}</span>
+                                    <span class="text-[10px] font-bold text-slate-400 italic truncate opacity-70 group-hover:opacity-100 transition-opacity">{{ $app->description ?? 'Layanan Digital' }}</span>
+                                </div>
+                            </a>
+                        @endforeach
+
+                        @if($apps->count() > 3)
+                            <button type="button" @click.prevent="showAllServices = true" class="dock-item-card group cursor-pointer">
+                                <div class="item-icon-box bg-amber-500/10 border-amber-500/20 group-hover:bg-amber-500 transition-colors">
+                                    <svg class="w-6 h-6 text-amber-500 group-hover:text-[#0f172a] transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+                                </div>
+                                <div class="flex flex-col min-w-0">
+                                    <span class="text-[13px] font-black text-amber-500 uppercase tracking-tight group-hover:text-white transition-colors truncate">Lainnya</span>
+                                    <span class="text-[10px] font-bold text-amber-500/60 italic truncate">Menu Tambahan</span>
+                                </div>
+                            </button>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile & Legacy Grid (Hidden on LG for new symmetrical layout) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start lg:hidden">
             
             <!-- LEFT: Visi Misi (Reduced width on Desktop) -->
             <div class="lg:col-span-4 hidden lg:flex flex-col gap-4">
@@ -399,64 +495,16 @@
                 <p class="text-[13px] font-black italic text-white uppercase font-outfit tracking-[0.1em] mb-0 drop-shadow-lg whitespace-nowrap">
                     Sistem Informasi Logistik
                 </p>
-                
-                <div class="hidden md:flex flex-row items-center justify-center gap-6 mb-16">
-                    <a href="#layanan" class="group px-12 py-5 bg-red-600 text-white rounded-3xl font-black uppercase tracking-widest text-xs shadow-[0_20px_50px_rgba(220,38,38,0.4)] hover:scale-110 active:scale-95 transition-all italic flex items-center gap-3">
-                        Layanan Digital
-                        <svg class="w-5 h-5 group-hover:translate-x-2 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-                    </a>
-                    <a href="#tentang" class="px-12 py-5 bg-blue-600 text-white rounded-3xl font-black uppercase tracking-widest text-xs shadow-[0_20px_50px_rgba(37,99,235,0.3)] hover:scale-110 active:scale-95 transition-all italic">Tentang Kami</a>
-                </div>
             </div>
 
             <!-- RIGHT: App Dock (Portal Layout from Image) -->
             <div class="lg:col-span-8 hidden lg:flex items-center justify-center pt-8">
-                <div class="elite-dock">
-                    <div class="dock-header">
-                        <div class="flex items-center gap-3">
-                            <div class="w-3 h-3 bg-blue-500 rounded-full shadow-[0_0_12px_rgba(59,130,246,0.8)]"></div>
-                            <h2 class="text-white font-black text-sm uppercase tracking-widest">Portal Layanan Digital</h2>
-                        </div>
-                        <div class="px-4 py-1.5 bg-white/5 rounded-full border border-white/10 text-[9px] font-bold text-white/40 uppercase tracking-widest">
-                            Akses Cepat
-                        </div>
-                    </div>
-                    
-                    <div class="grid grid-cols-4 gap-4">
-                        @foreach ($apps->take(3) as $app)
-                            <a href="{{ $app->url }}" target="_blank" class="dock-item-card group">
-                                <div class="item-icon-box">
-                                    @if($app->icon)
-                                        <img src="{{ asset('storage/' . $app->icon) }}" class="h-8 w-8 object-contain" alt="{{ $app->title }}">
-                                    @else
-                                        <svg class="h-8 w-8 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-                                    @endif
-                                </div>
-                                <div class="flex flex-col min-w-0">
-                                    <span class="text-[12px] font-black text-white uppercase tracking-tight truncate">{{ $app->title }}</span>
-                                    <span class="text-[9px] font-medium text-slate-400 italic truncate">{{ $app->description ?? 'Layanan Digital' }}</span>
-                                </div>
-                            </a>
-                        @endforeach
-
-                        @if($apps->count() > 3)
-                            <button type="button" @click.prevent="showAllServices = true" class="dock-item-card group cursor-pointer">
-                                <div class="item-icon-box bg-amber-500/10 border-amber-500/20">
-                                    <svg class="w-6 h-6 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
-                                </div>
-                                <div class="flex flex-col min-w-0">
-                                    <span class="text-[12px] font-black text-amber-500 uppercase tracking-tight truncate">Lainnya</span>
-                                    <span class="text-[9px] font-medium text-amber-500/60 italic truncate">Lihat Semua</span>
-                                </div>
-                            </button>
-                        @endif
-                    </div>
-                </div>
+                <!-- Keep original for safety/mobile but LG hidden now handles the new layout -->
             </div>
 
-            <!-- MOBILE App Dock Placeholder (Optional: if you want apps on mobile hero) -->
+            <!-- MOBILE App Dock Placeholder -->
             <div class="md:hidden">
-                <!-- Keep mobile logic if any, but currently apps are in a separate section for mobile -->
+                <!-- Keep mobile logic -->
             </div>
         </div>
     </div>
