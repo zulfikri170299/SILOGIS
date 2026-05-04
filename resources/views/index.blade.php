@@ -279,15 +279,15 @@
         }
 
         .elite-dock {
-            background: rgba(15, 23, 42, 0.7);
+            background: rgba(15, 23, 42, 0.4);
             backdrop-filter: blur(32px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 2.5rem;
             padding: 2.5rem;
             width: 100%;
             max-width: 1300px;
             box-shadow: 
-                0 60px 120px -30px rgba(0,0,0,0.8),
+                0 60px 120px -30px rgba(0,0,0,0.6),
                 inset 0 1px 1px rgba(255,255,255,0.05);
             display: flex;
             flex-direction: column;
@@ -304,7 +304,7 @@
         }
 
         .dock-item-card {
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(255, 255, 255, 0.02);
             border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 1.25rem;
             padding: 1.25rem 1rem;
