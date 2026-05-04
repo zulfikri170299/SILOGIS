@@ -225,10 +225,65 @@
         transform: translateY(2px);
         transition: all 0.3s ease;
     }
+
+    /* Ultra Premium Desktop Enhancements */
+    @media (min-width: 769px) {
+        .hero-spotlight {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(251, 191, 36, 0.1) 0%, transparent 80%);
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .glass-card-premium {
+            background: rgba(15, 23, 42, 0.5) !important;
+            backdrop-filter: blur(24px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        }
+        
+        .glass-card-premium:hover {
+            border-color: rgba(251, 191, 36, 0.4) !important;
+            transform: translateY(-5px) scale(1.02) !important;
+            background: rgba(15, 23, 42, 0.7) !important;
+        }
+
+        .elite-dock {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.4), rgba(30, 41, 59, 0.2));
+            backdrop-filter: blur(28px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 5rem;
+            padding: 3rem 5rem;
+            box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+            display: inline-flex;
+            gap: 3.5rem;
+            align-items: center;
+            position: relative;
+        }
+        
+        .elite-dock::after {
+            content: 'LAYANAN DIGITAL';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ef4444;
+            color: white;
+            font-size: 9px;
+            font-weight: 900;
+            padding: 4px 16px;
+            border-radius: 100px;
+            letter-spacing: 0.3em;
+            box-shadow: 0 10px 20px rgba(239, 68, 68, 0.3);
+        }
+    }
 </style>
 
 <!-- ELITE HERO SECTION -->
-<section id="beranda" class="elite-hero overflow-hidden pb-16 md:pb-0">
+<section id="beranda" class="elite-hero overflow-hidden pb-16 md:pb-0 relative">
+    <div class="hidden md:block hero-spotlight"></div>
     <!-- MOBILE PROFILE HEADER INSIDE -->
     <div class="md:hidden bg-transparent absolute top-0 left-0 right-0 pt-10 pb-4 px-6 z-30" x-data="{ showProfileMenu: false, showProfilePic: false }">
         <div class="flex items-center gap-4 relative">
@@ -270,44 +325,83 @@
         </template>
     </div>
     <div class="max-w-[1600px] mx-auto px-6 md:px-8 relative z-20 w-full pt-36 md:pt-20">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+        
+        <!-- Desktop Header: Logo above SILOGIS (Desktop Only) -->
+        <div class="hidden md:flex flex-col items-center mb-16">
+            <img src="{{ asset('log polri.png') }}" class="w-24 h-auto mb-8 filter drop-shadow-[0_10px_30px_rgba(251,191,36,0.3)] animate-float">
+            <h1 class="text-8xl font-black uppercase font-outfit tracking-[0.1em] leading-none text-center pl-[0.1em]">
+                <span class="elite-shimmer-effect drop-shadow-2xl">SILOGIS</span>
+            </h1>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
             
-            <!-- LEFT: Visi Misi (Desktop) -->
-            <div class="lg:col-span-3 hidden lg:flex flex-col gap-6">
-                <div class="glass-card p-6">
-                    <h4 class="text-amber-500 font-black uppercase tracking-widest text-[10px] mb-3">Visi Kami</h4>
-                    <p class="text-white text-sm font-bold italic leading-relaxed">"{{ $profile?->vision ?? 'Terwujudnya logistik yang modern, profesional dan terpercaya.' }}"</p>
+            <!-- LEFT: Visi Misi (Parallel with Dock on Desktop) -->
+            <div class="lg:col-span-6 hidden lg:flex flex-col gap-4">
+                <div class="glass-card-premium p-8 rounded-[2.5rem] relative group overflow-hidden">
+                    <div class="absolute top-0 left-0 w-1 h-full bg-amber-500 opacity-50 group-hover:opacity-100 transition-opacity"></div>
+                    <h4 class="text-amber-500 font-black uppercase tracking-[0.3em] text-[10px] mb-4">Visi Kami</h4>
+                    <p class="text-white text-base font-black italic leading-relaxed">"{{ $profile?->vision ?? 'Terwujudnya logistik yang modern, profesional dan terpercaya.' }}"</p>
                 </div>
-                <div class="glass-card p-6 border-l-4 border-red-600">
-                    <h4 class="text-red-500 font-black uppercase tracking-widest text-[10px] mb-3">Misi Kami</h4>
-                    <div class="text-white text-[11px] font-medium italic space-y-2">
+                <div class="glass-card-premium p-8 rounded-[2.5rem] border-l-4 border-red-600/50 relative group overflow-hidden">
+                    <div class="absolute top-0 left-0 w-1 h-full bg-red-600 opacity-50 group-hover:opacity-100 transition-opacity"></div>
+                    <h4 class="text-red-500 font-black uppercase tracking-[0.3em] text-[10px] mb-4">Misi Kami</h4>
+                    <div class="text-white text-[12px] font-bold italic space-y-3 leading-relaxed">
                         {!! nl2br(e($profile?->mission ?? 'Mewujudkan tata kelola logistik yang transparan dan akuntabel.')) !!}
                     </div>
                 </div>
             </div>
 
-            <!-- CENTER: Main Title -->
-            <div class="lg:col-span-6 text-center">
-                <h1 class="text-7xl md:text-9xl font-black uppercase font-outfit tracking-tighter leading-none mb-4">
+            <!-- CENTER: Main Title (MOBILE ONLY) -->
+            <div class="lg:col-span-6 text-center md:hidden">
+                <h1 class="text-7xl font-black uppercase font-outfit tracking-tighter leading-none mb-4">
                     <span class="elite-shimmer-effect drop-shadow-2xl px-2">SILOGIS</span>
                 </h1>
-                <p class="text-[13px] md:text-2xl font-black italic text-white md:text-amber-500 uppercase font-outfit tracking-[0.1em] md:tracking-[0.3em] mb-0 md:mb-12 drop-shadow-lg whitespace-nowrap">
+                <p class="text-[13px] font-black italic text-white uppercase font-outfit tracking-[0.1em] mb-0 drop-shadow-lg whitespace-nowrap">
                     Sistem Informasi Logistik
                 </p>
                 
-                <div class="hidden md:flex flex-row items-center justify-center gap-3 md:gap-6">
-                    <a href="#layanan" class="flex-1 sm:flex-none px-4 py-4 md:px-12 md:py-5 bg-red-600 text-white rounded-2xl md:rounded-3xl font-black uppercase tracking-widest text-[9px] md:text-xs shadow-2xl shadow-red-600/30 hover:scale-105 active:scale-95 transition-all italic text-center">Layanan Digital &rarr;</a>
-                    <a href="#tentang" class="flex-1 sm:flex-none px-4 py-4 md:px-12 md:py-5 bg-blue-600 text-white rounded-2xl md:rounded-3xl font-black uppercase tracking-widest text-[9px] md:text-xs shadow-2xl shadow-blue-600/20 hover:scale-105 active:scale-95 transition-all italic text-center">Tentang Kami</a>
+                <div class="hidden md:flex flex-row items-center justify-center gap-6 mb-16">
+                    <a href="#layanan" class="group px-12 py-5 bg-red-600 text-white rounded-3xl font-black uppercase tracking-widest text-xs shadow-[0_20px_50px_rgba(220,38,38,0.4)] hover:scale-110 active:scale-95 transition-all italic flex items-center gap-3">
+                        Layanan Digital
+                        <svg class="w-5 h-5 group-hover:translate-x-2 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                    </a>
+                    <a href="#tentang" class="px-12 py-5 bg-blue-600 text-white rounded-3xl font-black uppercase tracking-widest text-xs shadow-[0_20px_50px_rgba(37,99,235,0.3)] hover:scale-110 active:scale-95 transition-all italic">Tentang Kami</a>
                 </div>
             </div>
 
-            <!-- RIGHT: Logo (Desktop) -->
-            <div class="lg:col-span-3 hidden lg:flex justify-center">
-                <img src="{{ asset('log polri.png') }}" class="w-56 h-auto filter drop-shadow-[0_20px_50px_rgba(251,191,36,0.3)] animate-float" alt="Logo">
+            <!-- RIGHT: App Dock (Parallel with Visi Misi on Desktop) -->
+            <div class="lg:col-span-6 hidden lg:flex items-center justify-center pt-8">
+                <div class="elite-dock flex-wrap justify-center">
+                    @foreach ($apps->take(4) as $app)
+                        <a href="{{ $app->url }}" target="_blank" class="group flex flex-col items-center gap-4">
+                            <div class="w-20 h-20 bg-slate-900/60 rounded-[2rem] flex items-center justify-center text-amber-500 border border-white/10 shadow-2xl elite-icon-container">
+                                @if($app->icon)
+                                    <img src="{{ asset('storage/' . $app->icon) }}" class="h-10 w-10 object-contain filter drop-shadow-lg group-hover:scale-110 transition-transform" alt="{{ $app->title }}">
+                                @else
+                                    <svg class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                                @endif
+                            </div>
+                            <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest group-hover:text-amber-500 transition-colors">{{ $app->title }}</span>
+                        </a>
+                    @endforeach
+
+                    @if($apps->count() > 4)
+                        <button type="button" @click.prevent="showAllServices = true" class="group flex flex-col items-center gap-4">
+                            <div class="w-20 h-20 bg-amber-500 rounded-[2rem] flex items-center justify-center text-[#0f172a] shadow-2xl elite-icon-container">
+                                <svg class="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 6h16M4 12h16m-7 6h7"/></svg>
+                            </div>
+                            <span class="text-[10px] font-black text-amber-500 uppercase tracking-widest group-hover:text-white transition-colors">Lainnya</span>
+                        </button>
+                    @endif
+                </div>
+            </div>
+
+            <!-- MOBILE App Dock Placeholder (Optional: if you want apps on mobile hero) -->
+            <div class="md:hidden">
+                <!-- Keep mobile logic if any, but currently apps are in a separate section for mobile -->
             </div>
         </div>
-
-        <!-- Mobile Visi Misi Card Hidden -->
     </div>
 </section>
 
