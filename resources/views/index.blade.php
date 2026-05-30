@@ -337,7 +337,7 @@
 </style>
 
 <!-- ELITE HERO SECTION -->
-<section id="beranda" class="elite-hero overflow-hidden pb-16 md:pb-0 relative">
+<section id="beranda" class="elite-hero overflow-hidden pb-6 md:pb-0 relative">
     <!-- MOBILE PROFILE HEADER INSIDE -->
     <div class="md:hidden bg-transparent absolute top-0 left-0 right-0 pt-10 pb-4 px-6 z-30" x-data="{ showProfileMenu: false, showProfilePic: false }">
         <div class="flex items-center gap-4 relative">
@@ -434,9 +434,9 @@
                         </div>
                     </div>
                     
-                    <!-- Grid 2x2 for Apps in this side layout -->
-                    <div class="grid grid-cols-2 gap-4">
-                        @foreach ($apps->take(3) as $app)
+                    <!-- Grid 3x2 for Apps in this side layout -->
+                    <div class="grid grid-cols-3 gap-4">
+                        @foreach ($apps->take(5) as $app)
                             <a href="{{ $app->url }}" target="_blank" class="dock-item-card group">
                                 <div class="item-icon-box">
                                     @if($app->icon)
@@ -452,7 +452,7 @@
                             </a>
                         @endforeach
 
-                        @if($apps->count() > 3)
+                        @if($apps->count() > 5)
                             <button type="button" @click.prevent="showAllServices = true" class="dock-item-card group cursor-pointer">
                                 <div class="item-icon-box bg-amber-500/10 border-amber-500/20 group-hover:bg-amber-500 transition-colors">
                                     <svg class="w-6 h-6 text-amber-500 group-hover:text-[#0f172a] transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
@@ -488,7 +488,7 @@
             </div>
 
             <!-- CENTER: Main Title (MOBILE ONLY) -->
-            <div class="lg:col-span-6 text-center md:hidden">
+            <div class="lg:col-span-6 text-center md:hidden mt-12">
                 <h1 class="text-7xl font-black uppercase font-outfit tracking-tighter leading-none mb-4">
                     <span class="elite-shimmer-effect drop-shadow-2xl px-2">SILOGIS</span>
                 </h1>
