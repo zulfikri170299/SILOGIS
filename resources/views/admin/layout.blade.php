@@ -35,7 +35,14 @@
         [x-cloak] { display: none !important; }
     </style>
 </head>
-<body class="h-full font-sans antialiased text-slate-200 overflow-hidden bg-slate-950" x-data="{ sidebarOpen: false }">
+<body class="h-full font-sans antialiased text-slate-200 overflow-hidden bg-slate-950 relative selection:bg-brand-primary/30 selection:text-white" x-data="{ sidebarOpen: false }">
+    <!-- Ambient Background Effects -->
+    <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none">
+        <div class="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-brand-primary/10 blur-[120px]"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-indigo-600/10 blur-[120px]"></div>
+        <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSIvPjwvc3ZnPg==')] opacity-10"></div>
+    </div>
+
     <div class="flex h-full min-h-full">
         <!-- Sidebar for Mobile (Overlay) -->
         <div x-show="sidebarOpen" x-cloak class="fixed inset-0 z-40 lg:hidden" role="dialog" aria-modal="true">
@@ -71,7 +78,7 @@
         </div>
 
         <!-- Static Sidebar for Desktop -->
-        <div class="hidden lg:flex lg:w-72 lg:flex-col lg:bg-slate-900 border-r border-white/5">
+        <div class="hidden lg:flex lg:w-72 lg:flex-col bg-slate-900/40 backdrop-blur-xl border-r border-white/5 relative z-10 transition-all duration-300">
             <div class="flex h-20 shrink-0 items-center px-8 border-b border-white/5">
                 <div class="flex flex-col">
                     <span class="text-xl font-black italic font-outfit uppercase tracking-[0.2em] bg-gradient-to-r from-red-600 via-yellow-500 to-black bg-clip-text text-transparent">SILOGIS</span>
@@ -104,10 +111,10 @@
         </div>
 
         <!-- Main Content Wrapper -->
-        <div class="flex flex-1 flex-col overflow-hidden">
+        <div class="flex flex-1 flex-col overflow-hidden relative z-0">
             <!-- Top Header -->
-            <header class="flex h-14 shrink-0 items-center gap-x-4 border-b border-white/5 bg-slate-900 px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
-                <button type="button" class="-m-2.5 p-2.5 text-slate-400 lg:hidden" @click="sidebarOpen = true">
+            <header class="flex h-16 shrink-0 items-center justify-between gap-x-4 border-b border-white/5 bg-slate-900/40 backdrop-blur-xl px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8 sticky top-0 z-20">
+                <button type="button" class="-m-2.5 p-2.5 text-slate-400 hover:text-white transition-colors lg:hidden" @click="sidebarOpen = true">
                     <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
                 </button>
                 
@@ -124,8 +131,24 @@
             </header>
 
             <!-- Main Content Area -->
-            <main class="flex-1 overflow-y-auto bg-slate-950 p-6 lg:p-12 scroll-smooth">
-                 @yield('content')
+            <style>
+                @keyframes contentFadeIn {
+                    from { opacity: 0; transform: translateY(10px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+                .content-animate {
+                    animation: contentFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+                }
+                /* Custom Scrollbar */
+                ::-webkit-scrollbar { width: 6px; height: 6px; }
+                ::-webkit-scrollbar-track { background: transparent; }
+                ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
+                ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.2); }
+            </style>
+            <main class="flex-1 overflow-y-auto p-6 lg:p-10 scroll-smooth">
+                 <div class="content-animate mx-auto max-w-7xl h-full flex flex-col">
+                     @yield('content')
+                 </div>
             </main>
         </div>
     </div>

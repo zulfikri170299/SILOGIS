@@ -41,7 +41,16 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     // Documents Management
     Route::resource('documents', DocumentController::class);
     Route::resource('document-folders', DocumentFolderController::class);
+
+    // BWS Management
+    Route::get('/bws', [\App\Http\Controllers\Admin\BwsAdminController::class, 'index'])->name('bws.index');
+    Route::put('/bws/logo', [\App\Http\Controllers\Admin\BwsAdminController::class, 'updateLogo'])->name('bws.logo.update');
+    Route::delete('/bws/{bws}', [\App\Http\Controllers\Admin\BwsAdminController::class, 'destroy'])->name('bws.destroy');
 });
+
+// BWS Portal
+Route::get('/bws', [\App\Http\Controllers\Portal\BwsController::class, 'index'])->name('portal.bws.index');
+Route::post('/bws', [\App\Http\Controllers\Portal\BwsController::class, 'store'])->name('portal.bws.store');
 
 // Redirect default dashboard to admin dashboard
 Route::get('/dashboard', function () {

@@ -12,9 +12,18 @@ class AdminController extends Controller
 {
     public function dashboard()
     {
-        $appsCount = App::count();
-        $newsCount = News::count();
-        return view('admin.dashboard', compact('appsCount', 'newsCount'));
+        $bagianList = ['SUBBAGRENMIN', 'BAG FASKON', 'BAG PAL', 'BAG INFOLOG', 'BAG ADA', 'BAG BEKUM', 'URGUDANG'];
+        $stats = \App\Models\BwsReport::select('bagian', \Illuminate\Support\Facades\DB::raw('count(*) as total'))
+            ->groupBy('bagian')
+            ->pluck('total', 'bagian')
+            ->toArray();
+
+        $bwsStats = [];
+        foreach ($bagianList as $bag) {
+            $bwsStats[$bag] = $stats[$bag] ?? 0;
+        }
+
+        return view('admin.dashboard', compact('bwsStats'));
     }
 
     // --- APPS CRUD ---
@@ -181,7 +190,6 @@ class AdminController extends Controller
         }
 
         if ($request->hasFile('photo')) {
-            // Delete old photo if it's not the default placeholder
             if ($profile->photo && $profile->photo !== 'pimpinan.png') {
                 Storage::disk('public')->delete($profile->photo);
             }

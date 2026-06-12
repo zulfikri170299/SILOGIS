@@ -19,6 +19,7 @@ class Profile extends Model
         'integrity_service',
         'photo',
         'ecosystem_description',
-        'whatsapp'
+        'whatsapp',
+        'bws_logo'
     ];
 }

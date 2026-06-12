@@ -52,8 +52,8 @@
     }
 
     .service-tile {
-        background: #ffffff;
-        border: 1px solid #f1f5f9;
+        background: rgba(30, 41, 59, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.05);
         border-radius: 1.5rem;
         transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         display: flex;
@@ -61,7 +61,7 @@
         align-items: center;
         text-align: left;
         gap: 1.5rem;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
         min-height: 120px;
     }
 
@@ -79,16 +79,16 @@
     .tile-icon {
         width: 70px; height: 70px;
         flex-shrink: 0;
-        background: white;
+        background: rgba(15, 23, 42, 0.6);
         border-radius: 1.25rem;
         display: flex; align-items: center; justify-content: center;
         padding: 12px;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.2);
     }
 
     .news-card-elite {
-        background: #ffffff;
-        border: 1px solid #efefef;
+        background: #1e293b;
+        border: 1px solid rgba(255, 255, 255, 0.05);
         border-radius: 1.5rem;
         transition: all 0.4s ease;
         overflow: hidden;
@@ -96,15 +96,15 @@
 
     .news-card-elite:hover {
         transform: translateY(-8px);
-        box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.5);
     }
 
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
     .news-card-elite {
-        background: #ffffff;
-        border: 1px solid #efefef;
+        background: #1e293b;
+        border: 1px solid rgba(255, 255, 255, 0.05);
         border-radius: 1.5rem;
         transition: all 0.4s ease;
         overflow: hidden;
@@ -112,7 +112,7 @@
 
     .news-card-elite:hover {
         transform: translateY(-8px);
-        box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.5);
     }
 
     .no-scrollbar::-webkit-scrollbar { display: none; }
@@ -381,7 +381,7 @@
     <div class="max-w-[1600px] mx-auto px-6 md:px-8 relative z-20 w-full pt-36 md:pt-20">
         
         <!-- Desktop Header: Logo above SILOGIS (Desktop Only) -->
-        <div class="hidden md:flex flex-col items-center mb-8">
+        <div class="hidden flex-col items-center mb-8">
             <img src="{{ asset('log polri.png') }}" class="w-16 h-auto mb-4 filter drop-shadow-[0_10px_30px_rgba(251,191,36,0.3)] animate-float">
             <h1 class="text-8xl font-black uppercase font-outfit tracking-[0.1em] leading-none text-center pl-[0.1em]">
                 <span class="elite-shimmer-effect drop-shadow-2xl">SILOGIS</span>
@@ -436,7 +436,22 @@
                     
                     <!-- Grid 3x2 for Apps in this side layout -->
                     <div class="grid grid-cols-3 gap-4">
-                        @foreach ($apps->take(5) as $app)
+                        <!-- HARDCODED BWS MENU (At Position 1) -->
+                        <a href="{{ route('portal.bws.index') }}" class="dock-item-card group">
+                            <div class="item-icon-box bg-slate-800 border-slate-700 group-hover:bg-[#1e293b] group-hover:border-amber-500/50 transition-colors shadow-lg group-hover:shadow-[0_15px_30px_-10px_rgba(245,158,11,0.4)]">
+                                @if($profile && $profile->bws_logo)
+                                    <img src="{{ asset('storage/' . $profile->bws_logo) }}" class="h-8 w-8 object-contain" alt="BWS">
+                                @else
+                                    <svg class="h-8 w-8 text-amber-500 group-hover:scale-110 group-hover:-translate-y-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                                @endif
+                            </div>
+                            <div class="flex flex-col min-w-0">
+                                <span class="text-[13px] font-black text-white uppercase tracking-tight group-hover:text-amber-500 transition-colors truncate">BWS</span>
+                                <span class="text-[10px] font-bold text-slate-400 italic truncate opacity-70 group-hover:opacity-100 transition-opacity">Pengaduan</span>
+                            </div>
+                        </a>
+
+                        @foreach ($apps->take(4) as $app)
                             <a href="{{ $app->url }}" target="_blank" class="dock-item-card group">
                                 <div class="item-icon-box">
                                     @if($app->icon)
@@ -524,7 +539,19 @@
 
         <!-- Mobile Grid (Icons) -->
         <div class="grid grid-cols-4 gap-y-10 mb-12">
-            @foreach ($apps->take(3) as $app)
+            <!-- HARDCODED BWS MENU (At Position 1) -->
+            <a href="{{ route('portal.bws.index') }}" class="flex flex-col items-center gap-3 reveal-on-scroll group">
+                <div class="w-16 h-16 bg-slate-800 rounded-[1.5rem] flex items-center justify-center text-amber-500 border border-slate-700 shadow-xl elite-icon-container transition-all duration-300">
+                    @if($profile && $profile->bws_logo)
+                        <img src="{{ asset('storage/' . $profile->bws_logo) }}" class="h-8 w-8 object-contain" alt="BWS">
+                    @else
+                        <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                    @endif
+                </div>
+                <span class="text-[9px] font-black text-slate-300 text-center leading-tight uppercase tracking-tighter transition-all">BWS</span>
+            </a>
+
+            @foreach ($apps->take(2) as $app)
                 <a href="{{ $app->url }}" target="_blank" class="flex flex-col items-center gap-3 reveal-on-scroll group">
                     <div class="w-16 h-16 bg-slate-800 rounded-[1.5rem] flex items-center justify-center text-amber-500 border border-slate-700 shadow-xl elite-icon-container transition-all duration-300" style="animation-delay: {{ $loop->index * 200 }}ms">
                         @if($app->icon)
@@ -547,7 +574,7 @@
 </section>
 
 <!-- ELITE NEWS: Instagram Feed -->
-<section id="berita" class="pt-6 md:pt-16 pb-1 md:pb-16 md:bg-slate-50 bg-[#0f172a] px-6 md:px-8">
+<section id="berita" class="pt-6 md:pt-16 pb-1 md:pb-16 bg-[#0f172a] px-6 md:px-8">
     <div class="max-w-[1200px] mx-auto">
         <!-- Section Header Mobile -->
         <div class="md:hidden mb-6 border-b border-white/10 pb-4">
@@ -561,8 +588,8 @@
         <!-- Header Desktop -->
         <div class="hidden md:flex items-center justify-between mb-12">
             <div class="space-y-2">
-                <span class="text-amber-500 font-black uppercase tracking-[0.4em] text-[10px]">Polda NTB Updates</span>
-                <h2 class="text-6xl font-black text-slate-900 uppercase font-outfit leading-none">Berita Utama</h2>
+                <span class="text-amber-500 font-black uppercase tracking-[0.4em] text-[10px] flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>Polda NTB Updates</span>
+                <h2 class="text-4xl font-black uppercase font-outfit leading-tight text-white drop-shadow-sm">Berita Utama</h2>
             </div>
             <a href="https://www.instagram.com/birologistik_ntb/" target="_blank" class="flex items-center gap-3 px-6 py-3 bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] text-white text-[10px] font-black rounded-xl shadow-xl hover:scale-105 transition-all uppercase italic">
                 Follow IG @birologistik_ntb
@@ -605,23 +632,32 @@
             @foreach ($news as $item)
                 <a href="{{ $item->instagram_url ? '#' : route('portal.news.show', $item->slug) }}"
                    @if($item->instagram_url) onclick="event.preventDefault(); openInstaModal('{{ $item->instagram_url }}')" @endif
-                   class="news-card-elite group cursor-pointer block">
-                    <div class="relative aspect-[4/5] overflow-hidden">
+                   class="news-card-elite group cursor-pointer flex flex-col reveal-on-scroll overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 rounded-3xl border border-white/5" style="transition-delay: {{ $loop->index * 150 }}ms;">
+                    <div class="relative aspect-[4/3] w-full overflow-hidden shrink-0">
                         <img src="{{ asset('storage/' . $item->thumbnail) }}" class="h-full w-full object-cover group-hover:scale-110 transition-transform duration-700" alt="">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
-                            <span class="text-white text-xs font-black uppercase italic">Baca Selengkapnya &rarr;</span>
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-5">
+                            <span class="text-white text-[10px] font-black uppercase tracking-widest flex items-center gap-2">Baca Selengkapnya <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg></span>
                         </div>
                         <div class="absolute top-4 left-4">
                             @if($item->instagram_url)
-                                <span class="px-3 py-1 bg-white/20 backdrop-blur-md text-white text-[8px] font-black rounded-lg border border-white/20 uppercase">INSTAGRAM</span>
+                                <span class="px-3 py-1.5 bg-white/20 backdrop-blur-md text-white text-[9px] font-black rounded-lg border border-white/20 uppercase shadow-lg flex items-center gap-1.5"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163...z"/></svg>INSTAGRAM</span>
                             @else
-                                <span class="px-3 py-1 bg-red-600/80 backdrop-blur-md text-white text-[8px] font-black rounded-lg border border-red-500/50 uppercase">ARTIKEL</span>
+                                <span class="px-3 py-1.5 bg-red-600/90 backdrop-blur-md text-white text-[9px] font-black rounded-lg border border-red-500/50 uppercase shadow-lg shadow-red-500/20">ARTIKEL</span>
                             @endif
                         </div>
                     </div>
-                    <div class="p-6 bg-white">
-                        <span class="text-[9px] font-black text-red-600 uppercase tracking-widest mb-3 block">{{ $item->created_at->format('d F Y') }}</span>
-                        <h4 class="text-sm font-black text-slate-800 uppercase line-clamp-2 leading-tight font-outfit">{{ $item->title }}</h4>
+                    <div class="p-6 bg-slate-800/40 flex-1 flex flex-col justify-between border-t border-white/5">
+                        <div>
+                            <span class="text-[10px] font-black text-amber-500 uppercase tracking-widest flex items-center gap-1.5 mb-3">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg> 
+                                {{ $item->created_at->format('d M Y') }}
+                            </span>
+                            <h4 class="text-sm font-black text-white uppercase line-clamp-2 leading-snug font-outfit group-hover:text-amber-500 transition-colors">{{ $item->title }}</h4>
+                            @if(!empty($item->content) && !$item->instagram_url)
+                                <p class="text-[11px] text-slate-400 mt-3 line-clamp-3 leading-relaxed font-medium">{!! Str::limit(strip_tags($item->content), 120) !!}</p>
+                            @endif
+                        </div>
+                        <div class="w-8 h-1 bg-white/10 group-hover:bg-amber-500 group-hover:w-full transition-all duration-500 mt-6 rounded-full"></div>
                     </div>
                 </a>
             @endforeach
@@ -630,7 +666,7 @@
 </section>
 
 <!-- ELITE DOKUMEN: Dokumen & Arsip -->
-<section id="dokumen" class="pt-6 md:pt-16 pb-1 md:pb-16 md:bg-white bg-[#0f172a] px-6 md:px-8">
+<section id="dokumen" class="pt-6 md:pt-16 pb-1 md:pb-16 bg-[#0f172a] px-6 md:px-8">
     <div class="max-w-[1200px] mx-auto">
         <!-- Section Header Mobile -->
         <div class="md:hidden mb-6 border-b border-white/10 pb-4">
@@ -644,12 +680,12 @@
         <!-- Header Desktop -->
         <div class="hidden md:flex flex-row items-end justify-between mb-16 gap-8">
             <div class="space-y-4">
-                <span class="text-amber-500 font-black uppercase tracking-[0.4em] text-[10px]">Data & Archives Center</span>
-                <h2 class="text-6xl font-black text-slate-900 uppercase font-outfit leading-none">Dokumen</h2>
+                <span class="text-amber-500 font-black uppercase tracking-[0.4em] text-[10px] flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>Data & Archives Center</span>
+                <h2 class="text-4xl font-black uppercase font-outfit leading-tight text-white drop-shadow-sm">Dokumen</h2>
             </div>
             <div class="w-full max-w-sm">
                 <div class="relative group">
-                    <input type="text" x-model="searchDoc" placeholder="Cari Dokumen..." class="w-full bg-slate-50 border border-slate-200 rounded-2xl py-4 pl-12 pr-6 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all">
+                    <input type="text" x-model="searchDoc" placeholder="Cari Dokumen..." class="w-full bg-slate-800/50 border border-white/10 text-white rounded-2xl py-4 pl-12 pr-6 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all placeholder-slate-500">
                     <svg class="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                 </div>
             </div>
@@ -724,37 +760,53 @@
 
 
         <!-- Desktop View (Grid) -->
-        <div class="hidden md:grid grid-cols-4 gap-8">
+        <div class="hidden md:grid grid-cols-6 gap-5">
             <!-- Folders -->
-            @foreach ($folders as $folder)
-                <div class="bg-slate-50 p-8 rounded-[3rem] border border-slate-100 group hover:bg-white hover:shadow-2xl hover:shadow-amber-500/5 transition-all duration-500">
-                    <div class="h-14 w-14 bg-white rounded-2xl flex items-center justify-center text-amber-500 mb-8 shadow-sm group-hover:bg-amber-500 group-hover:text-white transition-all">
-                        <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" /></svg>
+            @foreach ($folders->take(11) as $folder)
+                <div class="bg-slate-800/40 p-4 rounded-3xl border border-white/5 group shadow-sm hover:shadow-2xl hover:border-amber-500/30 transition-all duration-500 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="h-10 w-10 bg-slate-900 border border-white/10 rounded-xl flex items-center justify-center text-amber-500 group-hover:scale-110 transition-transform">
+                                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" /></svg>
+                            </div>
+                            <span class="text-[8px] font-black text-amber-500 bg-amber-500/10 border border-amber-500/20 px-2 py-1 rounded-full uppercase tracking-widest">{{ $folder->documents->count() }} Berkas</span>
+                        </div>
+                        <h4 class="text-[10px] font-black text-white uppercase mb-3 line-clamp-2 leading-snug font-outfit group-hover:text-amber-500 transition-colors">{{ $folder->name }}</h4>
                     </div>
-                    <h4 class="text-sm font-black text-slate-800 uppercase mb-4 font-outfit">{{ $folder->name }}</h4>
-                    <select onchange="updateDownloadLinkManual(this.value, '{{ $folder->id }}')" class="w-full bg-white border border-slate-200 rounded-xl py-3 px-4 text-[10px] font-bold text-slate-600 outline-none mb-6 cursor-pointer hover:border-amber-500 transition-colors">
-                        <option value="">Pilih Berkas...</option>
-                        @foreach($folder->documents as $doc)
-                            <option value="{{ asset('storage/' . $doc->file_path) }}">{{ $doc->title }}</option>
-                        @endforeach
-                    </select>
-                    <a id="download-{{ $folder->id }}" href="#" target="_blank" class="w-full py-4 bg-slate-100 text-slate-300 rounded-2xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 pointer-events-none transition-all shadow-sm">
-                        Unduh Berkas
-                    </a>
+                    
+                    @if($folder->documents->count() > 0)
+                        <a href="{{ route('portal.folders.download', $folder->id) }}" class="w-full mt-2 py-2.5 bg-gradient-to-r from-amber-500 to-amber-400 text-slate-900 rounded-lg text-[9px] font-black uppercase tracking-widest flex items-center justify-center gap-1.5 shadow-md hover:shadow-[0_0_15px_rgba(245,158,11,0.5)] hover:-translate-y-0.5 transition-all">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                            .zip
+                        </a>
+                    @else
+                        <div class="w-full mt-2 py-2.5 bg-slate-800 text-slate-500 rounded-lg text-[9px] font-black uppercase tracking-widest flex items-center justify-center gap-1.5 border border-white/5 cursor-not-allowed">
+                            Kosong
+                        </div>
+                    @endif
                 </div>
             @endforeach
 
+            @if($folders->count() > 11)
+                <button type="button" @click.prevent="showAllDocs = true" class="bg-slate-800/20 border border-white/5 p-4 rounded-3xl group shadow-sm hover:shadow-2xl hover:border-amber-500/30 transition-all duration-500 flex flex-col justify-center items-center text-center">
+                    <div class="h-10 w-10 bg-amber-500 rounded-full flex items-center justify-center text-[#0f172a] mb-3 shadow-[0_0_15px_rgba(245,158,11,0.4)] group-hover:scale-110 transition-transform">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+                    </div>
+                    <span class="text-[10px] font-black text-amber-500 uppercase tracking-widest line-clamp-2">Lihat Semua<br>Folder</span>
+                </button>
+            @endif
+
             <!-- Standalone Documents -->
             @foreach ($standaloneDocuments as $doc)
-                <div class="bg-slate-900 p-8 rounded-[3rem] group hover:scale-[1.02] transition-all duration-500 flex flex-col justify-between">
+                <div class="bg-slate-900 p-4 rounded-3xl group hover:scale-[1.02] transition-all duration-500 flex flex-col justify-between">
                     <div>
-                        <div class="h-14 w-14 bg-white/10 rounded-2xl flex items-center justify-center text-white mb-8">
-                            <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+                        <div class="h-10 w-10 bg-white/10 rounded-xl flex items-center justify-center text-white mb-4">
+                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
                         </div>
-                        <h4 class="text-sm font-black text-white uppercase mb-4 font-outfit leading-snug">{{ $doc->title }}</h4>
+                        <h4 class="text-[10px] font-black text-white uppercase mb-4 line-clamp-2 font-outfit leading-snug">{{ $doc->title }}</h4>
                     </div>
-                    <a href="{{ asset('storage/' . $doc->file_path) }}" target="_blank" class="w-full py-4 bg-amber-500 text-[#0f172a] rounded-2xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 shadow-xl shadow-amber-500/20 italic">
-                        Unduh Mandiri &rarr;
+                    <a href="{{ asset('storage/' . $doc->file_path) }}" target="_blank" class="w-full py-2.5 bg-amber-500 text-[#0f172a] rounded-lg text-[9px] font-black uppercase tracking-widest flex items-center justify-center gap-1.5 shadow-md hover:shadow-lg italic transition-all">
+                        Unduh Mandiri
                     </a>
                 </div>
             @endforeach
@@ -763,7 +815,7 @@
 </section>
 
 <!-- ELITE BAGIAN: Tupoksi/Fungsi -->
-<section id="bagian" class="pt-6 md:pt-16 pb-1 md:pb-16 md:bg-white bg-[#0f172a] px-6 md:px-8 relative overflow-hidden">
+<section id="bagian" class="pt-6 md:pt-16 pb-1 md:pb-16 bg-[#0f172a] px-6 md:px-8 relative overflow-hidden">
     <div class="max-w-[1200px] mx-auto">
         <!-- Header Mobile -->
         <div class="md:hidden mb-6 border-b border-white/10 pb-4">
@@ -823,14 +875,14 @@
         <!-- Desktop Grid -->
         <div class="hidden md:block">
             <div class="text-center mb-16">
-                <span class="text-red-600 font-black uppercase tracking-[0.4em] text-[10px] mb-4 block">Tugas Pokok & Fungsi</span>
-                <h2 class="text-5xl font-black text-slate-900 uppercase font-outfit italic">Bagian/Fungsi</h2>
+                <span class="text-red-500 font-black uppercase tracking-[0.4em] text-[10px] mb-4 block">Tugas Pokok & Fungsi</span>
+                <h2 class="text-5xl font-black text-white uppercase font-outfit italic">Bagian/Fungsi</h2>
             </div>
             <div class="grid grid-cols-3 gap-8">
                 @foreach ($sections as $sec)
-                    <div class="bg-white p-10 rounded-[3rem] border border-slate-100 shadow-sm hover:shadow-2xl transition-all duration-500 group">
-                        <h5 class="text-red-600 font-black uppercase tracking-widest text-xs mb-6 border-b border-slate-50 pb-5 group-hover:text-amber-500 transition-colors">{{ $sec['title'] }}</h5>
-                        <p class="text-slate-500 text-sm leading-relaxed font-medium italic">{{ $sec['desc'] }}</p>
+                    <div class="bg-slate-800/40 p-10 rounded-[3rem] border border-white/5 shadow-sm hover:shadow-2xl hover:bg-slate-800/80 transition-all duration-500 group">
+                        <h5 class="text-red-500 font-black uppercase tracking-widest text-xs mb-6 border-b border-white/10 pb-5 group-hover:text-amber-500 transition-colors">{{ $sec['title'] }}</h5>
+                        <p class="text-slate-300 text-sm leading-relaxed font-medium italic">{{ $sec['desc'] }}</p>
                     </div>
                 @endforeach
             </div>
@@ -839,7 +891,7 @@
 </section>
 
 <!-- ELITE STRUKTUR: Personnel Discovery -->
-<section id="struktur" class="pt-6 md:pt-16 pb-1 md:pb-16 md:bg-slate-50 bg-[#0f172a] px-6 md:px-8">
+<section id="struktur" class="pt-6 md:pt-16 pb-1 md:pb-16 bg-[#0f172a] px-6 md:px-8">
     <div class="max-w-[1200px] mx-auto">
         <!-- Section Header Mobile -->
         <div class="md:hidden mb-6 flex items-center justify-between border-b border-white/10 pb-4">
@@ -864,7 +916,7 @@
         <div class="hidden md:flex items-center justify-between mb-12">
             <div class="space-y-2">
                 <span class="text-amber-500 font-black uppercase tracking-[0.4em] text-[10px]">Command Center</span>
-                <h2 class="text-6xl font-black text-slate-900 uppercase font-outfit leading-none">Struktur</h2>
+                <h2 class="text-6xl font-black text-white uppercase font-outfit leading-none">Struktur</h2>
             </div>
         </div>
 
@@ -967,40 +1019,40 @@
         <div class="hidden md:block">
             <h2 class="text-6xl font-black text-white uppercase font-outfit mb-20 text-center">Biro Logistik Polda NTB</h2>
             <div class="grid grid-cols-12 gap-12">
-                <div class="col-span-7 bg-white p-16 rounded-[4rem] shadow-2xl relative overflow-hidden group/card">
-                    <div class="absolute top-0 left-0 w-2 h-full bg-red-600 group-hover/card:w-4 transition-all duration-500"></div>
+                <div class="col-span-7 bg-slate-800/40 p-16 rounded-[4rem] shadow-2xl relative overflow-hidden group/card border border-white/5">
+                    <div class="absolute top-0 left-0 w-2 h-full bg-red-500 group-hover/card:w-4 transition-all duration-500"></div>
                     <div class="space-y-12">
                         <div class="group/item hover:translate-x-4 transition-transform duration-500">
                             <div class="flex items-center gap-5 mb-4">
                                 <div class="w-12 h-12 rounded-2xl bg-amber-500/10 flex items-center justify-center text-amber-500 group-hover/item:scale-110 group-hover/item:bg-amber-500 group-hover/item:text-white transition-all duration-500 shadow-lg shadow-amber-500/5">
                                     <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                                 </div>
-                                <h3 class="text-4xl font-black text-slate-800 uppercase italic font-outfit">Visi</h3>
+                                <h3 class="text-4xl font-black text-white uppercase italic font-outfit">Visi</h3>
                             </div>
-                            <p class="text-slate-500 text-xl font-bold italic leading-relaxed text-justify border-l-4 border-slate-100 pl-8 group-hover/item:border-amber-500 transition-colors">
+                            <p class="text-slate-300 text-xl font-bold italic leading-relaxed text-justify border-l-4 border-white/10 pl-8 group-hover/item:border-amber-500 transition-colors">
                                 {{ $profile?->vision ?? 'Menjadi biro logistik yang unggul dalam pelayanan.' }}
                             </p>
                         </div>
                         <div class="group/item hover:translate-x-4 transition-transform duration-500">
                             <div class="flex items-center gap-5 mb-4">
-                                <div class="w-12 h-12 rounded-2xl bg-red-500/10 flex items-center justify-center text-red-600 group-hover/item:scale-110 group-hover/item:bg-red-600 group-hover/item:text-white transition-all duration-500 shadow-lg shadow-red-500/5">
+                                <div class="w-12 h-12 rounded-2xl bg-red-500/10 flex items-center justify-center text-red-500 group-hover/item:scale-110 group-hover/item:bg-red-500 group-hover/item:text-white transition-all duration-500 shadow-lg shadow-red-500/5">
                                     <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
                                 </div>
-                                <h3 class="text-4xl font-black text-slate-800 uppercase italic font-outfit">Misi</h3>
+                                <h3 class="text-4xl font-black text-white uppercase italic font-outfit">Misi</h3>
                             </div>
-                            <p class="text-slate-500 text-base font-medium italic leading-relaxed text-justify border-l-4 border-slate-100 pl-8 group-hover/item:border-red-600 transition-colors">
+                            <p class="text-slate-300 text-base font-medium italic leading-relaxed text-justify border-l-4 border-white/10 pl-8 group-hover/item:border-red-500 transition-colors">
                                 {{ $profile?->mission ?? 'Melaksanakan manajemen logistik secara profesional.' }}
                             </p>
                         </div>
                     </div>
-                    <div class="pt-12 mt-12 border-t border-slate-100 grid grid-cols-2 gap-10">
+                    <div class="pt-12 mt-12 border-t border-white/10 grid grid-cols-2 gap-10">
                         <div class="group/stat">
-                            <span class="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] block mb-4 group-hover/stat:text-red-600 transition-colors">Nilai Utama</span>
-                            <p class="text-base font-black text-slate-800 italic uppercase">Profesionalisme & Integritas</p>
+                            <span class="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] block mb-4 group-hover/stat:text-red-500 transition-colors">Nilai Utama</span>
+                            <p class="text-base font-black text-white italic uppercase">Profesionalisme & Integritas</p>
                         </div>
                         <div class="group/stat">
-                            <span class="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] block mb-4 group-hover/stat:text-red-600 transition-colors">Wilayah Tugas</span>
-                            <p class="text-base font-black text-slate-800 italic uppercase">Polda Nusa Tenggara Barat</p>
+                            <span class="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] block mb-4 group-hover/stat:text-red-500 transition-colors">Wilayah Tugas</span>
+                            <p class="text-base font-black text-white italic uppercase">Polda Nusa Tenggara Barat</p>
                         </div>
                     </div>
                 </div>

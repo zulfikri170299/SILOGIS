@@ -34,9 +34,9 @@
         [x-cloak] { display: none !important; }
         ::selection { background: #0062ff; color: white; }
         ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f5f9; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #0062ff; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #f59e0b; }
 
         .floating-nav {
             position: fixed;
@@ -45,13 +45,13 @@
             transform: translateX(-50%);
             width: calc(100% - 4rem);
             max-width: 1200px;
-            background: rgba(255, 255, 255, 0.85);
+            background: rgba(15, 23, 42, 0.85);
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 2rem;
             z-index: 1000;
             transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.08);
+            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.3);
         }
 
         @media (max-width: 768px) {
@@ -64,22 +64,22 @@
         
         .nav-scrolled {
             top: 1rem;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(15, 23, 42, 0.95);
             backdrop-filter: blur(25px);
-            border: 1px solid rgba(0, 98, 255, 0.15);
-            box-shadow: 0 25px 50px -12px rgba(0, 98, 255, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.15);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
         }
 
         .nav-link {
             position: relative;
             font-size: 11px;
             font-weight: 800;
-            color: #64748b;
+            color: #94a3b8;
             text-transform: uppercase;
             letter-spacing: 0.1em;
             transition: all 0.3s ease;
         }
-        .nav-link:hover { color: #0062ff; }
+        .nav-link:hover { color: #f59e0b; }
         .nav-link::after {
             content: '';
             position: absolute;
@@ -87,7 +87,7 @@
             left: 50%;
             width: 0;
             height: 2px;
-            background: #0062ff;
+            background: #f59e0b;
             transition: all 0.3s ease;
             transform: translateX(-50%);
             border-radius: 2px;
@@ -95,7 +95,7 @@
         .nav-link:hover::after { width: 100%; }
         
         /* Active State */
-        .nav-link.active { color: #0062ff; }
+        .nav-link.active { color: #f59e0b; }
         .nav-link.active::after { width: 100%; }
 
         html {
@@ -114,7 +114,7 @@
 
 
         .dot-pattern {
-            background-image: radial-gradient(#cbd5e1 1.5px, transparent 1.5px);
+            background-image: radial-gradient(rgba(255,255,255,0.05) 1.5px, transparent 1.5px);
             background-size: 24px 24px;
         }
 
@@ -141,20 +141,56 @@
         }
 
         .glass-premium {
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(30, 41, 59, 0.5);
             backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
         }
 
         .reveal-on-scroll {
             opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateY(100px) scale(0.95);
+            transition: all 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+            filter: blur(10px);
+            will-change: transform, opacity, filter;
         }
         .reveal-on-scroll.active {
             opacity: 1;
-            transform: translateY(0);
+            transform: translateY(0) scale(1);
+            filter: blur(0);
+        }
+
+        /* 3D Section Depth - Desktop Only */
+        @media (min-width: 768px) {
+            section {
+                scroll-margin-top: 120px;
+                transition: transform 1s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.8s ease, filter 0.8s ease;
+                transform-style: preserve-3d;
+                backface-visibility: hidden;
+                will-change: transform, opacity, filter;
+            }
+            
+            section[id]:not(.active-section) {
+                opacity: 0.6;
+                transform: scale(0.9) translateZ(-100px);
+                filter: blur(3px);
+            }
+
+            section.active-section {
+                opacity: 1;
+                transform: scale(1) translateZ(0);
+                filter: blur(0);
+            }
+        }
+
+        /* Nav Link 3D Tilt */
+        .nav-link {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: inline-block;
+        }
+        .nav-link:hover {
+            transform: translateY(-2px) scale(1.1) translateZ(20px);
+            text-shadow: 0 10px 20px rgba(0, 98, 255, 0.2);
         }
 
         .elite-3d-red {
@@ -307,10 +343,89 @@
             animation: elite-text-shimmer 15s infinite linear;
         }
         [x-cloak] { display: none !important; }
+        
+        /* 3D Page Transitions (Lovable iOS Modal Style) - Desktop Only */
+        @media (min-width: 768px) {
+            :root {
+                --transition-speed: 0.7s;
+            }
+
+            /* The main container acts as the card */
+            main {
+                transition: transform var(--transition-speed) cubic-bezier(0.32, 0.72, 0, 1), 
+                            opacity var(--transition-speed) cubic-bezier(0.32, 0.72, 0, 1),
+                            border-radius var(--transition-speed) cubic-bezier(0.32, 0.72, 0, 1),
+                            filter var(--transition-speed) cubic-bezier(0.32, 0.72, 0, 1);
+                transform-origin: top center;
+                opacity: 1;
+                transform: translateY(0) scale(1) translateZ(0);
+                will-change: transform, opacity, border-radius, filter;
+                background: #0f172a;
+                border-radius: 0px; 
+                min-height: 100vh;
+                box-shadow: 0 -20px 40px rgba(0,0,0,0.3);
+            }
+
+            /* Initial state on load (Entry - coming from bottom) */
+            .page-entering main {
+                /* Start from almost offscreen bottom */
+                transform: translateY(100vh) scale(1);
+                opacity: 1;
+                border-radius: 30px 30px 0 0;
+            }
+
+            /* State when leaving (Exit - pushing back and down) */
+            .page-leaving main {
+                opacity: 0.5 !important;
+                /* Shrink, push back, and add radius to simulate the back card */
+                transform: translateY(20px) scale(0.92) translateZ(-100px) !important;
+                border-radius: 30px !important;
+                pointer-events: none;
+                filter: blur(2px) !important;
+            }
+
+            .page-loading-overlay {
+                position: fixed;
+                inset: 0;
+                background: #0f172a;
+                z-index: -1; 
+                pointer-events: none;
+            }
+            
+            .page-entering .page-loading-overlay {
+                opacity: 1;
+            }
+
+            /* Animations for Desktop Logo and Text */
+            .desktop-float {
+                animation: float-desktop-logo 4s ease-in-out infinite;
+            }
+            @keyframes float-desktop-logo {
+                0%, 100% { transform: translateY(0) rotate(0deg); }
+                50% { transform: translateY(-3px) rotate(3deg) scale(1.05); }
+            }
+            .desktop-shimmer {
+                background: linear-gradient(to right, #dc2626 0%, #eab308 40%, #ffffff 50%, #eab308 60%, #dc2626 100%);
+                background-size: 200% auto;
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                animation: shimmer-desktop-text 4s infinite linear;
+            }
+            @keyframes shimmer-desktop-text {
+                0% { background-position: 200% center; }
+                100% { background-position: -200% center; }
+            }
+        }
+
+        body {
+            overflow-x: hidden;
+            background: #0f172a;
+        }
     </style>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body x-data="{ activeSection: 'beranda', isAutoScrolling: false }" @scroll-spy.window="if(!isAutoScrolling) activeSection = $event.detail" class="antialiased text-slate-900 selection:bg-brand-primary/10 selection:text-brand-primary">
+<body x-data="{ activeSection: 'beranda', isAutoScrolling: false }" @scroll-spy.window="if(!isAutoScrolling) activeSection = $event.detail" class="antialiased text-white selection:bg-amber-500/10 selection:text-amber-500 page-entering">
+    <div class="page-loading-overlay"></div>
     @php
         $waNumber = $profile?->whatsapp ?? '6281234567890';
         $waNumber = preg_replace('/[^0-9]/', '', $waNumber);
@@ -320,10 +435,10 @@
     <nav id="main-nav" class="floating-nav hidden lg:block" x-data="{ mobileMenu: false }">
         <div class="px-6 md:px-8 flex justify-between h-20 items-center">
             <a href="#" @click.prevent="activeSection = 'beranda'" class="flex items-center gap-3 md:gap-4 group">
-                <img src="{{ asset('log polri.png') }}" class="h-8 md:h-10 w-auto" alt="POLRI Logo">
+                <img src="{{ asset('log polri.png') }}" class="h-8 md:h-10 w-auto desktop-float" alt="POLRI Logo">
                 <div class="flex flex-col">
-                    <span class="text-lg md:text-2xl font-black italic leading-none font-outfit uppercase tracking-[0.2em] bg-gradient-to-r from-red-600 via-yellow-500 to-black bg-clip-text text-transparent">SILOGIS</span>
-                    <span class="text-[7px] md:text-[8px] font-black text-slate-500 uppercase tracking-[0.1em] mt-1">Sistem Informasi Logistik</span>
+                    <span class="text-lg md:text-2xl font-black italic leading-none font-outfit uppercase tracking-[0.2em] bg-gradient-to-r from-red-500 via-yellow-500 to-white bg-clip-text text-transparent desktop-shimmer">SILOGIS</span>
+                    <span class="text-[7px] md:text-[8px] font-black text-slate-400 uppercase tracking-[0.1em] mt-1">Sistem Informasi Logistik</span>
                 </div>
             </a>
             
@@ -348,7 +463,7 @@
                     @endforeach
                 </div>
                 
-                <div class="h-6 w-px bg-slate-200"></div>
+                <div class="h-6 w-px bg-white/10"></div>
                 
                 @auth
                     <a href="{{ route('admin.dashboard') }}" class="bg-brand-primary text-white hover:bg-brand-dark hover:text-white px-8 py-3 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all shadow-lg shadow-brand-primary/20 italic">Dashboard</a>
@@ -434,6 +549,42 @@
         });
 
         document.addEventListener('DOMContentLoaded', () => {
+            // Remove entering class to trigger entry animation
+            setTimeout(() => {
+                document.body.classList.remove('page-entering');
+            }, 100);
+
+            // Handle Page Exit
+            document.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const href = this.getAttribute('href');
+                    const target = this.getAttribute('target');
+                    
+                    if (!href || href.startsWith('#') || href === '#' || target === '_blank' || e.metaKey || e.ctrlKey) return;
+
+                    try {
+                        const url = new URL(href, window.location.href);
+                        
+                        // If same page (different hash or same), don't trigger exit animation
+                        if (url.origin === window.location.origin && url.pathname === window.location.pathname) {
+                            return;
+                        }
+
+                        // Filter social and common non-page links
+                        if (href.includes('whatsapp.com') || href.startsWith('tel:') || href.startsWith('mailto:')) return;
+
+                        e.preventDefault();
+                        document.body.classList.add('page-leaving');
+                        
+                        setTimeout(() => {
+                            window.location.href = href;
+                        }, 500);
+                    } catch (err) {
+                        // Fallback for invalid URLs
+                    }
+                });
+            });
+
             // Intersection Observer for Scroll Spy & Reveal
             const observerOptions = { 
                 threshold: [0, 0.1, 0.25, 0.5, 0.75, 1.0],
@@ -471,6 +622,15 @@
 
                     if (activeId && maxRatio > 0) {
                         window.dispatchEvent(new CustomEvent('scroll-spy', { detail: activeId }));
+                        
+                        // Add active-section class to the current section
+                        document.querySelectorAll('section').forEach(sec => {
+                            if (sec.id === activeId) {
+                                sec.classList.add('active-section');
+                            } else {
+                                sec.classList.remove('active-section');
+                            }
+                        });
                     }
                 }
             }, observerOptions);

@@ -29,50 +29,37 @@
     </div>
 
     <!-- Stats Grid -->
-    <!-- Stats Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div class="bg-slate-900/50 backdrop-blur-2xl p-10 rounded-[2.5rem] shadow-2xl border border-white/5 flex items-center justify-between group hover:border-brand-primary/30 transition-all">
+    @php
+        $totalReports = array_sum($bwsStats);
+    @endphp
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
+        @foreach ($bwsStats as $bag => $count)
+        @php
+            $percentage = $totalReports > 0 ? round(($count / $totalReports) * 100) : 0;
+            $dashArray = $percentage . ', 100';
+        @endphp
+        <div class="bg-slate-900/50 backdrop-blur-2xl p-6 md:p-8 rounded-[2rem] shadow-2xl border border-white/5 flex flex-col justify-between group hover:border-amber-500/30 transition-all">
+            <div class="flex items-center justify-between mb-6">
+                <!-- Radial Progress Diagram -->
+                <div class="relative w-16 h-16">
+                    <svg class="w-full h-full -rotate-90" viewBox="0 0 36 36">
+                        <!-- Background Circle -->
+                        <path class="text-slate-800" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3" />
+                        <!-- Progress Circle -->
+                        <path class="text-amber-500 group-hover:text-brand-primary transition-colors duration-500" stroke-dasharray="{{ $dashArray }}" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3" />
+                    </svg>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <span class="text-xs font-black text-white italic">{{ $percentage }}%</span>
+                    </div>
+                </div>
+            </div>
             <div>
-                <p class="text-[10px] font-black uppercase tracking-[0.3em] text-slate-600 mb-4">Total Application Assets</p>
-                <h3 class="text-6xl font-black text-white font-outfit italic tracking-tighter">{{ $appsCount }}</h3>
-                <a href="{{ route('admin.apps.index') }}" class="mt-6 inline-block text-[10px] font-black uppercase tracking-widest text-brand-primary hover:text-white transition-all italic">Manage Ecosystem &rarr;</a>
-            </div>
-            <div class="h-20 w-20 bg-slate-800 rounded-3xl flex items-center justify-center text-brand-primary group-hover:bg-brand-primary group-hover:text-white transition-all duration-500 shadow-2xl">
-                <svg class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
+                <h3 class="text-5xl font-black text-white font-outfit italic tracking-tighter mb-2">{{ $count }}</h3>
+                <p class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">{{ $bag }}</p>
+                <a href="{{ route('admin.bws.index') }}?bagian={{ urlencode($bag) }}" class="mt-4 inline-block text-[9px] font-black uppercase tracking-widest text-brand-primary hover:text-white transition-all italic">Lihat Pengaduan &rarr;</a>
             </div>
         </div>
-        
-        <div class="bg-slate-900/50 backdrop-blur-2xl p-10 rounded-[2.5rem] shadow-2xl border border-white/5 flex items-center justify-between group hover:border-brand-primary/30 transition-all">
-            <div>
-                <p class="text-[10px] font-black uppercase tracking-[0.3em] text-slate-600 mb-4">Narrative Publications</p>
-                <h3 class="text-6xl font-black text-white font-outfit italic tracking-tighter">{{ $newsCount }}</h3>
-                <a href="{{ route('admin.news.index') }}" class="mt-6 inline-block text-[10px] font-black uppercase tracking-widest text-brand-primary hover:text-white transition-all italic">Review Archives &rarr;</a>
-            </div>
-            <div class="h-20 w-20 bg-slate-800 rounded-3xl flex items-center justify-center text-brand-primary group-hover:bg-brand-primary group-hover:text-white transition-all duration-500 shadow-2xl">
-                <svg class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5L18.5 7H20" /></svg>
-            </div>
-        </div>
-    </div>
-
-    <!-- Quick Info Section -->
-    <div class="bg-slate-900/50 backdrop-blur-2xl rounded-[2.5rem] p-10 text-white relative overflow-hidden border border-white/5 shadow-22xl italic">
-        <div class="relative z-10">
-            <h4 class="text-[10px] font-black uppercase tracking-[0.4em] mb-8 text-slate-500">Security & Operational Guidelines</h4>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
-                <div class="group">
-                    <p class="text-[10px] font-black uppercase tracking-widest text-brand-primary mb-3">Asset Visualization</p>
-                    <p class="text-[11px] text-slate-400 font-bold leading-relaxed opacity-80 group-hover:opacity-100 transition-opacity">Gunakan format ikon PNG transparan tingkat tinggi untuk menjaga estetika katalog ekosistem tetap premium.</p>
-                </div>
-                <div class="group border-l border-white/5 pl-10">
-                    <p class="text-[10px] font-black uppercase tracking-widest text-brand-primary mb-3">Narrative Engine</p>
-                    <p class="text-[11px] text-slate-400 font-bold leading-relaxed opacity-80 group-hover:opacity-100 transition-opacity">Sistem kecerdasan narasi kami secara otomatis mengoptimalkan SLUG untuk visibilitas mesin pencari global.</p>
-                </div>
-                <div class="group border-l border-white/5 pl-10">
-                    <p class="text-[10px] font-black uppercase tracking-widest text-brand-primary mb-3">Data Integrity</p>
-                    <p class="text-[11px] text-slate-400 font-bold leading-relaxed opacity-80 group-hover:opacity-100 transition-opacity">Selalu lakukan audit data secara berkala. Hapus entitas yang sudah tidak memenuhi standar protokol pimpinan.</p>
-                </div>
-            </div>
-        </div>
+        @endforeach
     </div>
 </div>
 @endsection
