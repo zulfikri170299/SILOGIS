@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('content')
-<!-- Custom Modern CSS for BWS -->
+<!-- Custom Modern CSS for WBS -->
 <style>
     .bws-hero {
         position: relative;
@@ -38,12 +38,12 @@
 
         @if($siteProfile && $siteProfile->bws_logo)
             <div class="inline-flex justify-center mb-6">
-                <img src="{{ asset('storage/' . $siteProfile->bws_logo) }}" class="h-20 md:h-24 w-auto object-contain" alt="BWS Logo">
+                <img src="{{ asset('storage/' . $siteProfile->bws_logo) }}" class="h-20 md:h-24 w-auto object-contain" alt="WBS Logo">
             </div>
         @else
             <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-500 mb-4 md:mb-6">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-                <span class="text-sm font-bold uppercase tracking-widest">Layanan Pengaduan BWS</span>
+                <span class="text-sm font-bold uppercase tracking-widest">Layanan Pengaduan WBS</span>
             </div>
         @endif
 
@@ -72,7 +72,7 @@
                     <h3 class="text-lg font-black uppercase tracking-wider mb-1">Berhasil!</h3>
                     <p class="font-medium text-sm text-green-400">{{ session('success') }}</p>
                 </div>
-                <button type="button" @click="step = 1; bagian = ''" class="ml-auto px-4 py-2 bg-green-500 text-white rounded-lg text-sm font-bold shadow-md hover:bg-green-600 transition-colors uppercase tracking-wider">Lapor Lagi</button>
+                <a href="{{ route('portal.bws.index') }}" class="ml-auto px-4 py-2 bg-green-500 text-white rounded-lg text-sm font-bold shadow-md hover:bg-green-600 transition-colors uppercase tracking-wider">Lapor Lagi</a>
             </div>
         @endif
 
@@ -189,6 +189,45 @@
                         </label>
                         <input type="text" name="nomor_hp" value="{{ old('nomor_hp') }}" required placeholder="Contoh: 08123456789"
                                class="w-full bg-slate-800/50 border border-slate-700 text-white rounded-xl px-5 py-3.5 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all font-medium placeholder-slate-500">
+                    </div>
+
+                    <!-- JENIS LAPORAN -->
+                    <div class="space-y-2 md:col-span-2" x-data="{ openJenis: false, jenisValue: '{{ old('jenis_laporan', '') }}' }">
+                        <label class="text-xs font-black text-slate-300 uppercase tracking-widest ml-1 flex items-center gap-1.5">
+                            Jenis Laporan <span class="text-red-500">*</span>
+                        </label>
+                        <input type="hidden" name="jenis_laporan" :value="jenisValue" required>
+                        <div class="relative">
+                            <button type="button" @click="openJenis = !openJenis" @click.outside="openJenis = false"
+                                class="w-full bg-slate-800/50 border-2 rounded-xl px-5 py-3.5 text-left font-bold flex items-center justify-between transition-all duration-300"
+                                :class="openJenis ? 'border-amber-500 ring-2 ring-amber-500/20' : jenisValue ? 'border-amber-500/40' : 'border-slate-700'">
+                                <span :class="jenisValue ? 'text-white' : 'text-slate-500'" x-text="jenisValue || '— Pilih Jenis Laporan —'"></span>
+                                <svg class="w-5 h-5 text-slate-400 transition-transform duration-300" :class="openJenis && 'rotate-180'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                            </button>
+                            <div x-show="openJenis" x-cloak
+                                 x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-2 scale-95" x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+                                 x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0 -translate-y-2 scale-95"
+                                 class="absolute z-50 mt-2 w-full bg-slate-800 border border-slate-700 rounded-xl shadow-2xl shadow-black/30 overflow-hidden">
+                                <div @click="jenisValue = 'KORUPSI'; openJenis = false" class="flex items-center gap-3 px-5 py-3.5 cursor-pointer transition-all duration-200 hover:bg-red-500/10 group"
+                                     :class="jenisValue === 'KORUPSI' && 'bg-red-500/10'">
+                                    <span class="w-3 h-3 rounded-full bg-red-500 shrink-0 group-hover:scale-125 transition-transform"></span>
+                                    <span class="font-black text-sm uppercase tracking-wider" :class="jenisValue === 'KORUPSI' ? 'text-red-400' : 'text-slate-300 group-hover:text-red-400'">Korupsi</span>
+                                    <svg x-show="jenisValue === 'KORUPSI'" class="w-4 h-4 text-red-400 ml-auto" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                                </div>
+                                <div @click="jenisValue = 'PUNGLI'; openJenis = false" class="flex items-center gap-3 px-5 py-3.5 cursor-pointer transition-all duration-200 hover:bg-violet-500/10 group"
+                                     :class="jenisValue === 'PUNGLI' && 'bg-violet-500/10'">
+                                    <span class="w-3 h-3 rounded-full bg-violet-500 shrink-0 group-hover:scale-125 transition-transform"></span>
+                                    <span class="font-black text-sm uppercase tracking-wider" :class="jenisValue === 'PUNGLI' ? 'text-violet-400' : 'text-slate-300 group-hover:text-violet-400'">Pungli</span>
+                                    <svg x-show="jenisValue === 'PUNGLI'" class="w-4 h-4 text-violet-400 ml-auto" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                                </div>
+                                <div @click="jenisValue = 'KESEWENANG'; openJenis = false" class="flex items-center gap-3 px-5 py-3.5 cursor-pointer transition-all duration-200 hover:bg-pink-500/10 group"
+                                     :class="jenisValue === 'KESEWENANG' && 'bg-pink-500/10'">
+                                    <span class="w-3 h-3 rounded-full bg-pink-500 shrink-0 group-hover:scale-125 transition-transform"></span>
+                                    <span class="font-black text-sm uppercase tracking-wider" :class="jenisValue === 'KESEWENANG' ? 'text-pink-400' : 'text-slate-300 group-hover:text-pink-400'">Kesewenang</span>
+                                    <svg x-show="jenisValue === 'KESEWENANG'" class="w-4 h-4 text-pink-400 ml-auto" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- ADUAN -->

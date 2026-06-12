@@ -12,11 +12,54 @@ class BwsAdminController extends Controller
     public function index(Request $request)
     {
         $query = BwsReport::latest();
+
         if ($request->filled('bagian')) {
             $query->where('bagian', $request->bagian);
         }
-        $reports = $query->get();
+        if ($request->filled('jenis_laporan')) {
+            $query->where('jenis_laporan', $request->jenis_laporan);
+        }
+        if ($request->filled('dari')) {
+            $query->whereDate('created_at', '>=', $request->dari);
+        }
+        if ($request->filled('sampai')) {
+            $query->whereDate('created_at', '<=', $request->sampai);
+        }
+
+        $perPage = $request->input('per_page', 10);
+        $reports = $query->paginate($perPage)->appends($request->query());
+
         return view('admin.bws.index', compact('reports'));
+    }
+
+    public function printReport(Request $request)
+    {
+        $query = BwsReport::latest();
+
+        if ($request->filled('bagian')) {
+            $query->where('bagian', $request->bagian);
+        }
+        if ($request->filled('jenis_laporan')) {
+            $query->where('jenis_laporan', $request->jenis_laporan);
+        }
+        if ($request->filled('dari')) {
+            $query->whereDate('created_at', '>=', $request->dari);
+        }
+        if ($request->filled('sampai')) {
+            $query->whereDate('created_at', '<=', $request->sampai);
+        }
+
+        $reports = $query->get();
+
+        // Stats for chart
+        $bagianList = ['SUBBAGRENMIN', 'BAG FASKON', 'BAG PAL', 'BAG INFOLOG', 'BAG ADA', 'BAG BEKUM', 'URGUDANG'];
+        $bwsStats = [];
+        foreach ($bagianList as $bag) {
+            $bwsStats[$bag] = $reports->where('bagian', $bag)->count();
+        }
+        $totalReports = $reports->count();
+
+        return view('admin.bws.print', compact('reports', 'bwsStats', 'totalReports', 'request'));
     }
 
     public function destroy(BwsReport $bws)

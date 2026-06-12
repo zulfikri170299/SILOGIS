@@ -436,17 +436,17 @@
                     
                     <!-- Grid 3x2 for Apps in this side layout -->
                     <div class="grid grid-cols-3 gap-4">
-                        <!-- HARDCODED BWS MENU (At Position 1) -->
+                        <!-- HARDCODED WBS MENU (At Position 1) -->
                         <a href="{{ route('portal.bws.index') }}" class="dock-item-card group">
                             <div class="item-icon-box bg-slate-800 border-slate-700 group-hover:bg-[#1e293b] group-hover:border-amber-500/50 transition-colors shadow-lg group-hover:shadow-[0_15px_30px_-10px_rgba(245,158,11,0.4)]">
                                 @if($profile && $profile->bws_logo)
-                                    <img src="{{ asset('storage/' . $profile->bws_logo) }}" class="h-8 w-8 object-contain" alt="BWS">
+                                    <img src="{{ asset('storage/' . $profile->bws_logo) }}" class="h-8 w-8 object-contain" alt="WBS">
                                 @else
                                     <svg class="h-8 w-8 text-amber-500 group-hover:scale-110 group-hover:-translate-y-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
                                 @endif
                             </div>
                             <div class="flex flex-col min-w-0">
-                                <span class="text-[13px] font-black text-white uppercase tracking-tight group-hover:text-amber-500 transition-colors truncate">BWS</span>
+                                <span class="text-[13px] font-black text-white uppercase tracking-tight group-hover:text-amber-500 transition-colors truncate">WBS</span>
                                 <span class="text-[10px] font-bold text-slate-400 italic truncate opacity-70 group-hover:opacity-100 transition-opacity">Pengaduan</span>
                             </div>
                         </a>
@@ -539,16 +539,16 @@
 
         <!-- Mobile Grid (Icons) -->
         <div class="grid grid-cols-4 gap-y-10 mb-12">
-            <!-- HARDCODED BWS MENU (At Position 1) -->
+            <!-- HARDCODED WBS MENU (At Position 1) -->
             <a href="{{ route('portal.bws.index') }}" class="flex flex-col items-center gap-3 reveal-on-scroll group">
                 <div class="w-16 h-16 bg-slate-800 rounded-[1.5rem] flex items-center justify-center text-amber-500 border border-slate-700 shadow-xl elite-icon-container transition-all duration-300">
                     @if($profile && $profile->bws_logo)
-                        <img src="{{ asset('storage/' . $profile->bws_logo) }}" class="h-8 w-8 object-contain" alt="BWS">
+                        <img src="{{ asset('storage/' . $profile->bws_logo) }}" class="h-8 w-8 object-contain" alt="WBS">
                     @else
                         <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
                     @endif
                 </div>
-                <span class="text-[9px] font-black text-slate-300 text-center leading-tight uppercase tracking-tighter transition-all">BWS</span>
+                <span class="text-[9px] font-black text-slate-300 text-center leading-tight uppercase tracking-tighter transition-all">WBS</span>
             </a>
 
             @foreach ($apps->take(2) as $app)

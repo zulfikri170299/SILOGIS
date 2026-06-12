@@ -44,6 +44,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
 
     // BWS Management
     Route::get('/bws', [\App\Http\Controllers\Admin\BwsAdminController::class, 'index'])->name('bws.index');
+    Route::get('/bws/print', [\App\Http\Controllers\Admin\BwsAdminController::class, 'printReport'])->name('bws.print');
     Route::put('/bws/logo', [\App\Http\Controllers\Admin\BwsAdminController::class, 'updateLogo'])->name('bws.logo.update');
     Route::delete('/bws/{bws}', [\App\Http\Controllers\Admin\BwsAdminController::class, 'destroy'])->name('bws.destroy');
 });

@@ -146,7 +146,7 @@
                 ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.2); }
             </style>
             <main class="flex-1 overflow-y-auto p-6 lg:p-10 scroll-smooth">
-                 <div class="content-animate mx-auto max-w-7xl h-full flex flex-col">
+                 <div class="content-animate mx-auto max-w-7xl pb-10">
                      @yield('content')
                  </div>
             </main>

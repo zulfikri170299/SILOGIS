@@ -10,10 +10,19 @@ use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
 {
-    public function dashboard()
+    public function dashboard(Request $request)
     {
+        // Year filter (SQLite compatible)
+        $availableYears = \App\Models\BwsReport::selectRaw("strftime('%Y', created_at) as year")
+            ->distinct()->orderByDesc('year')->pluck('year')->toArray();
+        if (empty($availableYears)) {
+            $availableYears = [now()->year];
+        }
+        $selectedYear = (string) $request->input('tahun', now()->year);
+
         $bagianList = ['SUBBAGRENMIN', 'BAG FASKON', 'BAG PAL', 'BAG INFOLOG', 'BAG ADA', 'BAG BEKUM', 'URGUDANG'];
-        $stats = \App\Models\BwsReport::select('bagian', \Illuminate\Support\Facades\DB::raw('count(*) as total'))
+        $stats = \App\Models\BwsReport::whereRaw("strftime('%Y', created_at) = ?", [$selectedYear])
+            ->select('bagian', \Illuminate\Support\Facades\DB::raw('count(*) as total'))
             ->groupBy('bagian')
             ->pluck('total', 'bagian')
             ->toArray();
@@ -23,7 +32,35 @@ class AdminController extends Controller
             $bwsStats[$bag] = $stats[$bag] ?? 0;
         }
 
-        return view('admin.dashboard', compact('bwsStats'));
+        // Jenis laporan breakdown per bagian
+        $jenisTypes = ['KORUPSI', 'PUNGLI', 'KESEWENANG'];
+        $jenisPerBagian = [];
+        foreach ($bagianList as $bag) {
+            foreach ($jenisTypes as $jenis) {
+                $jenisPerBagian[$bag][$jenis] = \App\Models\BwsReport::whereRaw("strftime('%Y', created_at) = ?", [$selectedYear])
+                    ->where('bagian', $bag)->where('jenis_laporan', $jenis)->count();
+            }
+        }
+
+        // News stats: per month (last 6 months)
+        $newsMonthly = [];
+        for ($i = 5; $i >= 0; $i--) {
+            $date = now()->subMonths($i);
+            $count = \App\Models\News::whereYear('created_at', $date->year)
+                ->whereMonth('created_at', $date->month)->count();
+            $newsMonthly[$date->translatedFormat('M Y')] = $count;
+        }
+        $totalNews = \App\Models\News::count();
+
+        // Document stats: per folder
+        $folders = \App\Models\DocumentFolder::withCount('documents')->get();
+        $docStats = [];
+        foreach ($folders as $folder) {
+            $docStats[$folder->name] = $folder->documents_count;
+        }
+        $totalDocs = \App\Models\Document::count();
+
+        return view('admin.dashboard', compact('bwsStats', 'jenisPerBagian', 'selectedYear', 'availableYears', 'newsMonthly', 'totalNews', 'docStats', 'totalDocs'));
     }
 
     // --- APPS CRUD ---
