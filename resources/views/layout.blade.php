@@ -435,7 +435,7 @@
     <nav id="main-nav" class="floating-nav hidden lg:block" x-data="{ mobileMenu: false }">
         <div class="px-6 md:px-8 flex justify-between h-20 items-center">
             <a href="#" @click.prevent="activeSection = 'beranda'" class="flex items-center gap-3 md:gap-4 group">
-                <img src="{{ asset('log polri.png') }}" class="h-8 md:h-10 w-auto desktop-float" alt="POLRI Logo">
+                <img src="{{ isset($profile) && $profile->logo ? asset('storage/' . $profile->logo) : (\App\Models\Profile::first()?->logo ? asset('storage/' . \App\Models\Profile::first()->logo) : asset('log polri.png')) }}" class="h-8 md:h-10 w-auto desktop-float" alt="SILOGIS Logo">
                 <div class="flex flex-col">
                     <span class="text-lg md:text-2xl font-black italic leading-none font-outfit uppercase tracking-[0.2em] bg-gradient-to-r from-red-500 via-yellow-500 to-white bg-clip-text text-transparent desktop-shimmer">SILOGIS</span>
                     <span class="text-[7px] md:text-[8px] font-black text-slate-400 uppercase tracking-[0.1em] mt-1">Sistem Informasi Logistik</span>

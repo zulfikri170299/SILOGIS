@@ -121,9 +121,6 @@
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                    @php
-                        $bagians = ['SUBBAGRENMIN', 'BAG FASKON', 'BAG PAL', 'BAG INFOLOG', 'BAG ADA', 'BAG BEKUM', 'URGUDANG'];
-                    @endphp
                     @foreach($bagians as $bag)
                         <label class="cursor-pointer group step-card relative overflow-hidden rounded-2xl">
                             <input type="radio" name="bagian" value="{{ $bag }}" x-model="bagian" class="hidden">
@@ -173,23 +170,7 @@
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
-                    <!-- NAMA -->
-                    <div class="space-y-2">
-                        <label class="text-xs font-black text-slate-300 uppercase tracking-widest ml-1 flex items-center gap-1.5">
-                            Nama Pelapor <span class="text-red-500">*</span>
-                        </label>
-                        <input type="text" name="nama" value="{{ old('nama') }}" required placeholder="Masukkan Nama Lengkap"
-                               class="w-full bg-slate-800/50 border border-slate-700 text-white rounded-xl px-5 py-3.5 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all font-medium placeholder-slate-500">
-                    </div>
 
-                    <!-- NOMOR HP -->
-                    <div class="space-y-2">
-                        <label class="text-xs font-black text-slate-300 uppercase tracking-widest ml-1 flex items-center gap-1.5">
-                            Nomor Handphone / WA <span class="text-red-500">*</span>
-                        </label>
-                        <input type="text" name="nomor_hp" value="{{ old('nomor_hp') }}" required placeholder="Contoh: 08123456789"
-                               class="w-full bg-slate-800/50 border border-slate-700 text-white rounded-xl px-5 py-3.5 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all font-medium placeholder-slate-500">
-                    </div>
 
                     <!-- JENIS LAPORAN -->
                     <div class="space-y-2 md:col-span-2" x-data="{ openJenis: false, jenisValue: '{{ old('jenis_laporan', '') }}' }">
@@ -208,23 +189,35 @@
                                  x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-2 scale-95" x-transition:enter-end="opacity-100 translate-y-0 scale-100"
                                  x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0 -translate-y-2 scale-95"
                                  class="absolute z-50 mt-2 w-full bg-slate-800 border border-slate-700 rounded-xl shadow-2xl shadow-black/30 overflow-hidden">
-                                <div @click="jenisValue = 'KORUPSI'; openJenis = false" class="flex items-center gap-3 px-5 py-3.5 cursor-pointer transition-all duration-200 hover:bg-red-500/10 group"
-                                     :class="jenisValue === 'KORUPSI' && 'bg-red-500/10'">
+                                <div @click="jenisValue = 'KORUPSI KOLUSI DAN NEPOTISME'; openJenis = false" class="flex items-center gap-3 px-5 py-3.5 cursor-pointer transition-all duration-200 hover:bg-red-500/10 group"
+                                     :class="jenisValue === 'KORUPSI KOLUSI DAN NEPOTISME' && 'bg-red-500/10'">
                                     <span class="w-3 h-3 rounded-full bg-red-500 shrink-0 group-hover:scale-125 transition-transform"></span>
-                                    <span class="font-black text-sm uppercase tracking-wider" :class="jenisValue === 'KORUPSI' ? 'text-red-400' : 'text-slate-300 group-hover:text-red-400'">Korupsi</span>
-                                    <svg x-show="jenisValue === 'KORUPSI'" class="w-4 h-4 text-red-400 ml-auto" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                                    <span class="font-black text-sm uppercase tracking-wider" :class="jenisValue === 'KORUPSI KOLUSI DAN NEPOTISME' ? 'text-red-400' : 'text-slate-300 group-hover:text-red-400'">Korupsi Kolusi dan Nepotisme</span>
+                                    <svg x-show="jenisValue === 'KORUPSI KOLUSI DAN NEPOTISME'" class="w-4 h-4 text-red-400 ml-auto" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
                                 </div>
-                                <div @click="jenisValue = 'PUNGLI'; openJenis = false" class="flex items-center gap-3 px-5 py-3.5 cursor-pointer transition-all duration-200 hover:bg-violet-500/10 group"
-                                     :class="jenisValue === 'PUNGLI' && 'bg-violet-500/10'">
+                                <div @click="jenisValue = 'PUNGUTAN LIAR'; openJenis = false" class="flex items-center gap-3 px-5 py-3.5 cursor-pointer transition-all duration-200 hover:bg-violet-500/10 group"
+                                     :class="jenisValue === 'PUNGUTAN LIAR' && 'bg-violet-500/10'">
                                     <span class="w-3 h-3 rounded-full bg-violet-500 shrink-0 group-hover:scale-125 transition-transform"></span>
-                                    <span class="font-black text-sm uppercase tracking-wider" :class="jenisValue === 'PUNGLI' ? 'text-violet-400' : 'text-slate-300 group-hover:text-violet-400'">Pungli</span>
-                                    <svg x-show="jenisValue === 'PUNGLI'" class="w-4 h-4 text-violet-400 ml-auto" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                                    <span class="font-black text-sm uppercase tracking-wider" :class="jenisValue === 'PUNGUTAN LIAR' ? 'text-violet-400' : 'text-slate-300 group-hover:text-violet-400'">Pungutan Liar</span>
+                                    <svg x-show="jenisValue === 'PUNGUTAN LIAR'" class="w-4 h-4 text-violet-400 ml-auto" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
                                 </div>
-                                <div @click="jenisValue = 'KESEWENANG'; openJenis = false" class="flex items-center gap-3 px-5 py-3.5 cursor-pointer transition-all duration-200 hover:bg-pink-500/10 group"
-                                     :class="jenisValue === 'KESEWENANG' && 'bg-pink-500/10'">
+                                <div @click="jenisValue = 'PENYALAHGUNAAN WEWENANG'; openJenis = false" class="flex items-center gap-3 px-5 py-3.5 cursor-pointer transition-all duration-200 hover:bg-pink-500/10 group"
+                                     :class="jenisValue === 'PENYALAHGUNAAN WEWENANG' && 'bg-pink-500/10'">
                                     <span class="w-3 h-3 rounded-full bg-pink-500 shrink-0 group-hover:scale-125 transition-transform"></span>
-                                    <span class="font-black text-sm uppercase tracking-wider" :class="jenisValue === 'KESEWENANG' ? 'text-pink-400' : 'text-slate-300 group-hover:text-pink-400'">Kesewenang</span>
-                                    <svg x-show="jenisValue === 'KESEWENANG'" class="w-4 h-4 text-pink-400 ml-auto" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                                    <span class="font-black text-sm uppercase tracking-wider" :class="jenisValue === 'PENYALAHGUNAAN WEWENANG' ? 'text-pink-400' : 'text-slate-300 group-hover:text-pink-400'">Penyalahgunaan Wewenang</span>
+                                    <svg x-show="jenisValue === 'PENYALAHGUNAAN WEWENANG'" class="w-4 h-4 text-pink-400 ml-auto" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                                </div>
+                                <div @click="jenisValue = 'PENYALAHGUNAAN NARKOBA'; openJenis = false" class="flex items-center gap-3 px-5 py-3.5 cursor-pointer transition-all duration-200 hover:bg-blue-500/10 group"
+                                     :class="jenisValue === 'PENYALAHGUNAAN NARKOBA' && 'bg-blue-500/10'">
+                                    <span class="w-3 h-3 rounded-full bg-blue-500 shrink-0 group-hover:scale-125 transition-transform"></span>
+                                    <span class="font-black text-sm uppercase tracking-wider" :class="jenisValue === 'PENYALAHGUNAAN NARKOBA' ? 'text-blue-400' : 'text-slate-300 group-hover:text-blue-400'">Penyalahgunaan Narkoba</span>
+                                    <svg x-show="jenisValue === 'PENYALAHGUNAAN NARKOBA'" class="w-4 h-4 text-blue-400 ml-auto" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                                </div>
+                                <div @click="jenisValue = 'LAINNYA'; openJenis = false" class="flex items-center gap-3 px-5 py-3.5 cursor-pointer transition-all duration-200 hover:bg-emerald-500/10 group"
+                                     :class="jenisValue === 'LAINNYA' && 'bg-emerald-500/10'">
+                                    <span class="w-3 h-3 rounded-full bg-emerald-500 shrink-0 group-hover:scale-125 transition-transform"></span>
+                                    <span class="font-black text-sm uppercase tracking-wider" :class="jenisValue === 'LAINNYA' ? 'text-emerald-400' : 'text-slate-300 group-hover:text-emerald-400'">Laporan Lainnya</span>
+                                    <svg x-show="jenisValue === 'LAINNYA'" class="w-4 h-4 text-emerald-400 ml-auto" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
                                 </div>
                             </div>
                         </div>
@@ -240,23 +233,38 @@
                     </div>
 
                     <!-- BUKTI DUKUNG -->
-                    <div class="space-y-2 md:col-span-2">
+                    <div class="space-y-2 md:col-span-1 relative group h-full">
                         <label class="text-xs font-black text-slate-300 uppercase tracking-widest ml-1 flex items-center gap-1.5">
-                            Bukti Pendukung <span class="text-red-500">*</span>
+                            Bukti Pendukung 1 <span class="text-red-500">*</span>
                         </label>
-                        <div class="w-full relative group">
-                            <input type="file" name="bukti_dukung" required accept=".pdf,.png,.jpg,.jpeg" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20">
-                            <div class="w-full bg-slate-800/30 border-2 border-dashed border-slate-700 rounded-2xl p-8 transition-all group-hover:border-amber-500 group-hover:bg-slate-800/60 flex flex-col items-center justify-center text-center relative z-10 pointer-events-none">
-                                <div class="w-16 h-16 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 mb-4 group-hover:scale-110 group-hover:text-amber-500 group-hover:shadow-[0_0_20px_rgba(245,158,11,0.2)] transition-all">
-                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+                        <div class="w-full relative group h-[200px]">
+                            <input type="file" name="bukti_dukung" required accept=".pdf,.png,.jpg,.jpeg,.mp4,.mov" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20">
+                            <div class="w-full h-full bg-slate-800/30 border-2 border-dashed border-slate-700 rounded-2xl p-4 transition-all group-hover:border-amber-500 group-hover:bg-slate-800/60 flex flex-col items-center justify-center text-center relative z-10 pointer-events-none">
+                                <div class="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 mb-2 group-hover:scale-110 group-hover:text-amber-500 group-hover:shadow-[0_0_20px_rgba(245,158,11,0.2)] transition-all">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
                                 </div>
-                                <h4 class="text-sm font-black text-white uppercase tracking-wider mb-1">Unggah Dokumen (Wajib)</h4>
-                                <p class="text-xs text-slate-400 font-medium">Klik atau seret file ke sini</p>
-                                <p class="text-[10px] text-slate-500 mt-2 italic">* Format PDF/JPG/PNG max 5MB</p>
+                                <h4 class="text-[11px] font-black text-white uppercase tracking-wider mb-1">Unggah Video/Foto/PDF (Wajib)</h4>
+                                <p class="text-[10px] text-slate-500 mt-1 italic">* Max 5MB</p>
                             </div>
-                            <div class="mt-3 text-xs text-amber-500 font-bold px-2 flex justify-between items-center z-10 relative pointer-events-none display-filename">
-                                <!-- Filename will be updated via JS if needed, or default text -->
+                            <div class="mt-2 text-xs text-amber-500 font-bold px-2 flex justify-between items-center z-10 relative pointer-events-none display-filename truncate w-full absolute bottom-2 left-0 text-center"></div>
+                        </div>
+                    </div>
+
+                    <!-- BUKTI DUKUNG TAMBAHAN -->
+                    <div class="space-y-2 md:col-span-1 relative group h-full">
+                        <label class="text-xs font-black text-slate-300 uppercase tracking-widest ml-1 flex items-center gap-1.5">
+                            Bukti Dukung Tambahan
+                        </label>
+                        <div class="w-full relative group h-[200px]">
+                            <input type="file" name="bukti_dukung_tambahan" accept=".pdf,.png,.jpg,.jpeg,.mp4,.mov" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20">
+                            <div class="w-full h-full bg-slate-800/30 border-2 border-dashed border-slate-700 rounded-2xl p-4 transition-all group-hover:border-emerald-500 group-hover:bg-slate-800/60 flex flex-col items-center justify-center text-center relative z-10 pointer-events-none">
+                                <div class="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 mb-2 group-hover:scale-110 group-hover:text-emerald-500 group-hover:shadow-[0_0_20px_rgba(16,185,129,0.2)] transition-all">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v16m8-8H4"/></svg>
+                                </div>
+                                <h4 class="text-[11px] font-black text-white uppercase tracking-wider mb-1">Dokumen Tambahan (Opsional)</h4>
+                                <p class="text-[10px] text-slate-500 mt-1 italic">* Max 20MB</p>
                             </div>
+                            <div class="mt-2 text-xs text-emerald-500 font-bold px-2 flex justify-between items-center z-10 relative pointer-events-none display-filename-tambahan truncate w-full absolute bottom-2 left-0 text-center"></div>
                         </div>
                     </div>
                 </div>
@@ -279,9 +287,21 @@
         if(fileInput && filenameDisplay) {
             fileInput.addEventListener('change', (e) => {
                 if(e.target.files.length > 0) {
-                    filenameDisplay.innerHTML = `<span class="flex items-center gap-2"><svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> ${e.target.files[0].name}</span>`;
+                    filenameDisplay.innerHTML = `<span class="flex justify-center items-center gap-2"><svg class="w-3 h-3 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> ${e.target.files[0].name}</span>`;
                 } else {
                     filenameDisplay.innerHTML = '';
+                }
+            });
+        }
+
+        const fileTambahan = document.querySelector('input[name="bukti_dukung_tambahan"]');
+        const filenameTambahanDisplay = document.querySelector('.display-filename-tambahan');
+        if(fileTambahan && filenameTambahanDisplay) {
+            fileTambahan.addEventListener('change', (e) => {
+                if(e.target.files.length > 0) {
+                    filenameTambahanDisplay.innerHTML = `<span class="flex justify-center items-center gap-2"><svg class="w-3 h-3 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> ${e.target.files[0].name}</span>`;
+                } else {
+                    filenameTambahanDisplay.innerHTML = '';
                 }
             });
         }

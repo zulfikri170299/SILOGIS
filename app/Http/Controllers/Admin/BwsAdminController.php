@@ -13,9 +13,12 @@ class BwsAdminController extends Controller
     {
         $query = BwsReport::latest();
 
-        if ($request->filled('bagian')) {
+        if (auth()->user()->isAdminBag() && auth()->user()->bagian) {
+            $query->where('bagian', auth()->user()->bagian->name);
+        } else if ($request->filled('bagian')) {
             $query->where('bagian', $request->bagian);
         }
+
         if ($request->filled('jenis_laporan')) {
             $query->where('jenis_laporan', $request->jenis_laporan);
         }
@@ -28,17 +31,21 @@ class BwsAdminController extends Controller
 
         $perPage = $request->input('per_page', 10);
         $reports = $query->paginate($perPage)->appends($request->query());
+        $bagians = \App\Models\Bagian::orderBy('name')->pluck('name')->toArray();
 
-        return view('admin.bws.index', compact('reports'));
+        return view('admin.bws.index', compact('reports', 'bagians'));
     }
 
     public function printReport(Request $request)
     {
         $query = BwsReport::latest();
 
-        if ($request->filled('bagian')) {
+        if (auth()->user()->isAdminBag() && auth()->user()->bagian) {
+            $query->where('bagian', auth()->user()->bagian->name);
+        } else if ($request->filled('bagian')) {
             $query->where('bagian', $request->bagian);
         }
+
         if ($request->filled('jenis_laporan')) {
             $query->where('jenis_laporan', $request->jenis_laporan);
         }
@@ -52,7 +59,10 @@ class BwsAdminController extends Controller
         $reports = $query->get();
 
         // Stats for chart
-        $bagianList = ['SUBBAGRENMIN', 'BAG FASKON', 'BAG PAL', 'BAG INFOLOG', 'BAG ADA', 'BAG BEKUM', 'URGUDANG'];
+        $bagianList = auth()->user()->isAdminBag() && auth()->user()->bagian 
+            ? [auth()->user()->bagian->name] 
+            : \App\Models\Bagian::orderBy('name')->pluck('name')->toArray();
+        
         $bwsStats = [];
         foreach ($bagianList as $bag) {
             $bwsStats[$bag] = $reports->where('bagian', $bag)->count();
@@ -85,6 +95,6 @@ class BwsAdminController extends Controller
             $profile->save();
         }
 
-        return redirect()->route('admin.bws.index')->with('success', 'Logo BWS berhasil diperbarui.');
+        return redirect()->route('logo.edit')->with('success', 'Logo WBS berhasil diperbarui.');
     }
 }

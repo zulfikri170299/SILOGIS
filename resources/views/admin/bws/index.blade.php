@@ -7,63 +7,6 @@
         <h2 class="text-xl sm:text-2xl font-black text-white uppercase tracking-tight">Pengaduan WBS</h2>
         <p class="text-xs sm:text-sm text-slate-400 mt-1">Kelola masuknya data Biro Logistik Whistleblowing System.</p>
     </div>
-    <button type="button" onclick="document.getElementById('wbs-settings').classList.toggle('hidden')"
-        class="flex items-center gap-2 px-4 py-2.5 bg-slate-800 border border-white/10 rounded-xl text-[9px] font-black uppercase tracking-widest text-slate-300 hover:text-white hover:border-amber-500/30 hover:bg-slate-800/80 transition-all shrink-0">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-        Pengaturan
-    </button>
-</div>
-
-<div id="wbs-settings" class="hidden mb-8 transition-all">
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <!-- Pengaturan Logo WBS Card -->
-        <div class="p-6 bg-slate-900 border border-white/5 rounded-2xl shadow-xl flex flex-col justify-center">
-            @php $profile = \App\Models\Profile::first(); @endphp
-            <h3 class="text-brand-primary font-black uppercase tracking-widest text-[10px] mb-4">Pengaturan Logo WBS</h3>
-            <div class="flex items-center gap-6">
-                <div class="h-20 w-20 bg-slate-800 rounded-xl overflow-hidden border border-white/5 flex items-center justify-center relative group p-2 shrink-0">
-                    @if($profile && $profile->bws_logo)
-                        <img id="bws-preview" src="{{ asset('storage/' . $profile->bws_logo) }}" class="h-full w-full object-contain" alt="WBS Logo">
-                    @else
-                        <div id="bws-placeholder" class="text-slate-600 flex flex-col items-center">
-                            <svg class="w-8 h-8 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                        </div>
-                    @endif
-                    <img id="bws-preview-fallback" src="#" class="h-full w-full object-contain hidden" alt="Preview">
-                </div>
-                <div>
-                    <form action="{{ route('admin.bws.logo.update') }}" method="POST" enctype="multipart/form-data" class="flex flex-col gap-2">
-                        @csrf
-                        @method('PUT')
-                        <div class="flex flex-wrap gap-2">
-                            <label class="cursor-pointer bg-slate-800/50 hover:bg-amber-500/20 text-slate-300 hover:text-white font-black py-2 px-4 rounded-xl border border-dashed border-white/10 transition-all inline-block">
-                                <span class="text-[9px] uppercase tracking-widest">Pilih Gambar</span>
-                                <input type="file" name="bws_logo" accept="image/*" class="sr-only" onchange="previewBwsImage(event)" required />
-                            </label>
-                            <button type="submit" class="text-[9px] font-black uppercase tracking-widest bg-brand-primary text-white py-2 px-4 rounded-xl shadow-lg hover:scale-105 transition-all">
-                                Simpan Logo
-                            </button>
-                        </div>
-                        @error('bws_logo') <p class="text-[10px] text-rose-500 font-bold mt-1">{{ $message }}</p> @enderror
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <!-- Dynamic QR Code Card -->
-        <div class="bg-slate-900 border border-white/5 rounded-2xl p-6 flex flex-row items-center gap-6 shadow-xl">
-            <div class="bg-white p-3 rounded-xl shrink-0">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ urlencode(route('portal.bws.index')) }}" alt="WBS QR Code" class="w-20 h-20 sm:w-24 sm:h-24 object-contain">
-            </div>
-            <div class="flex flex-col justify-center">
-                <h3 class="text-xs font-black uppercase tracking-widest text-emerald-400 mb-2">QR Layanan WBS</h3>
-                <p class="text-[10px] text-slate-400 leading-relaxed max-w-[200px] mb-4 font-bold">Otomatis beradaptasi dengan perubahan domain situs.</p>
-                <a href="https://api.qrserver.com/v1/create-qr-code/?size=1000x1000&data={{ urlencode(route('portal.bws.index')) }}" target="_blank" class="inline-block px-4 py-2 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-xl text-[9px] font-black uppercase tracking-widest hover:bg-emerald-500 hover:text-white transition-all w-max">
-                    Unduh Resolusi Tinggi
-                </a>
-            </div>
-        </div>
-    </div>
 </div>
 
 @if(session('success'))
@@ -76,22 +19,24 @@
 <!-- Filter & Actions Bar -->
 <div class="bg-slate-900 border border-white/5 rounded-2xl p-4 mb-6">
     <form method="GET" action="{{ route('admin.bws.index') }}" class="flex flex-col lg:flex-row lg:items-end gap-4">
+        @if(!Auth::user()->isAdminBag())
         <!-- Bagian Filter -->
         <div class="flex-1 min-w-0">
             <label class="text-[9px] font-black uppercase tracking-widest text-slate-500 block mb-1.5">Bagian</label>
             <select name="bagian" class="w-full bg-slate-800 border border-white/10 rounded-xl text-white text-xs font-bold py-2.5 px-3 focus:border-brand-primary focus:ring-brand-primary">
                 <option value="">Semua Bagian</option>
-                @foreach(['SUBBAGRENMIN','BAG FASKON','BAG PAL','BAG INFOLOG','BAG ADA','BAG BEKUM','URGUDANG'] as $bag)
+                @foreach($bagians as $bag)
                     <option value="{{ $bag }}" {{ request('bagian') == $bag ? 'selected' : '' }}>{{ $bag }}</option>
                 @endforeach
             </select>
         </div>
+        @endif
         <!-- Jenis Laporan Filter -->
         <div class="flex-1 min-w-0">
             <label class="text-[9px] font-black uppercase tracking-widest text-slate-500 block mb-1.5">Jenis</label>
             <select name="jenis_laporan" class="w-full bg-slate-800 border border-white/10 rounded-xl text-white text-xs font-bold py-2.5 px-3 focus:border-brand-primary focus:ring-brand-primary">
                 <option value="">Semua Jenis</option>
-                @foreach(['KORUPSI','PUNGLI','KESEWENANG'] as $jenis)
+                @foreach(['KORUPSI KOLUSI DAN NEPOTISME','PUNGUTAN LIAR','PENYALAHGUNAAN WEWENANG','PENYALAHGUNAAN NARKOBA','LAINNYA'] as $jenis)
                     <option value="{{ $jenis }}" {{ request('jenis_laporan') == $jenis ? 'selected' : '' }}>{{ $jenis }}</option>
                 @endforeach
             </select>
@@ -137,7 +82,6 @@
                     <th scope="col" class="px-6 py-4">Tanggal</th>
                     <th scope="col" class="px-6 py-4">Tujuan</th>
                     <th scope="col" class="px-6 py-4">Jenis</th>
-                    <th scope="col" class="px-6 py-4">Pelapor</th>
                     <th scope="col" class="px-6 py-4">Aduan</th>
                     <th scope="col" class="px-6 py-4">Lampiran</th>
                     <th scope="col" class="px-6 py-4 text-right rounded-tr-xl">Aksi</th>
@@ -157,30 +101,43 @@
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             @php
-                                $jenisColors = ['KORUPSI' => 'text-red-400 bg-red-500/10 border-red-500/20', 'PUNGLI' => 'text-violet-400 bg-violet-500/10 border-violet-500/20', 'KESEWENANG' => 'text-pink-400 bg-pink-500/10 border-pink-500/20'];
+                                $jenisColors = [
+                                    'KORUPSI KOLUSI DAN NEPOTISME' => 'text-red-400 bg-red-500/10 border-red-500/20', 
+                                    'PUNGUTAN LIAR' => 'text-purple-400 bg-purple-500/10 border-purple-500/20', 
+                                    'PENYALAHGUNAAN WEWENANG' => 'text-pink-400 bg-pink-500/10 border-pink-500/20',
+                                    'PENYALAHGUNAAN NARKOBA' => 'text-blue-400 bg-blue-500/10 border-blue-500/20',
+                                    'LAINNYA' => 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20'
+                                ];
                                 $jc = $jenisColors[$item->jenis_laporan] ?? 'text-slate-400 bg-slate-500/10 border-slate-500/20';
                             @endphp
                             <span class="px-2 py-1 border rounded-lg text-[10px] font-black uppercase tracking-widest {{ $jc }}">
                                 {{ $item->jenis_laporan ?? '-' }}
                             </span>
                         </td>
-                        <td class="px-6 py-4">
-                            <div class="font-bold text-white">{{ $item->nama }}</div>
-                            <div class="text-xs text-slate-500 mt-0.5">{{ $item->nomor_hp }}</div>
-                        </td>
                         <td class="px-6 py-4 min-w-[250px]">
                             <p class="text-xs text-slate-300 whitespace-normal line-clamp-3 leading-relaxed">
                                 {{ $item->aduan }}
                             </p>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
+                        <td class="px-6 py-4 whitespace-nowrap space-y-2">
                             @if($item->bukti_dukung)
-                                <a href="{{ asset('storage/' . $item->bukti_dukung) }}" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-brand-primary/10 text-brand-primary border border-brand-primary/20 hover:bg-brand-primary hover:text-white rounded-lg text-xs font-bold transition-colors">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg> 
-                                    Lihat File
-                                </a>
+                                <div>
+                                    <a href="{{ asset('storage/' . $item->bukti_dukung) }}" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-brand-primary/10 text-brand-primary border border-brand-primary/20 hover:bg-brand-primary hover:text-white rounded-lg text-[10px] font-bold transition-colors">
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg> 
+                                        Bukti Pendukung 1
+                                    </a>
+                                </div>
                             @else
-                                <span class="text-xs text-slate-500 italic">-</span>
+                                <div><span class="text-xs text-slate-500 italic">-</span></div>
+                            @endif
+                            
+                            @if($item->bukti_dukung_tambahan)
+                                <div>
+                                    <a href="{{ asset('storage/' . $item->bukti_dukung_tambahan) }}" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 hover:bg-emerald-500 hover:text-white rounded-lg text-[10px] font-bold transition-colors">
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg> 
+                                        Bukti Tambahan
+                                    </a>
+                                </div>
                             @endif
                         </td>
                         <td class="px-6 py-4 text-right whitespace-nowrap">

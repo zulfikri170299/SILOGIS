@@ -53,7 +53,7 @@
                 <div class="absolute top-0 left-1/2 -translate-x-1/2 w-1/3 h-1 bg-gradient-to-r from-transparent via-amber-500 to-transparent opacity-50"></div>
                 
                 <div class="text-center mb-10">
-                    <img src="{{ asset('log polri.png') }}" alt="Logo Polri" class="w-24 h-24 mx-auto mb-6 drop-shadow-[0_0_15px_rgba(251,191,36,0.3)] hover:scale-105 transition-transform duration-500">
+                    <img src="{{ isset($profile) && $profile->logo ? asset('storage/' . $profile->logo) : (\App\Models\Profile::first()?->logo ? asset('storage/' . \App\Models\Profile::first()->logo) : asset('log polri.png')) }}" alt="Logo SILOGIS" class="w-24 h-24 mx-auto mb-6 drop-shadow-[0_0_15px_rgba(251,191,36,0.3)] hover:scale-105 transition-transform duration-500">
                     <h2 class="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400 uppercase font-outfit tracking-wider">SILOGIS</h2>
                     <p class="mt-2 text-[10px] font-black tracking-[0.3em] text-amber-500 uppercase">Sistem Informasi Logistik</p>
                 </div>

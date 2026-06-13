@@ -27,7 +27,16 @@
                 </div>
 
                 <div class="space-y-3">
-                    <label for="category" class="text-[10px] font-black uppercase tracking-widest text-slate-500">Deployment Category</label>
+                    <label for="urutan" class="text-[10px] font-black uppercase tracking-widest text-slate-500">Nomor Urut Tampilan</label>
+                    <input id="urutan" name="urutan" type="number" min="2" value="{{ old('urutan', $app->urutan) }}"
+                        class="block w-full bg-slate-800/50 rounded-2xl border-white/5 py-4 text-white shadow-sm focus:border-brand-primary focus:ring-brand-primary sm:text-sm font-bold transition-all placeholder:text-slate-600"
+                        placeholder="Mulai dari 2 (Urutan 1 WBS)">
+                    @error('urutan') <p class="text-[10px] text-rose-500 font-bold uppercase tracking-widest">{{ $message }}</p> @enderror
+                </div>
+            </div>
+
+            <div class="space-y-3">
+                <label for="category" class="text-[10px] font-black uppercase tracking-widest text-slate-500">Deployment Category</label>
                     <input id="category" name="category" type="text" value="{{ old('category', $app->category) }}"
                         class="block w-full bg-slate-800/50 rounded-2xl border-white/5 py-4 text-white shadow-sm focus:border-brand-primary focus:ring-brand-primary sm:text-sm font-bold transition-all placeholder:text-slate-600"
                         placeholder="Contoh: Internal, Layanan Umum">

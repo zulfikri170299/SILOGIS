@@ -342,10 +342,7 @@
     <div class="md:hidden bg-transparent absolute top-0 left-0 right-0 pt-10 pb-4 px-6 z-30" x-data="{ showProfileMenu: false, showProfilePic: false }">
         <div class="flex items-center gap-4 relative">
             <div class="relative cursor-pointer" @click="showProfileMenu = !showProfileMenu">
-                <img src="{{ asset('log polri.png') }}" class="w-16 h-16 rounded-full border-4 border-white/10 bg-white p-2 shadow-2xl" alt="Logo">
-                <div class="absolute -bottom-1 -right-1 w-6 h-6 bg-amber-500 rounded-full border-2 border-[#0f172a] flex items-center justify-center">
-                    <svg class="w-3 h-3 text-[#0f172a]" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/></svg>
-                </div>
+                <img src="{{ isset($profile) && $profile->logo ? asset('storage/' . $profile->logo) : (\App\Models\Profile::first()?->logo ? asset('storage/' . \App\Models\Profile::first()->logo) : asset('log polri.png')) }}" class="w-16 h-16 rounded-full border border-white/10 shadow-2xl object-contain" alt="Logo">
             </div>
             <div class="cursor-pointer flex-1" @click="showProfileMenu = !showProfileMenu">
                 <h3 class="text-xl font-black text-white uppercase tracking-wider font-outfit">{{ Auth::user()->name ?? 'PENGUNJUNG' }}</h3>
@@ -374,7 +371,7 @@
                 <button @click="showProfilePic = false" class="absolute top-8 right-6 text-white hover:text-amber-500 p-2 bg-white/10 rounded-full transition-colors z-10">
                     <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
-                <img src="{{ asset('log polri.png') }}" class="max-w-full max-h-[70vh] object-contain rounded-[2rem] border-4 border-white/10 bg-white shadow-2xl" @click.away="showProfilePic = false">
+                <img src="{{ isset($profile) && $profile->logo ? asset('storage/' . $profile->logo) : (\App\Models\Profile::first()?->logo ? asset('storage/' . \App\Models\Profile::first()->logo) : asset('log polri.png')) }}" class="max-w-full max-h-[70vh] object-contain rounded-[2rem] border border-white/10 shadow-2xl" @click.away="showProfilePic = false">
             </div>
         </template>
     </div>
@@ -382,7 +379,7 @@
         
         <!-- Desktop Header: Logo above SILOGIS (Desktop Only) -->
         <div class="hidden flex-col items-center mb-8">
-            <img src="{{ asset('log polri.png') }}" class="w-16 h-auto mb-4 filter drop-shadow-[0_10px_30px_rgba(251,191,36,0.3)] animate-float">
+            <img src="{{ isset($profile) && $profile->logo ? asset('storage/' . $profile->logo) : (\App\Models\Profile::first()?->logo ? asset('storage/' . \App\Models\Profile::first()->logo) : asset('log polri.png')) }}" class="w-16 h-auto mb-4 filter drop-shadow-[0_10px_30px_rgba(251,191,36,0.3)] animate-float">
             <h1 class="text-8xl font-black uppercase font-outfit tracking-[0.1em] leading-none text-center pl-[0.1em]">
                 <span class="elite-shimmer-effect drop-shadow-2xl">SILOGIS</span>
             </h1>
@@ -429,9 +426,9 @@
                             </div>
                             <h2 class="text-white font-black text-sm uppercase tracking-[0.2em]">Layanan Digital</h2>
                         </div>
-                        <div class="px-4 py-1.5 bg-white/5 rounded-full border border-white/10 text-[9px] font-black text-amber-500 uppercase tracking-widest">
+                        <button type="button" @click.prevent="showAllServices = true" class="px-4 py-1.5 bg-white/5 hover:bg-amber-500 hover:text-[#0f172a] transition-colors cursor-pointer rounded-full border border-white/10 text-[9px] font-black text-amber-500 hover:text-[#0f172a] uppercase tracking-widest">
                             Akses Cepat
-                        </div>
+                        </button>
                     </div>
                     
                     <!-- Grid 3x2 for Apps in this side layout -->
@@ -440,9 +437,9 @@
                         <a href="{{ route('portal.bws.index') }}" class="dock-item-card group">
                             <div class="item-icon-box bg-slate-800 border-slate-700 group-hover:bg-[#1e293b] group-hover:border-amber-500/50 transition-colors shadow-lg group-hover:shadow-[0_15px_30px_-10px_rgba(245,158,11,0.4)]">
                                 @if($profile && $profile->bws_logo)
-                                    <img src="{{ asset('storage/' . $profile->bws_logo) }}" class="h-8 w-8 object-contain" alt="WBS">
+                                    <img src="{{ asset('storage/' . $profile->bws_logo) }}" class="w-full h-full object-contain p-1" alt="WBS">
                                 @else
-                                    <svg class="h-8 w-8 text-amber-500 group-hover:scale-110 group-hover:-translate-y-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                                    <svg class="w-10 h-10 text-amber-500 group-hover:scale-110 group-hover:-translate-y-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
                                 @endif
                             </div>
                             <div class="flex flex-col min-w-0">
@@ -455,9 +452,9 @@
                             <a href="{{ $app->url }}" target="_blank" class="dock-item-card group">
                                 <div class="item-icon-box">
                                     @if($app->icon)
-                                        <img src="{{ asset('storage/' . $app->icon) }}" class="h-8 w-8 object-contain" alt="{{ $app->title }}">
+                                        <img src="{{ asset('storage/' . $app->icon) }}" class="w-full h-full object-contain p-1" alt="{{ $app->title }}">
                                     @else
-                                        <svg class="h-8 w-8 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                                        <svg class="w-10 h-10 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                                     @endif
                                 </div>
                                 <div class="flex flex-col min-w-0">
@@ -467,17 +464,15 @@
                             </a>
                         @endforeach
 
-                        @if($apps->count() > 5)
-                            <button type="button" @click.prevent="showAllServices = true" class="dock-item-card group cursor-pointer">
-                                <div class="item-icon-box bg-amber-500/10 border-amber-500/20 group-hover:bg-amber-500 transition-colors">
-                                    <svg class="w-6 h-6 text-amber-500 group-hover:text-[#0f172a] transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
-                                </div>
-                                <div class="flex flex-col min-w-0">
-                                    <span class="text-[13px] font-black text-amber-500 uppercase tracking-tight group-hover:text-white transition-colors truncate">Lainnya</span>
-                                    <span class="text-[10px] font-bold text-amber-500/60 italic truncate">Menu Tambahan</span>
-                                </div>
-                            </button>
-                        @endif
+                        <button type="button" @click.prevent="showAllServices = true" class="dock-item-card group cursor-pointer text-left">
+                            <div class="item-icon-box bg-amber-500/10 border-amber-500/20 group-hover:bg-amber-500 transition-colors">
+                                <svg class="w-6 h-6 text-amber-500 group-hover:text-[#0f172a] transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+                            </div>
+                            <div class="flex flex-col min-w-0">
+                                <span class="text-[13px] font-black text-amber-500 uppercase tracking-tight group-hover:text-white transition-colors truncate">Lainnya</span>
+                                <span class="text-[10px] font-bold text-amber-500/60 italic truncate">Menu Tambahan</span>
+                            </div>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -543,9 +538,9 @@
             <a href="{{ route('portal.bws.index') }}" class="flex flex-col items-center gap-3 reveal-on-scroll group">
                 <div class="w-16 h-16 bg-slate-800 rounded-[1.5rem] flex items-center justify-center text-amber-500 border border-slate-700 shadow-xl elite-icon-container transition-all duration-300">
                     @if($profile && $profile->bws_logo)
-                        <img src="{{ asset('storage/' . $profile->bws_logo) }}" class="h-8 w-8 object-contain" alt="WBS">
+                        <img src="{{ asset('storage/' . $profile->bws_logo) }}" class="w-full h-full object-contain p-1" alt="WBS">
                     @else
-                        <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                        <svg class="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
                     @endif
                 </div>
                 <span class="text-[9px] font-black text-slate-300 text-center leading-tight uppercase tracking-tighter transition-all">WBS</span>
@@ -555,9 +550,9 @@
                 <a href="{{ $app->url }}" target="_blank" class="flex flex-col items-center gap-3 reveal-on-scroll group">
                     <div class="w-16 h-16 bg-slate-800 rounded-[1.5rem] flex items-center justify-center text-amber-500 border border-slate-700 shadow-xl elite-icon-container transition-all duration-300" style="animation-delay: {{ $loop->index * 200 }}ms">
                         @if($app->icon)
-                            <img src="{{ asset('storage/' . $app->icon) }}" class="h-8 w-8 object-contain" alt="">
+                            <img src="{{ asset('storage/' . $app->icon) }}" class="w-full h-full object-contain p-1" alt="">
                         @else
-                            <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                            <svg class="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                         @endif
                     </div>
                     <span class="text-[9px] font-black text-slate-300 text-center leading-tight uppercase tracking-tighter transition-all">{{ $app->title }}</span>
@@ -1100,11 +1095,23 @@
     </div>
     <div class="p-8">
         <input type="text" x-model="searchService" placeholder="Cari Layanan Digital..." class="w-full bg-slate-800/50 border border-white/10 rounded-2xl py-5 px-6 text-white text-sm font-bold focus:ring-2 focus:ring-red-600 outline-none mb-10 transition-all">
-        <div class="grid grid-cols-3 gap-8">
+        <div class="grid grid-cols-3 md:grid-cols-5 gap-8">
+            <!-- HARDCODED WBS -->
+            <a x-show="'wbs pengaduan'.includes(searchService.toLowerCase())" href="{{ route('portal.bws.index') }}" class="flex flex-col items-center gap-4 group">
+                <div class="w-20 h-20 bg-slate-800 rounded-[2rem] flex items-center justify-center text-amber-500 border border-white/5 shadow-2xl elite-icon-container">
+                    @if($profile && $profile->bws_logo)
+                        <img src="{{ asset('storage/' . $profile->bws_logo) }}" class="w-full h-full object-contain p-1.5" alt="WBS">
+                    @else
+                        <svg class="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                    @endif
+                </div>
+                <span class="text-[10px] font-black text-white text-center uppercase tracking-tighter leading-tight transition-all">WBS</span>
+            </a>
+            
             @foreach ($apps as $app)
                 <a x-show="'{{ strtolower($app->title) }}'.includes(searchService.toLowerCase())" href="{{ $app->url }}" target="_blank" class="flex flex-col items-center gap-4 group">
                     <div class="w-20 h-20 bg-slate-800 rounded-[2rem] flex items-center justify-center text-amber-500 border border-white/5 shadow-2xl elite-icon-container">
-                        @if($app->icon) <img src="{{ asset('storage/' . $app->icon) }}" class="h-10 w-10 object-contain"> @else <svg class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M13 10V3L4 14h7v7l9-11h-7z" /></svg> @endif
+                        @if($app->icon) <img src="{{ asset('storage/' . $app->icon) }}" class="w-full h-full object-contain p-1.5"> @else <svg class="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M13 10V3L4 14h7v7l9-11h-7z" /></svg> @endif
                     </div>
                     <span class="text-[10px] font-black text-white text-center uppercase tracking-tighter leading-tight transition-all">{{ $app->title }}</span>
                 </a>

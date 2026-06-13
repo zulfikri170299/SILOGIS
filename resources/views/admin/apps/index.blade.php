@@ -27,6 +27,7 @@
             <table class="w-full text-left">
                 <thead>
                     <tr class="bg-slate-900 text-slate-500 border-b border-white/5">
+                        <th class="px-8 py-6 text-[10px] font-black uppercase tracking-[0.2em]">Urutan</th>
                         <th class="px-8 py-6 text-[10px] font-black uppercase tracking-[0.2em]">Application Asset</th>
                         <th class="px-8 py-6 text-[10px] font-black uppercase tracking-[0.2em]">Domain Class</th>
                         <th class="px-8 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-center">Visual ID</th>
@@ -36,6 +37,9 @@
                 <tbody class="divide-y divide-white/5">
                     @forelse ($apps as $app)
                         <tr class="hover:bg-white/[0.02] transition-colors group">
+                            <td class="px-8 py-6">
+                                <div class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-slate-800 text-white font-black text-xs border border-white/5">{{ $app->urutan ?? '-' }}</div>
+                            </td>
                             <td class="px-8 py-6">
                                 <div class="font-black text-white group-hover:text-brand-primary transition-colors font-outfit uppercase italic">{{ $app->title }}</div>
                                 <div class="text-[9px] text-slate-500 mt-1 font-bold tracking-widest uppercase truncate max-w-xs">{{ $app->url }}</div>
@@ -75,7 +79,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4" class="px-6 py-20 text-center">
+                            <td colspan="5" class="px-6 py-20 text-center">
                                 <div class="flex flex-col items-center">
                                     <svg class="h-16 w-16 text-slate-200 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" /></svg>
                                     <p class="text-slate-400 font-bold">Katalog aplikasi masih kosong.</p>

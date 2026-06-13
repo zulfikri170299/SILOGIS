@@ -236,9 +236,7 @@
                 <th>Tanggal</th>
                 <th>Bagian</th>
                 <th>Jenis</th>
-                <th>Nama Pelapor</th>
-                <th>No. HP</th>
-                <th style="width:35%">Isi Aduan</th>
+                <th style="width:45%">Isi Aduan</th>
             </tr>
         </thead>
         <tbody>
@@ -252,12 +250,10 @@
                     </span>
                 </td>
                 <td style="font-weight:700; font-size:9px;">{{ $item->jenis_laporan ?? '-' }}</td>
-                <td style="font-weight:700;">{{ $item->nama }}</td>
-                <td>{{ $item->nomor_hp }}</td>
                 <td>{{ $item->aduan }}</td>
             </tr>
             @empty
-            <tr><td colspan="7" style="text-align:center; padding:30px; color:#94a3b8;">Tidak ada data.</td></tr>
+            <tr><td colspan="5" style="text-align:center; padding:30px; color:#94a3b8;">Tidak ada data.</td></tr>
             @endforelse
         </tbody>
     </table>

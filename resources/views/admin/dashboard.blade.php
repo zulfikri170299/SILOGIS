@@ -175,9 +175,11 @@
     <!-- Jenis Laporan per Bagian -->
     @php
         $jenisColors = [
-            'KORUPSI' => ['bg' => '#ef4444', 'text' => 'text-red-400'],
-            'PUNGLI' => ['bg' => '#8b5cf6', 'text' => 'text-violet-400'],
-            'KESEWENANG' => ['bg' => '#ec4899', 'text' => 'text-pink-400'],
+            'KORUPSI KOLUSI DAN NEPOTISME' => ['bg' => '#ef4444', 'text' => 'text-red-400'],
+            'PUNGUTAN LIAR' => ['bg' => '#8b5cf6', 'text' => 'text-violet-400'],
+            'PENYALAHGUNAAN WEWENANG' => ['bg' => '#ec4899', 'text' => 'text-pink-400'],
+            'PENYALAHGUNAAN NARKOBA' => ['bg' => '#3b82f6', 'text' => 'text-blue-400'],
+            'LAINNYA' => ['bg' => '#10b981', 'text' => 'text-emerald-400'],
         ];
     @endphp
     <div class="bg-slate-900/80 backdrop-blur-2xl rounded-2xl border border-white/5 p-6 md:p-8">
@@ -198,7 +200,7 @@
                 <thead>
                     <tr class="border-b border-white/10">
                         <th class="text-[9px] font-black uppercase tracking-widest text-slate-500 py-3 px-3">Bagian</th>
-                        @foreach(['KORUPSI','PUNGLI','KESEWENANG'] as $jenis)
+                        @foreach(['KORUPSI KOLUSI DAN NEPOTISME','PUNGUTAN LIAR','PENYALAHGUNAAN WEWENANG','PENYALAHGUNAAN NARKOBA','LAINNYA'] as $jenis)
                             <th class="text-[9px] font-black uppercase tracking-widest py-3 px-3 text-center {{ $jenisColors[$jenis]['text'] }}">{{ $jenis }}</th>
                         @endforeach
                         <th class="text-[9px] font-black uppercase tracking-widest text-slate-500 py-3 px-3 text-center">Total</th>
@@ -211,7 +213,7 @@
                         <td class="py-3 px-3">
                             <span class="text-xs font-black text-white uppercase tracking-wider">{{ $bag }}</span>
                         </td>
-                        @foreach(['KORUPSI','PUNGLI','KESEWENANG'] as $jenis)
+                        @foreach(['KORUPSI KOLUSI DAN NEPOTISME','PUNGUTAN LIAR','PENYALAHGUNAAN WEWENANG','PENYALAHGUNAAN NARKOBA','LAINNYA'] as $jenis)
                             <td class="py-3 px-3 text-center">
                                 @if($jenisData[$jenis] > 0)
                                     <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-xs font-black text-white" style="background: {{ $jenisColors[$jenis]['bg'] }};">

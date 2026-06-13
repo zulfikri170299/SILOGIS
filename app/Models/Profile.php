@@ -20,6 +20,7 @@ class Profile extends Model
         'photo',
         'ecosystem_description',
         'whatsapp',
-        'bws_logo'
+        'bws_logo',
+        'logo'
     ];
 }

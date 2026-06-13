@@ -14,7 +14,7 @@ class PortalController extends Controller
 {
     public function index()
     {
-        $apps = App::all();
+        $apps = App::orderByRaw('urutan IS NULL, urutan ASC')->get();
         $news = News::latest()->take(8)->get();
         // Ambil folder yang punya dokumen
         $folders = DocumentFolder::with(['documents' => function($q) {

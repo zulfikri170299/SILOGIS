@@ -15,33 +15,48 @@ Route::get('/news/{news:slug}', [PortalController::class, 'show'])->name('portal
 Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 
-    // Apps Management
-    Route::get('/apps', [AdminController::class, 'appsIndex'])->name('apps.index');
-    Route::get('/apps/create', [AdminController::class, 'appsCreate'])->name('apps.create');
-    Route::post('/apps', [AdminController::class, 'appsStore'])->name('apps.store');
-    Route::get('/apps/{app}/edit', [AdminController::class, 'appsEdit'])->name('apps.edit');
-    Route::put('/apps/{app}', [AdminController::class, 'appsUpdate'])->name('apps.update');
-    Route::delete('/apps/{app}', [AdminController::class, 'appsDestroy'])->name('apps.destroy');
+    // Superadmin Only Routes
+    Route::middleware('role:superadmin')->group(function () {
+        // Apps Management
+        Route::get('/apps', [AdminController::class, 'appsIndex'])->name('apps.index');
+        Route::get('/apps/create', [AdminController::class, 'appsCreate'])->name('apps.create');
+        Route::post('/apps', [AdminController::class, 'appsStore'])->name('apps.store');
+        Route::get('/apps/{app}/edit', [AdminController::class, 'appsEdit'])->name('apps.edit');
+        Route::put('/apps/{app}', [AdminController::class, 'appsUpdate'])->name('apps.update');
+        Route::delete('/apps/{app}', [AdminController::class, 'appsDestroy'])->name('apps.destroy');
+        
+        // Future Superadmin routes (Users, Bagian) will go here
+        Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
+        Route::resource('bagians', \App\Http\Controllers\Admin\BagianController::class);
+    });
 
-    // News Management
-    Route::get('/news', [AdminController::class, 'newsIndex'])->name('news.index');
-    Route::get('/news/create', [AdminController::class, 'newsCreate'])->name('news.create');
-    Route::post('/news', [AdminController::class, 'newsStore'])->name('news.store');
-    Route::get('/news/{news}/edit', [AdminController::class, 'newsEdit'])->name('news.edit');
-    Route::put('/news/{news}', [AdminController::class, 'newsUpdate'])->name('news.update');
-    Route::delete('/news/{news}', [AdminController::class, 'newsDestroy'])->name('news.destroy');
+    // Superadmin and Admin Satker Routes
+    Route::middleware('role:superadmin,admin_satker')->group(function () {
+        // News Management
+        Route::get('/news', [AdminController::class, 'newsIndex'])->name('news.index');
+        Route::get('/news/create', [AdminController::class, 'newsCreate'])->name('news.create');
+        Route::post('/news', [AdminController::class, 'newsStore'])->name('news.store');
+        Route::get('/news/{news}/edit', [AdminController::class, 'newsEdit'])->name('news.edit');
+        Route::put('/news/{news}', [AdminController::class, 'newsUpdate'])->name('news.update');
+        Route::delete('/news/{news}', [AdminController::class, 'newsDestroy'])->name('news.destroy');
 
-    // Site Profile Management
-    Route::get('/profile-site', [AdminController::class, 'profileEdit'])->name('profile-site.edit');
-    Route::put('/profile-site', [AdminController::class, 'profileUpdate'])->name('profile-site.update');
+        // Site Profile Management
+        Route::get('/profile-site', [AdminController::class, 'profileEdit'])->name('profile-site.edit');
+        Route::put('/profile-site', [AdminController::class, 'profileUpdate'])->name('profile-site.update');
 
-    // Organograms Management
-    Route::resource('organograms', App\Http\Controllers\OrganogramController::class)->except(['show']);
+        // Logo Management
+        Route::get('/logo', [AdminController::class, 'logoEdit'])->name('logo.edit');
+        Route::put('/logo', [AdminController::class, 'logoUpdate'])->name('logo.update');
 
-    // Documents Management
-    Route::resource('documents', DocumentController::class);
-    Route::resource('document-folders', DocumentFolderController::class);
+        // Organograms Management
+        Route::resource('organograms', App\Http\Controllers\OrganogramController::class)->except(['show']);
 
+        // Documents Management
+        Route::resource('documents', DocumentController::class);
+        Route::resource('document-folders', DocumentFolderController::class);
+    });
+
+    // All Admins (including Admin Bag) Routes
     // BWS Management
     Route::get('/bws', [\App\Http\Controllers\Admin\BwsAdminController::class, 'index'])->name('bws.index');
     Route::get('/bws/print', [\App\Http\Controllers\Admin\BwsAdminController::class, 'printReport'])->name('bws.print');

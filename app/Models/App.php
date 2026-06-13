@@ -8,6 +8,7 @@ class App extends Model
 {
     protected $fillable = [
         'title',
+        'urutan',
         'url',
         'icon',
         'category',

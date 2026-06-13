@@ -13,8 +13,13 @@ class AdminController extends Controller
     public function dashboard(Request $request)
     {
         // Year filter (SQLite compatible)
-        $availableYears = \App\Models\BwsReport::selectRaw("strftime('%Y', created_at) as year")
-            ->distinct()->orderByDesc('year')->pluck('year')->toArray();
+        $availableYearsBws = \App\Models\BwsReport::selectRaw("strftime('%Y', created_at) as year")->distinct()->pluck('year')->toArray();
+        $availableYearsNews = \App\Models\News::selectRaw("strftime('%Y', created_at) as year")->distinct()->pluck('year')->toArray();
+        $availableYearsDocs = \App\Models\Document::selectRaw("strftime('%Y', created_at) as year")->distinct()->pluck('year')->toArray();
+        
+        $availableYears = array_unique(array_merge($availableYearsBws, $availableYearsNews, $availableYearsDocs));
+        rsort($availableYears);
+
         if (empty($availableYears)) {
             $availableYears = [now()->year];
         }
@@ -33,7 +38,7 @@ class AdminController extends Controller
         }
 
         // Jenis laporan breakdown per bagian
-        $jenisTypes = ['KORUPSI', 'PUNGLI', 'KESEWENANG'];
+        $jenisTypes = ['KORUPSI KOLUSI DAN NEPOTISME', 'PUNGUTAN LIAR', 'PENYALAHGUNAAN WEWENANG', 'PENYALAHGUNAAN NARKOBA', 'LAINNYA'];
         $jenisPerBagian = [];
         foreach ($bagianList as $bag) {
             foreach ($jenisTypes as $jenis) {
@@ -42,23 +47,26 @@ class AdminController extends Controller
             }
         }
 
-        // News stats: per month (last 6 months)
+        // News stats: per month for selected year
         $newsMonthly = [];
-        for ($i = 5; $i >= 0; $i--) {
-            $date = now()->subMonths($i);
-            $count = \App\Models\News::whereYear('created_at', $date->year)
-                ->whereMonth('created_at', $date->month)->count();
-            $newsMonthly[$date->translatedFormat('M Y')] = $count;
+        for ($month = 1; $month <= 12; $month++) {
+            $count = \App\Models\News::whereRaw("strftime('%Y', created_at) = ?", [$selectedYear])
+                ->whereRaw("strftime('%m', created_at) = ?", [sprintf('%02d', $month)])->count();
+            $monthName = \Carbon\Carbon::create()->month($month)->translatedFormat('M');
+            $newsMonthly[$monthName] = $count;
         }
-        $totalNews = \App\Models\News::count();
+        $totalNews = \App\Models\News::whereRaw("strftime('%Y', created_at) = ?", [$selectedYear])->count();
 
-        // Document stats: per folder
-        $folders = \App\Models\DocumentFolder::withCount('documents')->get();
+        // Document stats: per folder for selected year
+        $folders = \App\Models\DocumentFolder::withCount(['documents' => function($q) use ($selectedYear) {
+            $q->whereRaw("strftime('%Y', created_at) = ?", [$selectedYear]);
+        }])->get();
+        
         $docStats = [];
         foreach ($folders as $folder) {
             $docStats[$folder->name] = $folder->documents_count;
         }
-        $totalDocs = \App\Models\Document::count();
+        $totalDocs = \App\Models\Document::whereRaw("strftime('%Y', created_at) = ?", [$selectedYear])->count();
 
         return view('admin.dashboard', compact('bwsStats', 'jenisPerBagian', 'selectedYear', 'availableYears', 'newsMonthly', 'totalNews', 'docStats', 'totalDocs'));
     }
@@ -66,7 +74,7 @@ class AdminController extends Controller
     // --- APPS CRUD ---
     public function appsIndex()
     {
-        $apps = App::latest()->get();
+        $apps = App::orderByRaw('urutan IS NULL, urutan ASC')->latest()->get();
         return view('admin.apps.index', compact('apps'));
     }
 
@@ -79,6 +87,7 @@ class AdminController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
+            'urutan' => 'nullable|integer',
             'url' => 'required|url',
             'icon' => 'nullable|image|max:2048',
             'category' => 'nullable|string|max:255',
@@ -102,6 +111,7 @@ class AdminController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
+            'urutan' => 'nullable|integer',
             'url' => 'required|url',
             'icon' => 'nullable|image|max:2048',
             'category' => 'nullable|string|max:255',
@@ -236,5 +246,32 @@ class AdminController extends Controller
         $profile->update($validated);
 
         return redirect()->back()->with('success', 'Profil Berhasil Diperbarui.');
+    }
+
+    // --- LOGO MANAGEMENT ---
+    public function logoEdit()
+    {
+        $profile = \App\Models\Profile::first();
+        return view('admin.logo.edit', compact('profile'));
+    }
+
+    public function logoUpdate(Request $request)
+    {
+        $profile = \App\Models\Profile::first();
+        
+        $validated = $request->validate([
+            'logo' => 'nullable|image|max:2048',
+        ]);
+
+        if ($request->hasFile('logo')) {
+            if ($profile->logo) {
+                Storage::disk('public')->delete($profile->logo);
+            }
+            $validated['logo'] = $request->file('logo')->store('profile', 'public');
+        }
+
+        $profile->update($validated);
+
+        return redirect()->back()->with('success', 'Logo SILOGIS Berhasil Diperbarui.');
     }
 }

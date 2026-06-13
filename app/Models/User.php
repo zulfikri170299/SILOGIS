@@ -21,6 +21,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'bagian_id',
     ];
 
     /**
@@ -44,6 +46,26 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function bagian()
+    {
+        return $this->belongsTo(Bagian::class);
+    }
+
+    public function isSuperAdmin()
+    {
+        return $this->role === 'superadmin';
+    }
+
+    public function isAdminSatker()
+    {
+        return $this->role === 'admin_satker';
+    }
+
+    public function isAdminBag()
+    {
+        return $this->role === 'admin_bag';
     }
 
     public function news()

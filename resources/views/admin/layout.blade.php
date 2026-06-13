@@ -33,6 +33,24 @@
     </script>
     <style>
         [x-cloak] { display: none !important; }
+        @keyframes shimmerText {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+        .desktop-shimmer {
+            background: linear-gradient(to right, #dc2626 0%, #eab308 40%, #ffffff 50%, #eab308 60%, #dc2626 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            color: transparent;
+            animation: shimmerText 4s linear infinite;
+        }
+        @keyframes desktopFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-3px) rotate(3deg) scale(1.05); }
+        }
+        .desktop-float {
+            animation: desktopFloat 3s ease-in-out infinite;
+        }
     </style>
 </head>
 <body class="h-full font-sans antialiased text-slate-200 overflow-hidden bg-slate-950 relative selection:bg-brand-primary/30 selection:text-white" x-data="{ sidebarOpen: false }">
@@ -65,7 +83,13 @@
                 class="relative flex w-full max-w-[240px] flex-1 flex-col bg-slate-900 pb-4 pt-5">
                 
                 <div class="flex items-center justify-between px-4">
-                    <span class="text-xl font-black text-white">AdminPortal</span>
+                    <div class="flex items-center gap-3">
+                        <img src="{{ isset($profile) && $profile->logo ? asset('storage/' . $profile->logo) : (\App\Models\Profile::first()?->logo ? asset('storage/' . \App\Models\Profile::first()->logo) : asset('log polri.png')) }}" class="h-8 w-auto desktop-float" alt="SILOGIS Logo">
+                        <div class="flex flex-col">
+                            <span class="text-lg font-black italic leading-none font-outfit uppercase tracking-[0.2em] desktop-shimmer">SILOGIS</span>
+                            <span class="text-[7px] font-black text-slate-400 uppercase tracking-[0.1em] mt-1">Sistem Informasi Logistik</span>
+                        </div>
+                    </div>
                     <button type="button" class="text-slate-400 hover:text-white" @click="sidebarOpen = false">
                         <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                     </button>
@@ -79,10 +103,13 @@
 
         <!-- Static Sidebar for Desktop -->
         <div class="hidden lg:flex lg:w-72 lg:flex-col bg-slate-900/40 backdrop-blur-xl border-r border-white/5 relative z-10 transition-all duration-300">
-            <div class="flex h-20 shrink-0 items-center px-8 border-b border-white/5">
-                <div class="flex flex-col">
-                    <span class="text-xl font-black italic font-outfit uppercase tracking-[0.2em] bg-gradient-to-r from-red-600 via-yellow-500 to-black bg-clip-text text-transparent">SILOGIS</span>
-                    <span class="text-[7px] font-black text-slate-400 uppercase tracking-[0.1em] mt-1">Sistem Informasi Logistik</span>
+            <div class="flex h-24 shrink-0 items-center px-8 border-b border-white/5">
+                <div class="flex items-center gap-3">
+                    <img src="{{ isset($profile) && $profile->logo ? asset('storage/' . $profile->logo) : (\App\Models\Profile::first()?->logo ? asset('storage/' . \App\Models\Profile::first()->logo) : asset('log polri.png')) }}" class="h-10 w-auto desktop-float" alt="SILOGIS Logo">
+                    <div class="flex flex-col">
+                        <span class="text-xl md:text-2xl font-black italic leading-none font-outfit uppercase tracking-[0.2em] desktop-shimmer">SILOGIS</span>
+                        <span class="text-[7px] font-black text-slate-400 uppercase tracking-[0.1em] mt-1">Sistem Informasi Logistik</span>
+                    </div>
                 </div>
             </div>
             <nav class="mt-8 flex-1 px-4 space-y-1.5 overflow-y-auto">
