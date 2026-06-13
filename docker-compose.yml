@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: silogis-app:latest
+    container_name: silogis_app
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      - ./storage/app/public:/var/www/html/storage/app/public
+      - ./database/database.sqlite:/var/www/html/database/database.sqlite
+    environment:
+      - APP_ENV=production
+      - APP_DEBUG=false
+      - DB_CONNECTION=sqlite
+      # If you are serving the app on a specific domain, you can set it here:
+      # - APP_URL=http://your-domain.com
