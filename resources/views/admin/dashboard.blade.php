@@ -5,15 +5,24 @@
 @section('content')
 @php
     $totalReports = array_sum($bwsStats);
-    $colors = [
-        'SUBBAGRENMIN' => ['bg' => '#f59e0b', 'text' => 'text-amber-500',   'ring' => 'ring-amber-500/30'],
-        'BAG FASKON'   => ['bg' => '#3b82f6', 'text' => 'text-blue-500',    'ring' => 'ring-blue-500/30'],
-        'BAG PAL'      => ['bg' => '#10b981', 'text' => 'text-emerald-500', 'ring' => 'ring-emerald-500/30'],
-        'BAG INFOLOG'  => ['bg' => '#8b5cf6', 'text' => 'text-violet-500',  'ring' => 'ring-violet-500/30'],
-        'BAG ADA'      => ['bg' => '#ec4899', 'text' => 'text-pink-500',    'ring' => 'ring-pink-500/30'],
-        'BAG BEKUM'    => ['bg' => '#ef4444', 'text' => 'text-red-500',     'ring' => 'ring-red-500/30'],
-        'URGUDANG'     => ['bg' => '#06b6d4', 'text' => 'text-cyan-500',    'ring' => 'ring-cyan-500/30'],
+    $palette = [
+        ['bg' => '#f59e0b', 'text' => 'text-amber-500',   'ring' => 'ring-amber-500/30'],
+        ['bg' => '#3b82f6', 'text' => 'text-blue-500',    'ring' => 'ring-blue-500/30'],
+        ['bg' => '#10b981', 'text' => 'text-emerald-500', 'ring' => 'ring-emerald-500/30'],
+        ['bg' => '#8b5cf6', 'text' => 'text-violet-500',  'ring' => 'ring-violet-500/30'],
+        ['bg' => '#ec4899', 'text' => 'text-pink-500',    'ring' => 'ring-pink-500/30'],
+        ['bg' => '#ef4444', 'text' => 'text-red-500',     'ring' => 'ring-red-500/30'],
+        ['bg' => '#06b6d4', 'text' => 'text-cyan-500',    'ring' => 'ring-cyan-500/30'],
+        ['bg' => '#f97316', 'text' => 'text-orange-500',  'ring' => 'ring-orange-500/30'],
+        ['bg' => '#14b8a6', 'text' => 'text-teal-500',    'ring' => 'ring-teal-500/30'],
+        ['bg' => '#a855f7', 'text' => 'text-purple-500',  'ring' => 'ring-purple-500/30'],
     ];
+    $colors = [];
+    $i = 0;
+    foreach(array_keys($bwsStats) as $bag) {
+        $colors[$bag] = $palette[$i % count($palette)];
+        $i++;
+    }
 @endphp
 
 <div class="space-y-8">

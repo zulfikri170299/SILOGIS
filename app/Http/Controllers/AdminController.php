@@ -25,7 +25,7 @@ class AdminController extends Controller
         }
         $selectedYear = (string) $request->input('tahun', now()->year);
 
-        $bagianList = ['SUBBAGRENMIN', 'BAG FASKON', 'BAG PAL', 'BAG INFOLOG', 'BAG ADA', 'BAG BEKUM', 'URGUDANG'];
+        $bagianList = \App\Models\Bagian::orderBy('name')->pluck('name')->toArray();
         $stats = \App\Models\BwsReport::whereRaw("strftime('%Y', created_at) = ?", [$selectedYear])
             ->select('bagian', \Illuminate\Support\Facades\DB::raw('count(*) as total'))
             ->groupBy('bagian')
@@ -261,7 +261,14 @@ class AdminController extends Controller
         
         $validated = $request->validate([
             'logo' => 'nullable|image|max:2048',
+            'vision' => 'nullable|string',
+            'mission' => 'nullable|string',
+            'whatsapp' => 'nullable|string',
         ]);
+
+        if ($request->has('whatsapp') && !empty($validated['whatsapp'])) {
+            $validated['whatsapp'] = preg_replace('/^0/', '62', preg_replace('/[^0-9]/', '', $validated['whatsapp']));
+        }
 
         if ($request->hasFile('logo')) {
             if ($profile->logo) {
@@ -272,6 +279,6 @@ class AdminController extends Controller
 
         $profile->update($validated);
 
-        return redirect()->back()->with('success', 'Logo SILOGIS Berhasil Diperbarui.');
+        return redirect()->back()->with('success', 'Pengaturan Berhasil Diperbarui.');
     }
 }

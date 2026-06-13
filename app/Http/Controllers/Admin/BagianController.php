@@ -23,6 +23,7 @@ class BagianController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255|unique:bagians,name',
+            'description' => 'nullable|string',
         ]);
 
         Bagian::create($request->all());
@@ -39,6 +40,7 @@ class BagianController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255|unique:bagians,name,' . $bagian->id,
+            'description' => 'nullable|string',
         ]);
 
         $bagian->update($request->all());

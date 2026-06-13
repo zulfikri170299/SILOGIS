@@ -821,20 +821,11 @@
             <span class="block text-[9px] font-bold text-amber-500/60 uppercase tracking-[0.3em] mt-2 ml-5">Tugas Pokok & Fungsi</span>
         </div>
 
-        @php
-            $sections = [
-                ['title' => 'BAG PAL', 'desc' => 'Melaksanakan pemeliharaan dan perbaikan alat peralatan logistik kepolisian serta pengawasan teknis sarana prasarana.'],
-                ['title' => 'BAG BEKUM', 'desc' => 'Mengelola perbekalan umum, distribusi seragam dinas, material logistik, serta kebutuhan dasar personel.'],
-                ['title' => 'BAG FASKON', 'desc' => 'Bertanggung jawab atas pembangunan, pemeliharaan, dan pengawasan fasilitas gedung serta infrastruktur fisik.'],
-                ['title' => 'BAG INFOLOG', 'desc' => 'Menyelenggarakan digitalisasi data logistik, pengelolaan sistem informasi inventaris (SILOGIS), serta pelaporan aset.'],
-                ['title' => 'BAG ADA', 'desc' => 'Melaksanakan administrasi pengadaan barang dan jasa secara transparan dan akuntabel melalui e-procurement.'],
-                ['title' => 'SUBBAG RENMIN', 'desc' => 'Menyelenggarakan perencanaan program kerja, administrasi SDM, keuangan internal, dan pengawasan umum.'],
-            ];
-        @endphp
+
 
         <!-- Mobile List -->
         <div class="md:hidden space-y-5 mb-16">
-            @foreach ($sections as $sec)
+            @foreach ($bagians as $sec)
                 <div x-data="{ open: false }">
                     <div @click="open = true" class="flex gap-5 bg-slate-800/40 p-5 rounded-[2.5rem] border border-white/5 shadow-2xl reveal-on-scroll group transition-all duration-300 transform hover:scale-[1.03] hover:-translate-x-2 hover:shadow-[0_20px_40px_rgba(245,158,11,0.15)] hover:border-amber-500/30 hover:bg-slate-800 active:scale-95 cursor-pointer">
                         <div class="w-16 h-16 rounded-2xl bg-slate-900 flex items-center justify-center text-amber-500 border border-amber-500/10 animate-float-soft transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3 shrink-0" style="animation-delay: {{ $loop->index * 300 }}ms">
@@ -842,9 +833,9 @@
                         </div>
                         <div class="flex-1 flex flex-col justify-center">
                             <div class="flex justify-between items-center mb-1">
-                                <h3 class="text-xs font-black text-white uppercase tracking-widest">{{ $sec['title'] }}</h3>
+                                <h3 class="text-xs font-black text-white uppercase tracking-widest">{{ $sec->name }}</h3>
                             </div>
-                            <p class="text-[9px] text-slate-400 font-medium italic line-clamp-2 leading-relaxed">{{ $sec['desc'] }}</p>
+                            <p class="text-[9px] text-slate-400 font-medium italic line-clamp-2 leading-relaxed">{{ $sec->description ?? 'Deskripsi belum ditambahkan.' }}</p>
                         </div>
                     </div>
 
@@ -858,8 +849,8 @@
                                 <div class="w-16 h-16 rounded-2xl bg-slate-800 border border-white/5 flex items-center justify-center text-amber-500 mb-6 shadow-inner">
                                     <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
                                 </div>
-                                <h3 class="text-xl font-black text-white uppercase tracking-widest mb-4">{{ $sec['title'] }}</h3>
-                                <p class="text-sm text-slate-300 font-medium italic leading-relaxed">{{ $sec['desc'] }}</p>
+                                <h3 class="text-xl font-black text-white uppercase tracking-widest mb-4">{{ $sec->name }}</h3>
+                                <p class="text-sm text-slate-300 font-medium italic leading-relaxed">{{ $sec->description ?? 'Deskripsi belum ditambahkan.' }}</p>
                             </div>
                         </div>
                     </template>
@@ -874,10 +865,10 @@
                 <h2 class="text-5xl font-black text-white uppercase font-outfit italic">Bagian/Fungsi</h2>
             </div>
             <div class="grid grid-cols-3 gap-8">
-                @foreach ($sections as $sec)
+                @foreach ($bagians as $sec)
                     <div class="bg-slate-800/40 p-10 rounded-[3rem] border border-white/5 shadow-sm hover:shadow-2xl hover:bg-slate-800/80 transition-all duration-500 group">
-                        <h5 class="text-red-500 font-black uppercase tracking-widest text-xs mb-6 border-b border-white/10 pb-5 group-hover:text-amber-500 transition-colors">{{ $sec['title'] }}</h5>
-                        <p class="text-slate-300 text-sm leading-relaxed font-medium italic">{{ $sec['desc'] }}</p>
+                        <h5 class="text-red-500 font-black uppercase tracking-widest text-xs mb-6 border-b border-white/10 pb-5 group-hover:text-amber-500 transition-colors">{{ $sec->name }}</h5>
+                        <p class="text-slate-300 text-sm leading-relaxed font-medium italic">{{ $sec->description ?? 'Deskripsi belum ditambahkan.' }}</p>
                     </div>
                 @endforeach
             </div>

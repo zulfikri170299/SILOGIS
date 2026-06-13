@@ -26,8 +26,9 @@ class PortalController extends Controller
 
         $profile = \App\Models\Profile::first(['*']);
         $organograms = \App\Models\Organogram::whereNull('parent_id')->with('children.children.children')->orderBy('order')->get();
+        $bagians = \App\Models\Bagian::orderBy('name')->get();
         
-        return view('index', compact('apps', 'news', 'folders', 'standaloneDocuments', 'profile', 'organograms'));
+        return view('index', compact('apps', 'news', 'folders', 'standaloneDocuments', 'profile', 'organograms', 'bagians'));
     }
 
     public function downloadFolder(DocumentFolder $documentFolder)

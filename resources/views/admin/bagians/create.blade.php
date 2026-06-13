@@ -24,6 +24,15 @@
             @enderror
         </div>
 
+        <div>
+            <label for="description" class="block text-xs font-black uppercase tracking-widest text-slate-400 mb-2">Deskripsi (Opsional)</label>
+            <textarea id="description" name="description" rows="4"
+                class="w-full bg-slate-950/50 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all">{{ old('description') }}</textarea>
+            @error('description')
+                <p class="mt-2 text-xs text-red-400">{{ $message }}</p>
+            @enderror
+        </div>
+
         <div class="pt-4 border-t border-white/5 flex justify-end">
             <button type="submit" class="bg-gradient-to-r from-brand-primary to-indigo-600 px-8 py-3 rounded-xl text-xs font-black uppercase tracking-widest text-white hover:shadow-[0_0_20px_rgba(0,98,255,0.4)] transition-all hover:scale-105 active:scale-95">
                 Simpan Bagian
