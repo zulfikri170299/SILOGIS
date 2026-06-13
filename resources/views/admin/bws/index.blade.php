@@ -72,34 +72,36 @@
     </form>
 </div>
 
-<!-- Data Table -->
-<div class="bg-slate-900 border border-white/5 rounded-2xl shadow-xl overflow-hidden">
+<!-- Table Wrapper with Alpine x-data -->
+<div x-data="{ detailModalOpen: false, selectedItem: null }" @open-detail.window="selectedItem = $event.detail; detailModalOpen = true">
+    <!-- Data Table -->
+    <div class="bg-slate-900 border border-white/5 rounded-2xl shadow-xl overflow-hidden">
     <div class="overflow-x-auto">
         <table class="w-full text-left text-sm text-slate-300">
             <thead class="bg-slate-800 text-slate-100 text-xs uppercase font-black tracking-wider">
                 <tr>
-                    <th scope="col" class="px-6 py-4 rounded-tl-xl">No</th>
-                    <th scope="col" class="px-6 py-4">Tanggal</th>
-                    <th scope="col" class="px-6 py-4">Tujuan</th>
-                    <th scope="col" class="px-6 py-4">Jenis</th>
-                    <th scope="col" class="px-6 py-4">Aduan</th>
-                    <th scope="col" class="px-6 py-4">Lampiran</th>
-                    <th scope="col" class="px-6 py-4 text-right rounded-tr-xl">Aksi</th>
+                    <th scope="col" class="px-4 py-4 sm:px-6 rounded-tl-xl w-10">No</th>
+                    <th scope="col" class="px-2 py-4 sm:px-6 w-24 sm:w-auto">Tanggal</th>
+                    <th scope="col" class="px-4 py-4 sm:px-6">Tujuan</th>
+                    <th scope="col" class="px-6 py-4 hidden md:table-cell">Jenis</th>
+                    <th scope="col" class="px-6 py-4 hidden lg:table-cell">Aduan</th>
+                    <th scope="col" class="px-6 py-4 hidden md:table-cell">Lampiran</th>
+                    <th scope="col" class="px-4 py-4 sm:px-6 text-right rounded-tr-xl">Aksi</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-slate-800/50">
                 @forelse($reports as $item)
                     <tr class="hover:bg-slate-800/30 transition-colors">
-                        <td class="px-6 py-4 whitespace-nowrap text-xs font-bold text-slate-500">{{ $reports->firstItem() + $loop->index }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-xs font-bold text-slate-400">
+                        <td class="px-4 py-4 sm:px-6 whitespace-nowrap text-xs font-bold text-slate-500">{{ $reports->firstItem() + $loop->index }}</td>
+                        <td class="px-2 py-4 sm:px-6 whitespace-nowrap text-[10px] sm:text-xs font-bold text-slate-400">
                             {{ $item->created_at->format('d M Y, H:i') }}
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
+                        <td class="px-4 py-4 sm:px-6 whitespace-nowrap">
                             <span class="px-2 py-1 bg-amber-500/10 border border-amber-500/20 text-amber-500 rounded-lg text-[10px] font-black uppercase tracking-widest">
                                 {{ $item->bagian }}
                             </span>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
+                        <td class="px-6 py-4 whitespace-nowrap hidden md:table-cell">
                             @php
                                 $jenisColors = [
                                     'KORUPSI KOLUSI DAN NEPOTISME' => 'text-red-400 bg-red-500/10 border-red-500/20', 
@@ -114,12 +116,12 @@
                                 {{ $item->jenis_laporan ?? '-' }}
                             </span>
                         </td>
-                        <td class="px-6 py-4 min-w-[250px]">
+                        <td class="px-6 py-4 min-w-[250px] hidden lg:table-cell">
                             <p class="text-xs text-slate-300 whitespace-normal line-clamp-3 leading-relaxed">
                                 {{ $item->aduan }}
                             </p>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap space-y-2">
+                        <td class="px-6 py-4 whitespace-nowrap space-y-2 hidden md:table-cell">
                             @if($item->bukti_dukung)
                                 <div>
                                     <a href="{{ asset('storage/' . $item->bukti_dukung) }}" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-brand-primary/10 text-brand-primary border border-brand-primary/20 hover:bg-brand-primary hover:text-white rounded-lg text-[10px] font-bold transition-colors">
@@ -140,7 +142,10 @@
                                 </div>
                             @endif
                         </td>
-                        <td class="px-6 py-4 text-right whitespace-nowrap">
+                        <td class="px-4 py-4 sm:px-6 text-right whitespace-nowrap">
+                            <button type="button" @click="$dispatch('open-detail', {{ json_encode($item) }})" class="text-slate-400 hover:text-blue-500 transition-colors p-2 bg-slate-800 rounded-lg border border-slate-700 hover:border-blue-500/50 mr-1 md:hidden" title="Detail">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                            </button>
                             <form action="{{ route('admin.bws.destroy', $item) }}" method="POST" class="inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus laporan ini?');">
                                 @csrf
                                 @method('DELETE')
@@ -191,6 +196,83 @@
         </div>
     </div>
     @endif
+</div>
+
+    <!-- Modal Detail -->
+    <div x-show="detailModalOpen" class="fixed inset-0 z-[100] overflow-y-auto" style="display: none;" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-center justify-center min-h-screen px-4 py-4 text-center">
+            <!-- Background overlay -->
+            <div x-show="detailModalOpen" x-transition.opacity class="fixed inset-0 transition-opacity bg-slate-900/80 backdrop-blur-sm" aria-hidden="true" @click="detailModalOpen = false"></div>
+
+            <!-- Modal panel -->
+            <div x-show="detailModalOpen" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" class="relative z-10 w-full max-w-2xl p-6 overflow-hidden text-left align-middle transition-all transform bg-slate-800 border border-white/10 shadow-2xl rounded-2xl">
+                
+                <div class="flex justify-between items-start mb-5">
+                    <h3 class="text-lg font-black text-white uppercase tracking-tight" id="modal-title">Detail Pengaduan WBS</h3>
+                    <button @click="detailModalOpen = false" class="text-slate-400 hover:text-white transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+                
+                <div class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-slate-900/50 p-4 rounded-xl border border-white/5">
+                            <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Tanggal</p>
+                            <p class="text-sm text-white font-medium" x-text="selectedItem ? String(selectedItem.created_at).substring(0, 19).replace('T', ' ') : ''"></p>
+                        </div>
+                        <div class="bg-slate-900/50 p-4 rounded-xl border border-white/5">
+                            <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Tujuan Bagian</p>
+                            <p class="text-sm text-amber-500 font-bold" x-text="selectedItem ? selectedItem.bagian : ''"></p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-slate-900/50 p-4 rounded-xl border border-white/5">
+                        <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Jenis Laporan</p>
+                        <p class="text-sm text-white font-medium" x-text="selectedItem ? (selectedItem.jenis_laporan || '-') : ''"></p>
+                    </div>
+                    
+                    <div class="bg-slate-900/50 p-4 rounded-xl border border-white/5">
+                        <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Isi Aduan</p>
+                        <p class="text-sm text-slate-300 leading-relaxed whitespace-pre-wrap" x-text="selectedItem ? selectedItem.aduan : ''"></p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-slate-900/50 p-4 rounded-xl border border-white/5">
+                            <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Bukti Pendukung 1</p>
+                            <template x-if="selectedItem && selectedItem.bukti_dukung">
+                                <a :href="'/storage/' + selectedItem.bukti_dukung" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-2 bg-brand-primary/10 text-brand-primary border border-brand-primary/20 hover:bg-brand-primary hover:text-white rounded-lg text-[10px] font-bold transition-colors">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg> 
+                                    Lihat Lampiran
+                                </a>
+                            </template>
+                            <template x-if="!selectedItem || !selectedItem.bukti_dukung">
+                                <p class="text-xs text-slate-500 italic">Tidak ada lampiran</p>
+                            </template>
+                        </div>
+                        <div class="bg-slate-900/50 p-4 rounded-xl border border-white/5">
+                            <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Bukti Tambahan</p>
+                            <template x-if="selectedItem && selectedItem.bukti_dukung_tambahan">
+                                <a :href="'/storage/' + selectedItem.bukti_dukung_tambahan" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-2 bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 hover:bg-emerald-500 hover:text-white rounded-lg text-[10px] font-bold transition-colors">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg> 
+                                    Lihat Lampiran
+                                </a>
+                            </template>
+                            <template x-if="!selectedItem || !selectedItem.bukti_dukung_tambahan">
+                                <p class="text-xs text-slate-500 italic">Tidak ada lampiran</p>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-6 flex justify-end">
+                    <button @click="detailModalOpen = false" type="button" class="px-5 py-2.5 bg-slate-700 hover:bg-slate-600 text-white rounded-xl text-xs font-black uppercase tracking-widest transition-colors">
+                        Tutup
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </div>
 
 <script>

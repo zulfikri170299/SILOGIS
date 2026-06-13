@@ -36,6 +36,24 @@
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
+        @keyframes shimmerText {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+        .desktop-shimmer {
+            background: linear-gradient(to right, #dc2626 0%, #eab308 40%, #ffffff 50%, #eab308 60%, #dc2626 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            color: transparent;
+            animation: shimmerText 4s linear infinite;
+        }
+        @keyframes desktopFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-3px) rotate(3deg) scale(1.05); }
+        }
+        .desktop-float {
+            animation: desktopFloat 3s ease-in-out infinite;
+        }
     </style>
 </head>
 <body class="h-full font-sans antialiased text-white bg-[#0f172a] mesh-pattern relative overflow-x-hidden">
@@ -45,16 +63,16 @@
         <div class="absolute top-[40%] -right-[10%] w-[40%] h-[60%] rounded-full bg-red-600/10 blur-[100px]"></div>
     </div>
 
-    <div class="flex min-h-full">
-        <!-- Left Side: Login Form -->
-        <div class="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24 z-10">
+    <div class="flex min-h-full items-center justify-center">
+        <!-- Login Form -->
+        <div class="flex flex-col justify-center px-4 py-12 sm:px-6 w-full z-10">
             <div class="mx-auto w-full max-w-sm lg:w-[420px] glass-panel p-8 sm:p-10 rounded-3xl shadow-2xl relative">
                 <!-- Decorative top line -->
                 <div class="absolute top-0 left-1/2 -translate-x-1/2 w-1/3 h-1 bg-gradient-to-r from-transparent via-amber-500 to-transparent opacity-50"></div>
                 
                 <div class="text-center mb-10">
-                    <img src="{{ isset($profile) && $profile->logo ? asset('storage/' . $profile->logo) : (\App\Models\Profile::first()?->logo ? asset('storage/' . \App\Models\Profile::first()->logo) : asset('log polri.png')) }}" alt="Logo SILOGIS" class="w-24 h-24 mx-auto mb-6 drop-shadow-[0_0_15px_rgba(251,191,36,0.3)] hover:scale-105 transition-transform duration-500">
-                    <h2 class="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400 uppercase font-outfit tracking-wider">SILOGIS</h2>
+                    <img src="{{ isset($profile) && $profile->logo ? asset('storage/' . $profile->logo) : (\App\Models\Profile::first()?->logo ? asset('storage/' . \App\Models\Profile::first()->logo) : asset('log polri.png')) }}" alt="Logo SILOGIS" class="w-24 h-24 mx-auto mb-6 drop-shadow-[0_0_15px_rgba(251,191,36,0.3)] hover:scale-105 transition-transform duration-500 desktop-float">
+                    <h2 class="text-4xl font-black uppercase font-outfit tracking-wider desktop-shimmer">SILOGIS</h2>
                     <p class="mt-2 text-[10px] font-black tracking-[0.3em] text-amber-500 uppercase">Sistem Informasi Logistik</p>
                 </div>
 
@@ -109,36 +127,7 @@
             </div>
         </div>
 
-        <!-- Right Side: Decorative Dashboard Image/Pattern -->
-        <div class="relative hidden w-0 flex-1 lg:block bg-slate-900 overflow-hidden">
-            <div class="absolute inset-0 h-full w-full">
-                <!-- Using a dark modern gradient for now -->
-                <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-[#0f172a] mix-blend-multiply opacity-90"></div>
-                <div class="absolute inset-0 bg-[radial-gradient(circle_at_2px_2px,rgba(255,255,255,0.03)_1px,transparent_0)] [background-size:24px_24px]"></div>
-                
-                <div class="flex h-full flex-col justify-center px-24 text-white relative z-10">
-                    <div class="w-20 h-2 bg-gradient-to-r from-amber-500 to-amber-300 rounded-full mb-10 shadow-[0_0_15px_rgba(245,158,11,0.5)]"></div>
-                    <h1 class="text-6xl lg:text-7xl font-black leading-none tracking-tighter font-outfit uppercase mb-4">
-                        KENDALI PUSAT<br>
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-amber-200">OPERASIONAL</span>
-                    </h1>
-                    <p class="mt-6 text-xl text-slate-400 max-w-xl leading-relaxed font-medium">
-                        Akses sistem eksklusif untuk mengelola logistik, inventaris digital, dan informasi struktural di lingkungan Biro Logistik Polda NTB.
-                    </p>
-                    <div class="mt-16 flex space-x-16 border-t border-white/10 pt-10">
-                        <div class="flex flex-col">
-                            <span class="text-5xl font-black font-outfit text-white drop-shadow-lg">100%</span>
-                            <span class="text-[11px] uppercase tracking-[0.3em] text-amber-500 mt-3 font-black">Terkontrol</span>
-                        </div>
-                        <div class="w-px h-20 bg-white/10"></div>
-                        <div class="flex flex-col">
-                            <span class="text-5xl font-black font-outfit text-white drop-shadow-lg">Aman</span>
-                            <span class="text-[11px] uppercase tracking-[0.3em] text-amber-500 mt-3 font-black">Otentikasi Terenkripsi</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+
     </div>
 </body>
 </html>
