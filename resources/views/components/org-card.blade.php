@@ -15,7 +15,7 @@
 
     <!-- Info Layer -->
     <div class="space-y-1">
-        <h4 class="text-xs font-black text-slate-800 uppercase font-jakarta tracking-tight leading-snug group-hover:text-brand-primary transition-colors">
+        <h4 class="text-xs font-black text-white uppercase font-jakarta tracking-tight leading-snug group-hover:text-brand-primary transition-colors">
             {{ $node->rank }} {{ $node->name }}
         </h4>
         <div class="inline-block px-3 py-1 bg-slate-100 rounded-full text-[9px] font-bold text-slate-500 uppercase tracking-widest group-hover:bg-brand-primary group-hover:text-white transition-all">

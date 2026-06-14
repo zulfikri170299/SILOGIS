@@ -826,11 +826,21 @@
         <!-- Mobile List -->
         <div class="md:hidden space-y-5 mb-16">
             @foreach ($bagians as $sec)
+                @php
+                    $bagName = strtolower(trim($sec->name));
+                    $iconPath = '<path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />'; // Default: Building
+                    if (str_contains($bagName, 'subbagrenmin')) { $iconPath = '<path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />'; }
+                    elseif (str_contains($bagName, 'bag pal')) { $iconPath = '<path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />'; }
+                    elseif (str_contains($bagName, 'bag infolog')) { $iconPath = '<path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0V12a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 12V5.25" />'; }
+                    elseif (str_contains($bagName, 'bag ada')) { $iconPath = '<path stroke-linecap="round" stroke-linejoin="round" d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" /><polyline stroke-linecap="round" stroke-linejoin="round" points="3.27 6.96 12 12.01 20.73 6.96" /><line stroke-linecap="round" stroke-linejoin="round" x1="12" y1="22.08" x2="12" y2="12" />'; }
+                    elseif (str_contains($bagName, 'bag bekum')) { $iconPath = '<path stroke-linecap="round" stroke-linejoin="round" d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.47a1 1 0 00.99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.47a2 2 0 00-1.34-2.23z" />'; }
+                    elseif (str_contains($bagName, 'urgudang')) { $iconPath = '<path stroke-linecap="round" stroke-linejoin="round" d="M22 8.36L12 2 2 8.36V22h20V8.36z" /><path stroke-linecap="round" stroke-linejoin="round" d="M10 12h4v10h-4z" /><path stroke-linecap="round" stroke-linejoin="round" d="M14 8h.01" /><path stroke-linecap="round" stroke-linejoin="round" d="M10 8h.01" />'; }
+                @endphp
                 <div x-data="{ open: false }">
                     <div @click="open = true" class="flex gap-5 bg-slate-800/40 p-5 rounded-[2.5rem] border border-white/5 shadow-2xl reveal-on-scroll group transition-all duration-300 transform hover:scale-[1.03] hover:-translate-x-2 hover:shadow-[0_20px_40px_rgba(245,158,11,0.15)] hover:border-amber-500/30 hover:bg-slate-800 active:scale-95 cursor-pointer">
                         <div class="w-16 h-16 rounded-2xl bg-slate-900 flex items-center justify-center text-red-500 border border-red-500/20 animate-float-soft transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 shrink-0 group-hover:text-amber-500 group-hover:border-amber-500/30" style="animation-delay: {{ $loop->index * 300 }}ms">
                             <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                {!! $iconPath !!}
                             </svg>
                         </div>
                         <div class="flex-1 flex flex-col justify-center">
@@ -850,7 +860,7 @@
                                 </button>
                                 <div class="w-16 h-16 rounded-2xl bg-slate-800 border border-red-500/20 flex items-center justify-center text-red-500 mb-6 shadow-inner">
                                     <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                        {!! $iconPath !!}
                                     </svg>
                                 </div>
                                 <h3 class="text-xl font-black text-white uppercase tracking-widest mb-4">{{ $sec->name }}</h3>
@@ -870,13 +880,23 @@
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 @foreach ($bagians as $sec)
+                    @php
+                        $bagName = strtolower(trim($sec->name));
+                        $iconPath = '<path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />'; // Default: Building
+                        if (str_contains($bagName, 'subbagrenmin')) { $iconPath = '<path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />'; }
+                        elseif (str_contains($bagName, 'bag pal')) { $iconPath = '<path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />'; }
+                        elseif (str_contains($bagName, 'bag infolog')) { $iconPath = '<path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0V12a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 12V5.25" />'; }
+                        elseif (str_contains($bagName, 'bag ada')) { $iconPath = '<path stroke-linecap="round" stroke-linejoin="round" d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" /><polyline stroke-linecap="round" stroke-linejoin="round" points="3.27 6.96 12 12.01 20.73 6.96" /><line stroke-linecap="round" stroke-linejoin="round" x1="12" y1="22.08" x2="12" y2="12" />'; }
+                        elseif (str_contains($bagName, 'bag bekum')) { $iconPath = '<path stroke-linecap="round" stroke-linejoin="round" d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.47a1 1 0 00.99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.47a2 2 0 00-1.34-2.23z" />'; }
+                        elseif (str_contains($bagName, 'urgudang')) { $iconPath = '<path stroke-linecap="round" stroke-linejoin="round" d="M22 8.36L12 2 2 8.36V22h20V8.36z" /><path stroke-linecap="round" stroke-linejoin="round" d="M10 12h4v10h-4z" /><path stroke-linecap="round" stroke-linejoin="round" d="M14 8h.01" /><path stroke-linecap="round" stroke-linejoin="round" d="M10 8h.01" />'; }
+                    @endphp
                     <div class="bg-slate-800/40 p-10 rounded-[3rem] border border-white/5 shadow-sm hover:shadow-2xl hover:bg-slate-800/80 transition-all duration-500 group relative overflow-hidden flex flex-col h-full">
                         <div class="absolute -right-4 -top-4 w-32 h-32 bg-red-500/5 rounded-full blur-3xl group-hover:bg-red-500/20 transition-colors pointer-events-none"></div>
                         
                         <div class="flex items-center gap-5 border-b border-white/10 pb-5 mb-5 relative z-10">
                             <div class="w-14 h-14 rounded-xl bg-slate-900/80 flex items-center justify-center text-red-500 border border-red-500/20 shadow-inner group-hover:scale-110 group-hover:text-amber-500 group-hover:border-amber-500/30 transition-all duration-500 shrink-0">
                                 <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                    {!! $iconPath !!}
                                 </svg>
                             </div>
                             <h5 class="text-red-500 font-black uppercase tracking-widest text-sm m-0 leading-snug group-hover:text-amber-500 transition-colors">{{ $sec->name }}</h5>
