@@ -43,6 +43,7 @@
                             <label for="password" class="block text-xs font-black uppercase tracking-widest text-slate-400 mb-2">Password Baru</label>
                             <input type="password" id="password" name="password"
                                 class="w-full bg-slate-950/50 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all">
+                            <p class="mt-1 text-[10px] text-slate-500 font-medium">Minimal 8 karakter, mengandung huruf besar, huruf kecil, angka, dan simbol.</p>
                             @error('password')
                                 <p class="mt-2 text-xs text-red-400">{{ $message }}</p>
                             @enderror
@@ -83,6 +84,20 @@
                     <p class="mt-2 text-xs text-red-400">{{ $message }}</p>
                 @enderror
             </div>
+
+            <div id="satker-container" class="{{ old('role', $user->role) == 'admin_satker' ? 'block' : 'hidden' }}">
+                <label for="satker_id" class="block text-xs font-black uppercase tracking-widest text-slate-400 mb-2">Pilih Satker</label>
+                <select id="satker_id" name="satker_id" 
+                    class="w-full bg-slate-950/50 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all appearance-none">
+                    <option value="">-- Pilih Satker --</option>
+                    @foreach($satkers as $satker)
+                        <option value="{{ $satker->id }}" {{ old('satker_id', $user->satker_id) == $satker->id ? 'selected' : '' }}>{{ $satker->name }}</option>
+                    @endforeach
+                </select>
+                @error('satker_id')
+                    <p class="mt-2 text-xs text-red-400">{{ $message }}</p>
+                @enderror
+            </div>
         </div>
 
         <div class="pt-4 border-t border-white/5 flex justify-end">
@@ -96,13 +111,23 @@
 <script>
     function toggleBagian() {
         const role = document.getElementById('role').value;
-        const container = document.getElementById('bagian-container');
+        const bagContainer = document.getElementById('bagian-container');
+        const satContainer = document.getElementById('satker-container');
+        
         if (role === 'admin_bag') {
-            container.classList.remove('hidden');
-            container.classList.add('block');
+            bagContainer.classList.remove('hidden');
+            bagContainer.classList.add('block');
         } else {
-            container.classList.remove('block');
-            container.classList.add('hidden');
+            bagContainer.classList.remove('block');
+            bagContainer.classList.add('hidden');
+        }
+
+        if (role === 'admin_satker') {
+            satContainer.classList.remove('hidden');
+            satContainer.classList.add('block');
+        } else {
+            satContainer.classList.remove('block');
+            satContainer.classList.add('hidden');
         }
     }
     // Initialize on load

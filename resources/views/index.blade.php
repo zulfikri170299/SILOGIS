@@ -348,12 +348,14 @@
                 <h3 class="text-xl font-black text-white uppercase tracking-wider font-outfit">{{ Auth::user()->name ?? 'PENGUNJUNG' }}</h3>
                 <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">BIRO LOGISTIK POLDA NTB</p>
             </div>
-            <div @click="showProfileMenu = !showProfileMenu" class="text-white/50 p-2 cursor-pointer">
-                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" /></svg>
+            <div @click="showProfileMenu = !showProfileMenu" class="text-white bg-white/10 p-2.5 rounded-xl border border-white/20 shadow-lg cursor-pointer flex-shrink-0 transition-all active:scale-95 flex items-center justify-center">
+                <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
             </div>
 
             <!-- Dropdown Menu -->
-            <div x-show="showProfileMenu" @click.away="showProfileMenu = false" x-transition class="absolute top-full left-0 mt-2 w-56 bg-[#1e293b]/95 backdrop-blur-md rounded-xl shadow-2xl border border-white/10 overflow-hidden z-50 origin-top-left">
+            <div x-show="showProfileMenu" @click.away="showProfileMenu = false" x-transition class="absolute top-full right-0 mt-2 w-56 bg-[#1e293b]/95 backdrop-blur-md rounded-xl shadow-2xl border border-white/10 overflow-hidden z-50 origin-top-right">
                 <button @click="showProfilePic = true; showProfileMenu = false" class="w-full text-left px-5 py-4 text-sm text-white hover:bg-white/10 border-b border-white/5 font-semibold flex items-center gap-3 transition-colors">
                     <svg class="w-4 h-4 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
                     Lihat Profil

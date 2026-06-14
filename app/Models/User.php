@@ -23,6 +23,7 @@ class User extends Authenticatable
         'password',
         'role',
         'bagian_id',
+        'satker_id',
     ];
 
     /**
@@ -51,6 +52,11 @@ class User extends Authenticatable
     public function bagian()
     {
         return $this->belongsTo(Bagian::class);
+    }
+
+    public function satker()
+    {
+        return $this->belongsTo(Satker::class);
     }
 
     public function isSuperAdmin()

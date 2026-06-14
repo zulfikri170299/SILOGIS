@@ -13,14 +13,15 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::with('bagian')->latest()->get();
+        $users = User::with(['bagian', 'satker'])->latest()->get();
         return view('admin.users.index', compact('users'));
     }
 
     public function create()
     {
         $bagians = Bagian::orderBy('name')->get();
-        return view('admin.users.create', compact('bagians'));
+        $satkers = \App\Models\Satker::orderBy('name')->get();
+        return view('admin.users.create', compact('bagians', 'satkers'));
     }
 
     public function store(Request $request)
@@ -31,6 +32,7 @@ class UserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'role' => ['required', 'in:superadmin,admin_satker,admin_bag'],
             'bagian_id' => ['nullable', 'required_if:role,admin_bag', 'exists:bagians,id'],
+            'satker_id' => ['nullable', 'required_if:role,admin_satker', 'exists:satkers,id'],
         ]);
 
         User::create([
@@ -39,6 +41,7 @@ class UserController extends Controller
             'password' => Hash::make($request->password),
             'role' => $request->role,
             'bagian_id' => $request->role === 'admin_bag' ? $request->bagian_id : null,
+            'satker_id' => $request->role === 'admin_satker' ? $request->satker_id : null,
         ]);
 
         return redirect()->route('admin.users.index')->with('success', 'Pengguna berhasil ditambahkan.');
@@ -47,7 +50,8 @@ class UserController extends Controller
     public function edit(User $user)
     {
         $bagians = Bagian::orderBy('name')->get();
-        return view('admin.users.edit', compact('user', 'bagians'));
+        $satkers = \App\Models\Satker::orderBy('name')->get();
+        return view('admin.users.edit', compact('user', 'bagians', 'satkers'));
     }
 
     public function update(Request $request, User $user)
@@ -57,6 +61,7 @@ class UserController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class.',email,'.$user->id],
             'role' => ['required', 'in:superadmin,admin_satker,admin_bag'],
             'bagian_id' => ['nullable', 'required_if:role,admin_bag', 'exists:bagians,id'],
+            'satker_id' => ['nullable', 'required_if:role,admin_satker', 'exists:satkers,id'],
         ]);
 
         $data = [
@@ -64,6 +69,7 @@ class UserController extends Controller
             'email' => $request->email,
             'role' => $request->role,
             'bagian_id' => $request->role === 'admin_bag' ? $request->bagian_id : null,
+            'satker_id' => $request->role === 'admin_satker' ? $request->satker_id : null,
         ];
 
         if ($request->filled('password')) {

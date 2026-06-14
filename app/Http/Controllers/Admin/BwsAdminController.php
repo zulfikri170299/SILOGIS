@@ -74,8 +74,15 @@ class BwsAdminController extends Controller
 
     public function destroy(BwsReport $bws)
     {
+        if (!auth()->user()->isSuperAdmin()) {
+            abort(403, 'Unauthorized action.');
+        }
+
         if ($bws->bukti_dukung) {
             Storage::disk('public')->delete($bws->bukti_dukung);
+        }
+        if ($bws->bukti_dukung_tambahan) {
+            Storage::disk('public')->delete($bws->bukti_dukung_tambahan);
         }
         $bws->delete();
 

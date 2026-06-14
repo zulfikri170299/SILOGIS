@@ -5,6 +5,7 @@ use App\Http\Controllers\PortalController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\DocumentFolderController;
+use App\Http\Controllers\Admin\BagAdaInputController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [PortalController::class, 'index'])->name('portal.index');
@@ -25,10 +26,17 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
         Route::put('/apps/{app}', [AdminController::class, 'appsUpdate'])->name('apps.update');
         Route::delete('/apps/{app}', [AdminController::class, 'appsDestroy'])->name('apps.destroy');
         
-        // Future Superadmin routes (Users, Bagian) will go here
+        // Future Superadmin routes (Users, Bagian, Satker) will go here
         Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
         Route::resource('bagians', \App\Http\Controllers\Admin\BagianController::class);
+        Route::resource('satkers', \App\Http\Controllers\Admin\SatkerController::class);
     });
+
+    // Satker Inputs Routes
+    Route::get('/bagian/{bagian}/inputs', [\App\Http\Controllers\Admin\SatkerInputController::class, 'index'])->name('satker_inputs.index');
+    Route::get('/bagian/{bagian}/inputs/create', [\App\Http\Controllers\Admin\SatkerInputController::class, 'create'])->name('satker_inputs.create');
+    Route::post('/bagian/{bagian}/inputs', [\App\Http\Controllers\Admin\SatkerInputController::class, 'store'])->name('satker_inputs.store');
+    Route::delete('/satker-inputs/{id}', [\App\Http\Controllers\Admin\SatkerInputController::class, 'destroy'])->name('satker_inputs.destroy');
 
     // Superadmin and Admin Satker Routes
     Route::middleware('role:superadmin,admin_satker')->group(function () {
@@ -55,6 +63,21 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
         Route::resource('documents', DocumentController::class);
         Route::resource('document-folders', DocumentFolderController::class);
     });
+
+    // Master Bag Ada routes (for Superadmin or Admin Bag Ada)
+    Route::middleware('role:superadmin,admin_bag')->group(function () {
+        Route::resource('master-pelaku', \App\Http\Controllers\Admin\MasterPelakuPengadaanController::class);
+        Route::resource('master-metode', \App\Http\Controllers\Admin\MasterMetodePengadaanController::class);
+    });
+
+    // Bag Ada Inputs (for Superadmin, Admin Bag Ada, Admin Satker)
+    // We already have 'role:superadmin,admin_satker' earlier, but Admin Bag can view all. 
+    // Let's just group them without middleware (it's inside 'auth' and 'admin' prefix).
+    Route::get('/bag-ada-inputs/export', [BagAdaInputController::class, 'export'])->name('bag-ada-inputs.export');
+    Route::get('/bag-ada-inputs/template', [BagAdaInputController::class, 'downloadTemplate'])->name('bag-ada-inputs.template');
+    Route::post('/bag-ada-inputs/import', [BagAdaInputController::class, 'import'])->name('bag-ada-inputs.import');
+    Route::delete('/bag-ada-inputs/bulk-destroy', [BagAdaInputController::class, 'bulkDestroy'])->name('bag-ada-inputs.bulk-destroy');
+    Route::resource('bag-ada-inputs', BagAdaInputController::class)->except(['create', 'show']);
 
     // All Admins (including Admin Bag) Routes
     // BWS Management
