@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class VisitorLog extends Model
 {
-    protected $fillable = ['visitor_id', 'visited_at'];
+    protected $fillable = ['visitor_id', 'visited_at', 'device'];
 
     protected $casts = [
         'visited_at' => 'datetime',

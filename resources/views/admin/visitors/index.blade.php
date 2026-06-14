@@ -44,6 +44,11 @@
                     $terakhirKunjung = $visitor->logs->isNotEmpty() 
                         ? \Carbon\Carbon::parse($visitor->logs->first()->visited_at)->translatedFormat('d M Y, H:i') 
                         : \Carbon\Carbon::parse($visitor->created_at)->translatedFormat('d M Y, H:i');
+                    $komputerCount = $visitor->logs->where('device', 'Komputer')->count();
+                    $handphoneCount = $visitor->logs->where('device', 'Handphone')->count();
+                    $perangkatInfo = '';
+                    if($komputerCount > 0) $perangkatInfo .= 'Komputer: ' . $komputerCount . ' kali ';
+                    if($handphoneCount > 0) $perangkatInfo .= 'Handphone: ' . $handphoneCount . ' kali';
                 @endphp
                 <tr class="hover:bg-white/[0.02] transition-colors">
                     <td class="px-6 py-4">{{ $visitors->firstItem() + $index }}</td>
@@ -57,7 +62,7 @@
                         {{ $terakhirKunjung }}
                     </td>
                     <td class="px-6 py-4 text-right md:hidden">
-                        <button @click="$dispatch('open-visitor-detail', { nama: '{{ addslashes($visitor->nama) }}', email: '{{ addslashes($visitor->email) }}', satker: '{{ addslashes($visitor->satuan_kerja ?? '-') }}', kunjungan: '{{ $visitor->logs_count }} kali', terakhir: '{{ $terakhirKunjung }}' })" 
+                        <button @click="$dispatch('open-visitor-detail', { nama: '{{ addslashes($visitor->nama) }}', email: '{{ addslashes($visitor->email) }}', satker: '{{ addslashes($visitor->satuan_kerja ?? '-') }}', kunjungan: '{{ $visitor->logs_count }} kali', terakhir: '{{ $terakhirKunjung }}', perangkat: '{{ $perangkatInfo }}' })" 
                                 class="p-2 bg-blue-500/10 text-blue-400 rounded-xl hover:bg-blue-500 hover:text-white transition-colors shadow-lg shadow-blue-500/10" title="Lihat Detail">
                             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
                         </button>
@@ -109,6 +114,10 @@
                 <div>
                     <label class="block text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1.5">Terakhir Kunjung</label>
                     <div class="text-sm text-slate-200 font-medium" x-text="detail.terakhir"></div>
+                </div>
+                <div>
+                    <label class="block text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1.5">Perangkat yang Digunakan</label>
+                    <div class="text-sm text-slate-200 font-medium" x-text="detail.perangkat"></div>
                 </div>
             </div>
             

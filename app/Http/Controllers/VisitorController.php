@@ -34,9 +34,14 @@ class VisitorController extends Controller
             ]);
         }
 
+        $userAgent = request()->header('User-Agent');
+        $isMobile = preg_match("/(android|avantgo|blackberry|bolt|boost|cricket|docomo|fone|hiptop|mini|mobi|palm|phone|pie|tablet|up\.browser|up\.link|webos|wos)/i", $userAgent);
+        $device = $isMobile ? 'Handphone' : 'Komputer';
+
         VisitorLog::create([
             'visitor_id' => $visitor->id,
             'visited_at' => now(),
+            'device' => $device,
         ]);
 
         // Set session so we don't log them again in this session

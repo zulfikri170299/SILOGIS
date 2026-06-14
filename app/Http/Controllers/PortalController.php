@@ -24,9 +24,14 @@ class PortalController extends Controller
                 // Rekam kunjungan baru jika belum ada log, atau jika log terakhir lebih dari 1 menit yang lalu
                 // (Untuk menghindari spam ketika pengunjung melakukan refresh berulang kali)
                 if (!$lastLog || $lastLog->visited_at->diffInMinutes(now()) >= 1) {
+                    $userAgent = request()->header('User-Agent');
+                    $isMobile = preg_match("/(android|avantgo|blackberry|bolt|boost|cricket|docomo|fone|hiptop|mini|mobi|palm|phone|pie|tablet|up\.browser|up\.link|webos|wos)/i", $userAgent);
+                    $device = $isMobile ? 'Handphone' : 'Komputer';
+
                     \App\Models\VisitorLog::create([
                         'visitor_id' => $visitor->id,
                         'visited_at' => now(),
+                        'device' => $device,
                     ]);
                 }
             }
