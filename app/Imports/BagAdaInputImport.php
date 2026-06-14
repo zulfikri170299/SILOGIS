@@ -16,9 +16,12 @@ class BagAdaInputImport implements ToModel, WithHeadingRow
     protected $satkers;
     protected $pelakus;
     protected $metodes;
+    protected $mapping;
 
-    public function __construct()
+    public function __construct(array $mapping = [])
     {
+        $this->mapping = $mapping;
+
         // Cache master data to avoid querying for each row
         $this->satkers = Satker::all()->keyBy(function($item) {
             return strtolower(trim($item->name));
@@ -35,19 +38,39 @@ class BagAdaInputImport implements ToModel, WithHeadingRow
 
     public function model(array $row)
     {
-        $satkerName = strtolower(trim($row['satker'] ?? ''));
-        $satkerId = isset($this->satkers[$satkerName]) ? $this->satkers[$satkerName]->id : null;
+        // Skip baris jika semua kolom utamanya kosong
+        if (empty(array_filter($row))) return null;
+
+        $satkerNameRaw = trim($row['satker'] ?? '');
+        $satkerName = strtolower($satkerNameRaw);
+        
+        // Cek mapping
+        if (isset($this->mapping['satker'][$satkerNameRaw]) && $this->mapping['satker'][$satkerNameRaw] != '') {
+            $satkerId = $this->mapping['satker'][$satkerNameRaw];
+        } else {
+            $satkerId = isset($this->satkers[$satkerName]) ? $this->satkers[$satkerName]->id : null;
+        }
 
         // Skip if satker is not valid (must have a valid satker)
         if (!$satkerId) {
             return null;
         }
 
-        $pelakuName = strtolower(trim($row['pelaku_pengadaan'] ?? ''));
-        $pelakuId = isset($this->pelakus[$pelakuName]) ? $this->pelakus[$pelakuName]->id : null;
+        $pelakuNameRaw = trim($row['pelaku_pengadaan'] ?? '');
+        $pelakuName = strtolower($pelakuNameRaw);
+        if (isset($this->mapping['pelaku'][$pelakuNameRaw]) && $this->mapping['pelaku'][$pelakuNameRaw] != '') {
+            $pelakuId = $this->mapping['pelaku'][$pelakuNameRaw];
+        } else {
+            $pelakuId = isset($this->pelakus[$pelakuName]) ? $this->pelakus[$pelakuName]->id : null;
+        }
 
-        $metodeName = strtolower(trim($row['metode_pengadaan'] ?? ''));
-        $metodeId = isset($this->metodes[$metodeName]) ? $this->metodes[$metodeName]->id : null;
+        $metodeNameRaw = trim($row['metode_pengadaan'] ?? '');
+        $metodeName = strtolower($metodeNameRaw);
+        if (isset($this->mapping['metode'][$metodeNameRaw]) && $this->mapping['metode'][$metodeNameRaw] != '') {
+            $metodeId = $this->mapping['metode'][$metodeNameRaw];
+        } else {
+            $metodeId = isset($this->metodes[$metodeName]) ? $this->metodes[$metodeName]->id : null;
+        }
 
         // Format dates correctly from Excel
         $kepTanggal = isset($row['tanggal_kepsprin']) ? $this->transformDate($row['tanggal_kepsprin']) : null;

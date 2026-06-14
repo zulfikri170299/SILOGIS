@@ -634,9 +634,12 @@
                 }
             }, observerOptions);
 
-            // Observe sections and reveal elements
-            document.querySelectorAll('section[id], .reveal-on-scroll').forEach(el => observer.observe(el));
-        });
-    </script>
+        // Observe sections and reveal elements
+        document.querySelectorAll('section[id], .reveal-on-scroll').forEach(el => observer.observe(el));
+    });
+</script>
+
+@stack('modals')
+
 </body>
 </html>

@@ -92,6 +92,12 @@
     Kelola Pengguna
 </a>
 
+<a href="{{ route('admin.visitors.index') }}" 
+   class="group flex items-center gap-x-2.5 rounded-xl p-2.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('admin.visitors.*') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
+    <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+    Rekap Pengunjung
+</a>
+
 <div x-data="{ open: {{ request()->routeIs('admin.bagians.*') || request()->routeIs('admin.satkers.*') || request()->routeIs('admin.logo.*') ? 'true' : 'false' }} }" class="space-y-1 mt-2">
     <button @click="open = !open" type="button" 
         class="w-full group flex items-center justify-between gap-x-2.5 rounded-xl p-2.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('admin.bagians.*') || request()->routeIs('admin.satkers.*') || request()->routeIs('admin.logo.*') ? 'bg-white/5 text-white' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">

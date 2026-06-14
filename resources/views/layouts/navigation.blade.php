@@ -21,6 +21,11 @@
                     <x-nav-link :href="route('admin.news.index')" :active="request()->routeIs('admin.news.*')">
                         {{ __('Berita') }}
                     </x-nav-link>
+                    @if(auth()->user()->role === 'superadmin')
+                    <x-nav-link :href="route('admin.visitors.index')" :active="request()->routeIs('admin.visitors.*')">
+                        {{ __('Rekap Pengunjung') }}
+                    </x-nav-link>
+                    @endif
                 </div>
             </div>
 
@@ -82,6 +87,11 @@
             <x-responsive-nav-link :href="route('admin.news.index')" :active="request()->routeIs('admin.news.*')">
                 {{ __('Berita') }}
             </x-responsive-nav-link>
+            @if(auth()->user()->role === 'superadmin')
+            <x-responsive-nav-link :href="route('admin.visitors.index')" :active="request()->routeIs('admin.visitors.*')">
+                {{ __('Rekap Pengunjung') }}
+            </x-responsive-nav-link>
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->

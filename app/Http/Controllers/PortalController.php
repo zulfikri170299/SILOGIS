@@ -14,6 +14,24 @@ class PortalController extends Controller
 {
     public function index()
     {
+        $visitorEmail = \Illuminate\Support\Facades\Cookie::get('visitor_email');
+        if ($visitorEmail) {
+            $visitor = \App\Models\Visitor::where('email', $visitorEmail)->first();
+            if ($visitor) {
+                // Cari log terakhir pengunjung ini
+                $lastLog = \App\Models\VisitorLog::where('visitor_id', $visitor->id)->latest('visited_at')->first();
+                
+                // Rekam kunjungan baru jika belum ada log, atau jika log terakhir lebih dari 1 menit yang lalu
+                // (Untuk menghindari spam ketika pengunjung melakukan refresh berulang kali)
+                if (!$lastLog || $lastLog->visited_at->diffInMinutes(now()) >= 1) {
+                    \App\Models\VisitorLog::create([
+                        'visitor_id' => $visitor->id,
+                        'visited_at' => now(),
+                    ]);
+                }
+            }
+        }
+
         $apps = App::orderByRaw('urutan IS NULL, urutan ASC')->get();
         $news = News::latest()->take(8)->get();
         // Ambil folder yang punya dokumen

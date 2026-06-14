@@ -1261,5 +1261,40 @@
     }
 </script>
 
+@push('modals')
+@if(!\Illuminate\Support\Facades\Cookie::has('visitor_email'))
+<div x-data="{ showVisitorModal: true }" x-show="showVisitorModal" x-cloak class="fixed inset-0 z-[9999999] flex items-center justify-center p-4 bg-[#0f172a]/95 backdrop-blur-md">
+    <div class="bg-slate-900 border border-white/10 rounded-[2rem] p-8 w-full max-w-md relative shadow-2xl" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 scale-90" x-transition:enter-end="opacity-100 scale-100">
+        <div class="text-center mb-6">
+            <div class="w-16 h-16 bg-amber-500/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-amber-500/20">
+                <svg class="w-8 h-8 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+            </div>
+            <h3 class="text-xl font-black text-white uppercase font-outfit tracking-wider">Buku Tamu SILOGIS</h3>
+            <p class="text-xs text-slate-400 mt-2 font-medium">Silakan isi form berikut untuk melanjutkan</p>
+        </div>
+
+        <form action="{{ route('visitor.register') }}" method="POST" class="space-y-4">
+            @csrf
+            <div>
+                <label class="block text-[10px] font-black text-amber-500 uppercase tracking-widest mb-1.5">Alamat Email Google</label>
+                <input type="email" name="email" required placeholder="nama@gmail.com" class="w-full bg-slate-800 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all">
+            </div>
+            <div>
+                <label class="block text-[10px] font-black text-amber-500 uppercase tracking-widest mb-1.5">Nama Lengkap</label>
+                <input type="text" name="nama" required placeholder="Nama Anda" class="w-full bg-slate-800 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all">
+            </div>
+            <div>
+                <label class="block text-[10px] font-black text-amber-500 uppercase tracking-widest mb-1.5">Satuan Kerja (Opsional)</label>
+                <input type="text" name="satuan_kerja" placeholder="Asal Satker" class="w-full bg-slate-800 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all">
+            </div>
+            <button type="submit" class="w-full py-4 bg-amber-500 hover:bg-amber-400 text-[#0f172a] font-black uppercase text-xs tracking-widest rounded-xl transition-all shadow-lg shadow-amber-500/20 mt-2">
+                Simpan & Lanjutkan
+            </button>
+        </form>
+    </div>
+</div>
+@endif
+@endpush
+
 </div>
 @endsection

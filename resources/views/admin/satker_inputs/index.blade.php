@@ -56,7 +56,7 @@
                     </td>
                     <td class="px-6 py-4 text-right">
                         @if(auth()->user()->role === 'superadmin' || (auth()->user()->role === 'admin_satker' && auth()->user()->satker_id == $input->satker_id))
-                        <form action="{{ route('admin.satker_inputs.destroy', $input->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus inputan ini?');">
+                        <form action="{{ route('admin.satker_inputs.destroy', $input->id) }}" method="POST" class="inline-block" onsubmit="return confirmDelete(this, 'Apakah Anda yakin ingin menghapus inputan ini?');">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="p-2 text-red-400 hover:text-white hover:bg-red-500/20 rounded-lg transition-all" title="Hapus">

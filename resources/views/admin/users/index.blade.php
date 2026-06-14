@@ -58,7 +58,7 @@
                             <a href="{{ route('admin.users.edit', $user) }}" class="p-2 bg-white/5 rounded-xl text-slate-400 hover:text-white hover:bg-brand-primary transition-all group relative">
                                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
                             </a>
-                            <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="inline" onsubmit="return confirm('Hapus pengguna ini secara permanen?');">
+                            <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="inline" onsubmit="return confirmDelete(this, 'Hapus pengguna ini secara permanen?');">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="p-2 bg-white/5 rounded-xl text-slate-400 hover:text-white hover:bg-red-500 transition-all group relative">

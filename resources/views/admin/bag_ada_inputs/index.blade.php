@@ -3,8 +3,68 @@
 @section('title', 'Data Pengadaan Bag Ada')
 
 @section('content')
-<div x-data="{ createModalOpen: false, editModalOpen: false, importModalOpen: {{ $errors->has('file_excel') ? 'true' : 'false' }}, selectedData: {}, selectedIds: [], selectAll: false }"
-     @open-import.window="importModalOpen = true">
+<div x-data="{ 
+    createModalOpen: false, 
+    editModalOpen: false, 
+    importModalOpen: {{ $errors->has('file_excel') ? 'true' : 'false' }}, 
+    selectedData: {}, 
+    selectedIds: [], 
+    selectAll: false,
+    isValidating: false,
+    validationResult: null,
+    unmatched: {},
+    options: {},
+    tempPath: '',
+    validateExcel(e) {
+        let file = e.target.files[0];
+        if(!file) return;
+        this.isValidating = true;
+        this.validationResult = null;
+        let formData = new FormData();
+        formData.append('file_excel', file);
+        formData.append('_token', '{{ csrf_token() }}');
+        
+        fetch('{{ route('admin.bag-ada-inputs.import-validate') }}', {
+            method: 'POST',
+            body: formData,
+            headers: { 'Accept': 'application/json' }
+        })
+        .then(res => res.json())
+        .then(data => {
+            this.isValidating = false;
+            if(data.status === 'ok') {
+                this.validationResult = 'ok';
+                this.tempPath = data.path;
+            } else if(data.status === 'mapping_required') {
+                this.validationResult = 'mapping_required';
+                this.tempPath = data.path;
+                this.unmatched = data.unmatched;
+                this.options = data.options;
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Validasi Gagal',
+                    text: data.message || 'Terjadi kesalahan.',
+                    background: '#0f172a',
+                    color: '#f8fafc'
+                });
+                e.target.value = '';
+            }
+        })
+        .catch(err => {
+            this.isValidating = false;
+            Swal.fire({
+                icon: 'error',
+                title: 'Error Jaringan',
+                text: 'Gagal menghubungi server.',
+                background: '#0f172a',
+                color: '#f8fafc'
+            });
+            e.target.value = '';
+        });
+    }
+}"
+     @open-import.window="importModalOpen = true; validationResult = null; tempPath = '';">
     <div class="mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
             <h2 class="text-2xl font-black text-white font-outfit uppercase tracking-tight">Data Pengadaan</h2>
@@ -91,7 +151,7 @@
     <!-- Bulk Action (muncul saat ada checkbox dicentang) -->
     <div x-show="selectedIds.length > 0" x-cloak style="display: none;" class="mb-6 flex items-center gap-3 bg-red-500/10 px-4 py-3 rounded-2xl border border-red-500/20 shadow-lg">
         <span class="text-xs font-bold text-red-400" x-text="selectedIds.length + ' data dipilih'"></span>
-        <form action="{{ route('admin.bag-ada-inputs.bulk-destroy') }}" method="POST" class="ml-auto" onsubmit="return confirm('Hapus semua data yang dipilih?');">
+        <form action="{{ route('admin.bag-ada-inputs.bulk-destroy') }}" method="POST" class="ml-auto" onsubmit="return confirmDelete(this, 'Hapus semua data yang dipilih?');">
             @csrf
             @method('DELETE')
             <template x-for="id in selectedIds" :key="id">
@@ -443,7 +503,7 @@
                                     <button type="button" @click="$dispatch('open-edit', {{ json_encode($item) }})" class="p-1.5 bg-blue-500/10 text-blue-400 hover:bg-blue-500 hover:text-white rounded transition-colors" title="Edit">
                                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
                                     </button>
-                                    <form action="{{ route('admin.bag-ada-inputs.destroy', $item) }}" method="POST" class="inline" onsubmit="return confirm('Hapus data ini?');">
+                                    <form action="{{ route('admin.bag-ada-inputs.destroy', $item) }}" method="POST" class="inline" onsubmit="return confirmDelete(this, 'Hapus data ini?');">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="p-1.5 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white rounded transition-colors" title="Hapus">
@@ -464,9 +524,7 @@
                 </tbody>
             </table>
         </div>
-        </div>
     </div>
-
     <!-- Import Modal -->
     <template x-teleport="body">
         <div x-show="importModalOpen" class="fixed inset-0 z-50 overflow-y-auto" style="display: none;">
@@ -495,19 +553,97 @@
                             </a>
                         </div>
 
-                        <form action="{{ route('admin.bag-ada-inputs.import') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('admin.bag-ada-inputs.import-process') }}" method="POST" enctype="multipart/form-data">
                             @csrf
+                            <input type="hidden" name="path" x-model="tempPath">
+                            
                             <div class="mb-6">
                                 <label class="block mb-2 text-xs font-bold text-slate-300 uppercase tracking-widest">Upload File Excel</label>
-                                <input type="file" name="file_excel" accept=".xlsx, .xls" required class="block w-full text-sm text-slate-400 file:mr-4 file:py-3 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-blue-500/20 file:text-blue-400 hover:file:bg-blue-500 hover:file:text-white cursor-pointer bg-slate-800/50 rounded-xl border border-white/5 transition-all">
+                                <input type="file" @change="validateExcel" name="file_excel" accept=".xlsx, .xls" required class="block w-full text-sm text-slate-400 file:mr-4 file:py-3 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-blue-500/20 file:text-blue-400 hover:file:bg-blue-500 hover:file:text-white cursor-pointer bg-slate-800/50 rounded-xl border border-white/5 transition-all">
                                 @error('file_excel')
                                     <p class="mt-2 text-xs text-red-500">{{ $message }}</p>
                                 @enderror
                             </div>
 
+                            <!-- Area Status Validasi -->
+                            <div x-show="validationResult === 'ok'" class="mb-6 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold flex items-center gap-3" style="display: none;">
+                                <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                                File valid dan siap di-import!
+                            </div>
+
+                            <!-- Area Mapping -->
+                            <div x-show="validationResult === 'mapping_required'" style="display: none;" class="mb-6 border-t border-white/10 pt-4">
+                                <div class="p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 mb-4">
+                                    <div class="flex items-center gap-2 text-amber-400 mb-2">
+                                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                                        <h4 class="text-xs font-bold">Ditemukan Kesalahan Data</h4>
+                                    </div>
+                                    <p class="text-[10px] text-slate-300">Ada nama yang tidak cocok dengan database. Silakan pilih perbaikannya di bawah ini, atau pilih "Abaikan".</p>
+                                </div>
+
+                                <div class="space-y-4 max-h-[40vh] overflow-y-auto no-scrollbar pr-2">
+                                    <!-- Satker Mapping -->
+                                    <template x-if="unmatched && unmatched.satker && unmatched.satker.length > 0">
+                                        <div class="bg-slate-800/50 p-3 rounded-xl border border-white/5">
+                                            <h5 class="text-[10px] font-black text-white uppercase tracking-widest mb-3 border-b border-white/5 pb-2">Satker Salah</h5>
+                                            <template x-for="name in unmatched.satker" :key="name">
+                                                <div class="mb-3 last:mb-0">
+                                                    <label class="block text-[10px] font-bold text-red-400 mb-1" x-text="'&quot;' + name + '&quot;'"></label>
+                                                    <select :name="'map_satker[' + name + ']'" class="w-full bg-slate-900 border border-white/10 rounded-lg px-3 py-2 text-white text-[10px] focus:border-brand-primary">
+                                                        <option value="">-- Abaikan (Baris Dilewati) --</option>
+                                                        <template x-for="opt in options.satker" :key="opt.id">
+                                                            <option :value="opt.id" x-text="opt.name"></option>
+                                                        </template>
+                                                    </select>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </template>
+
+                                    <!-- Pelaku Mapping -->
+                                    <template x-if="unmatched && unmatched.pelaku && unmatched.pelaku.length > 0">
+                                        <div class="bg-slate-800/50 p-3 rounded-xl border border-white/5">
+                                            <h5 class="text-[10px] font-black text-white uppercase tracking-widest mb-3 border-b border-white/5 pb-2">Pelaku Salah</h5>
+                                            <template x-for="name in unmatched.pelaku" :key="name">
+                                                <div class="mb-3 last:mb-0">
+                                                    <label class="block text-[10px] font-bold text-red-400 mb-1" x-text="'&quot;' + name + '&quot;'"></label>
+                                                    <select :name="'map_pelaku[' + name + ']'" class="w-full bg-slate-900 border border-white/10 rounded-lg px-3 py-2 text-white text-[10px] focus:border-brand-primary">
+                                                        <option value="">-- Abaikan (Dikosongkan) --</option>
+                                                        <template x-for="opt in options.pelaku" :key="opt.id">
+                                                            <option :value="opt.id" x-text="opt.nama_peran"></option>
+                                                        </template>
+                                                    </select>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </template>
+
+                                    <!-- Metode Mapping -->
+                                    <template x-if="unmatched && unmatched.metode && unmatched.metode.length > 0">
+                                        <div class="bg-slate-800/50 p-3 rounded-xl border border-white/5">
+                                            <h5 class="text-[10px] font-black text-white uppercase tracking-widest mb-3 border-b border-white/5 pb-2">Metode Salah</h5>
+                                            <template x-for="name in unmatched.metode" :key="name">
+                                                <div class="mb-3 last:mb-0">
+                                                    <label class="block text-[10px] font-bold text-red-400 mb-1" x-text="'&quot;' + name + '&quot;'"></label>
+                                                    <select :name="'map_metode[' + name + ']'" class="w-full bg-slate-900 border border-white/10 rounded-lg px-3 py-2 text-white text-[10px] focus:border-brand-primary">
+                                                        <option value="">-- Abaikan (Dikosongkan) --</option>
+                                                        <template x-for="opt in options.metode" :key="opt.id">
+                                                            <option :value="opt.id" x-text="opt.nama_metode"></option>
+                                                        </template>
+                                                    </select>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+
                             <div class="flex items-center gap-3 pt-4 border-t border-white/10">
                                 <button @click="importModalOpen = false" type="button" class="w-full text-white bg-slate-800 hover:bg-slate-700 font-bold rounded-xl text-xs px-5 py-3 text-center uppercase tracking-wider transition-colors">Batal</button>
-                                <button type="submit" class="w-full text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 focus:ring-4 focus:outline-none focus:ring-blue-500/50 font-bold rounded-xl text-xs px-5 py-3 text-center uppercase tracking-wider transition-all hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(0,98,255,0.3)]">Import</button>
+                                <button type="submit" :disabled="isValidating || !validationResult" class="w-full text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed focus:ring-4 focus:outline-none focus:ring-blue-500/50 font-bold rounded-xl text-xs px-5 py-3 text-center uppercase tracking-wider transition-all shadow-[0_0_20px_rgba(0,98,255,0.3)]">
+                                    <span x-show="!isValidating">Import</span>
+                                    <span x-show="isValidating">Memvalidasi...</span>
+                                </button>
                             </div>
                         </form>
                     </div>

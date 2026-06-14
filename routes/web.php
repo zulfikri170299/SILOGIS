@@ -12,6 +12,7 @@ Route::get('/', [PortalController::class, 'index'])->name('portal.index');
 Route::get('/folders/{documentFolder}/download', [PortalController::class, 'downloadFolder'])->name('portal.folders.download');
 Route::get('/news', [PortalController::class, 'newsIndex'])->name('portal.news.index');
 Route::get('/news/{news:slug}', [PortalController::class, 'show'])->name('portal.news.show');
+Route::post('/visitor/register', [\App\Http\Controllers\VisitorController::class, 'register'])->name('visitor.register');
 
 Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
@@ -30,6 +31,8 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
         Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
         Route::resource('bagians', \App\Http\Controllers\Admin\BagianController::class);
         Route::resource('satkers', \App\Http\Controllers\Admin\SatkerController::class);
+        Route::get('/visitors/print', [\App\Http\Controllers\Admin\VisitorAdminController::class, 'print'])->name('visitors.print');
+        Route::get('/visitors', [\App\Http\Controllers\Admin\VisitorAdminController::class, 'index'])->name('visitors.index');
     });
 
     // Satker Inputs Routes
@@ -76,6 +79,8 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::get('/bag-ada-inputs/export', [BagAdaInputController::class, 'export'])->name('bag-ada-inputs.export');
     Route::get('/bag-ada-inputs/template', [BagAdaInputController::class, 'downloadTemplate'])->name('bag-ada-inputs.template');
     Route::post('/bag-ada-inputs/import', [BagAdaInputController::class, 'import'])->name('bag-ada-inputs.import');
+    Route::post('/bag-ada-inputs/import-validate', [BagAdaInputController::class, 'importValidate'])->name('bag-ada-inputs.import-validate');
+    Route::post('/bag-ada-inputs/import-process', [BagAdaInputController::class, 'importProcess'])->name('bag-ada-inputs.import-process');
     Route::delete('/bag-ada-inputs/bulk-destroy', [BagAdaInputController::class, 'bulkDestroy'])->name('bag-ada-inputs.bulk-destroy');
     Route::resource('bag-ada-inputs', BagAdaInputController::class)->except(['create', 'show']);
 

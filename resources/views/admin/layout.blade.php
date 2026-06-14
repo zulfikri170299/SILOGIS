@@ -213,5 +213,33 @@
             </main>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function confirmDelete(form, message = 'Apakah Anda yakin ingin menghapus data ini?') {
+            Swal.fire({
+                title: 'Konfirmasi',
+                text: message,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#334155',
+                confirmButtonText: 'Ya, Hapus!',
+                cancelButtonText: 'Batal',
+                background: '#0f172a',
+                color: '#f8fafc',
+                customClass: {
+                    popup: 'rounded-2xl border border-white/10 shadow-2xl',
+                    confirmButton: 'rounded-xl px-5 py-2.5 font-bold',
+                    cancelButton: 'rounded-xl px-5 py-2.5 font-bold'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+            return false;
+        }
+    </script>
+    @stack('modals')
 </body>
 </html>

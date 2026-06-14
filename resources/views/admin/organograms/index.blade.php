@@ -65,7 +65,7 @@
                                     <a href="{{ route('admin.organograms.edit', $org) }}" class="p-2.5 rounded-xl bg-slate-800 text-slate-400 hover:bg-brand-primary hover:text-white transition-all shadow-lg">
                                         <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
                                     </a>
-                                    <form action="{{ route('admin.organograms.destroy', $org) }}" method="POST" class="inline" onsubmit="return confirm('Hapus struktur ini dari sistem? Semua bawahan mungkin akan kehilangan parentnya.');">
+                                    <form action="{{ route('admin.organograms.destroy', $org) }}" method="POST" class="inline" onsubmit="return confirmDelete(this, 'Hapus struktur ini dari sistem? Semua bawahan mungkin akan kehilangan parentnya.');">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="p-2.5 rounded-xl bg-slate-800 text-slate-400 hover:bg-rose-600 hover:text-white transition-all shadow-lg">
