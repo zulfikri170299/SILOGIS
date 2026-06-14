@@ -66,10 +66,10 @@
             <div class="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center shrink-0">
                 <svg class="w-6 h-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
             </div>
-            <div>
+            <div class="flex-1 min-w-0">
                 <p class="text-[9px] font-black uppercase tracking-widest text-slate-500">Terbanyak</p>
                 @php $topBag = $totalReports > 0 ? array_keys($bwsStats, max($bwsStats))[0] : '-'; @endphp
-                <h3 class="text-sm font-black text-white font-outfit uppercase truncate">{{ $topBag }}</h3>
+                <h3 class="text-[10px] sm:text-xs font-black text-white font-outfit uppercase leading-tight" style="word-break: break-word;" title="{{ $topBag }}">{{ $topBag }}</h3>
             </div>
         </div>
         <div class="bg-slate-900/80 backdrop-blur-2xl rounded-2xl border border-white/5 p-5 flex items-center gap-4">
@@ -191,10 +191,10 @@
             'LAINNYA' => ['bg' => '#10b981', 'text' => 'text-emerald-400'],
         ];
     @endphp
-    <div class="bg-slate-900/80 backdrop-blur-2xl rounded-2xl border border-white/5 p-6 md:p-8">
-        <div class="flex items-center justify-between mb-6">
+    <div class="bg-slate-900/80 backdrop-blur-2xl rounded-2xl border border-white/5 p-4 md:p-8">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
             <h3 class="text-[10px] font-black uppercase tracking-widest text-slate-500">Jenis Laporan Per Bagian</h3>
-            <div class="flex items-center gap-4">
+            <div class="flex flex-wrap items-center gap-3 md:gap-4">
                 @foreach($jenisColors as $jenis => $jc)
                     <div class="flex items-center gap-1.5">
                         <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background: {{ $jc['bg'] }};"></span>
@@ -204,15 +204,15 @@
             </div>
         </div>
 
-        <div class="overflow-x-auto">
-            <table class="w-full text-left">
+        <div class="overflow-x-auto pb-4">
+            <table class="w-full text-left min-w-[800px]">
                 <thead>
                     <tr class="border-b border-white/10">
-                        <th class="text-[9px] font-black uppercase tracking-widest text-slate-500 py-3 px-3">Bagian</th>
+                        <th class="text-[9px] font-black uppercase tracking-widest text-slate-500 py-3 px-3 whitespace-nowrap">Bagian</th>
                         @foreach(['KORUPSI KOLUSI DAN NEPOTISME','PUNGUTAN LIAR','PENYALAHGUNAAN WEWENANG','PENYALAHGUNAAN NARKOBA','LAINNYA'] as $jenis)
-                            <th class="text-[9px] font-black uppercase tracking-widest py-3 px-3 text-center {{ $jenisColors[$jenis]['text'] }}">{{ $jenis }}</th>
+                            <th class="text-[9px] font-black uppercase tracking-widest py-3 px-3 text-center whitespace-nowrap {{ $jenisColors[$jenis]['text'] }}">{{ $jenis }}</th>
                         @endforeach
-                        <th class="text-[9px] font-black uppercase tracking-widest text-slate-500 py-3 px-3 text-center">Total</th>
+                        <th class="text-[9px] font-black uppercase tracking-widest text-slate-500 py-3 px-3 text-center whitespace-nowrap">Total</th>
                     </tr>
                 </thead>
                 <tbody>

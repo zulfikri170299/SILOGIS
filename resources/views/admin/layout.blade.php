@@ -80,7 +80,7 @@
                 x-transition:leave="transition ease-in-out duration-300 transform"
                 x-transition:leave-start="translate-x-0"
                 x-transition:leave-end="-translate-x-full"
-                class="relative flex w-full max-w-[240px] flex-1 flex-col bg-slate-900 pb-4 pt-5">
+                class="relative flex h-full w-full max-w-[240px] flex-1 flex-col bg-slate-900 pb-4 pt-5">
                 
                 <div class="flex items-center justify-between px-4">
                     <div class="flex items-center gap-3">
@@ -98,6 +98,26 @@
                 <nav class="mt-8 flex-1 px-4 space-y-1 overflow-y-auto">
                     @include('admin.sidebar-links')
                 </nav>
+                <div class="p-4 mt-auto border-t border-slate-800 bg-slate-900/50">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <div class="h-10 w-10 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold">
+                                {{ substr(Auth::user()->name, 0, 1) }}
+                            </div>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-bold text-white leading-none mb-1">{{ Auth::user()->name }}</p>
+                            <p class="text-xs text-slate-400 truncate w-32">{{ Auth::user()->email }}</p>
+                        </div>
+                    </div>
+                    <form action="{{ route('logout') }}" method="POST" class="mt-4">
+                        @csrf
+                        <button type="submit" class="w-full flex items-center justify-center p-2 rounded-lg text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">
+                            <svg class="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+                            Keluar Sesi
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
 

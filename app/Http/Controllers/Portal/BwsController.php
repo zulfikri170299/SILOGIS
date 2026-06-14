@@ -18,11 +18,11 @@ class BwsController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'bagian' => 'required|string',
-            'jenis_laporan' => 'required|string|in:KORUPSI KOLUSI DAN NEPOTISME,PUNGUTAN LIAR,PENYALAHGUNAAN WEWENANG,PENYALAHGUNAAN NARKOBA,LAINNYA',
+            'bagian' => 'required|string|max:255',
+            'jenis_laporan' => 'required|string|max:255',
             'aduan' => 'required|string',
-            'bukti_dukung' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
-            'bukti_dukung_tambahan' => 'nullable|file|mimes:pdf,jpg,jpeg,png,mp4,mov|max:20480',
+            'bukti_dukung' => 'required|file|mimes:pdf,jpg,jpeg,png,mp4,mov|max:102400',
+            'bukti_dukung_tambahan' => 'nullable|file|mimes:pdf,jpg,jpeg,png,mp4,mov|max:102400',
         ]);
 
         $filePath = null;

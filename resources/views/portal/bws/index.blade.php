@@ -172,17 +172,17 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
 
 
-                    <!-- JENIS LAPORAN -->
+                    <!-- JENIS PENGADUAN -->
                     <div class="space-y-2 md:col-span-2" x-data="{ openJenis: false, jenisValue: '{{ old('jenis_laporan', '') }}' }">
                         <label class="text-xs font-black text-slate-300 uppercase tracking-widest ml-1 flex items-center gap-1.5">
-                            Jenis Laporan <span class="text-red-500">*</span>
+                            Jenis Pengaduan <span class="text-red-500">*</span>
                         </label>
                         <input type="hidden" name="jenis_laporan" :value="jenisValue" required>
                         <div class="relative">
                             <button type="button" @click="openJenis = !openJenis" @click.outside="openJenis = false"
                                 class="w-full bg-slate-800/50 border-2 rounded-xl px-5 py-3.5 text-left font-bold flex items-center justify-between transition-all duration-300"
                                 :class="openJenis ? 'border-amber-500 ring-2 ring-amber-500/20' : jenisValue ? 'border-amber-500/40' : 'border-slate-700'">
-                                <span :class="jenisValue ? 'text-white' : 'text-slate-500'" x-text="jenisValue || '— Pilih Jenis Laporan —'"></span>
+                                <span :class="jenisValue ? 'text-white' : 'text-slate-500'" x-text="jenisValue || '— Pilih Jenis Pengaduan —'"></span>
                                 <svg class="w-5 h-5 text-slate-400 transition-transform duration-300" :class="openJenis && 'rotate-180'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                             </button>
                             <div x-show="openJenis" x-cloak
@@ -244,7 +244,7 @@
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
                                 </div>
                                 <h4 class="text-[11px] font-black text-white uppercase tracking-wider mb-1">Unggah Video/Foto/PDF (Wajib)</h4>
-                                <p class="text-[10px] text-slate-500 mt-1 italic">* Max 5MB</p>
+                                <p class="text-[10px] text-slate-500 mt-1 italic">* Max 100MB</p>
                             </div>
                             <div class="mt-2 text-xs text-amber-500 font-bold px-2 flex justify-between items-center z-10 relative pointer-events-none display-filename truncate w-full absolute bottom-2 left-0 text-center"></div>
                         </div>
@@ -262,7 +262,7 @@
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v16m8-8H4"/></svg>
                                 </div>
                                 <h4 class="text-[11px] font-black text-white uppercase tracking-wider mb-1">Dokumen Tambahan (Opsional)</h4>
-                                <p class="text-[10px] text-slate-500 mt-1 italic">* Max 20MB</p>
+                                <p class="text-[10px] text-slate-500 mt-1 italic">* Max 100MB</p>
                             </div>
                             <div class="mt-2 text-xs text-emerald-500 font-bold px-2 flex justify-between items-center z-10 relative pointer-events-none display-filename-tambahan truncate w-full absolute bottom-2 left-0 text-center"></div>
                         </div>

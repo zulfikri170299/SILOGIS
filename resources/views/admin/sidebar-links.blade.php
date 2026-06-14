@@ -65,11 +65,13 @@
 @if(!Auth::user()->isAdminBag())
 <div class="mt-6 mb-2 px-3 text-[9px] font-black uppercase tracking-widest text-slate-500">Pengaturan</div>
 
+{{-- 
 <a href="{{ route('admin.profile-site.edit') }}" 
    class="group flex items-center gap-x-2.5 rounded-xl p-2.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('admin.profile-site.*') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
     <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
     Edit Profil Beranda
 </a>
+--}}
 
 <a href="{{ route('admin.logo.edit') }}" 
    class="group flex items-center gap-x-2.5 rounded-xl p-2.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('admin.logo.*') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">

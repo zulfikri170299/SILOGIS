@@ -451,8 +451,7 @@
                             'Berita' => 'berita', 
                             'Dokumen' => 'dokumen', 
                             'Bagian/Fungsi' => 'bagian',
-                            'Struktur' => 'struktur',
-                            'Tentang Kami' => 'tentang'
+                            'Struktur' => 'struktur'
                         ]; 
                     @endphp
                     @foreach($links as $name => $id)

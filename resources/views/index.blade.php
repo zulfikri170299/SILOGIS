@@ -605,7 +605,7 @@
                                 <span class="text-[8px] font-black uppercase">Baca Berita</span>
                             </div>
                             @if($post->instagram_url)
-                                <button @click.prevent="openInstaModal('{{ $post->instagram_url }}')" class="flex items-center gap-1.5 text-[#ee2a7b] z-10 relative px-2 py-1 bg-[#ee2a7b]/10 rounded-lg border border-[#ee2a7b]/20 hover:bg-[#ee2a7b] hover:text-white transition-colors">
+                                <button @click.prevent="window.open('{{ $post->instagram_url }}', '_blank')" class="flex items-center gap-1.5 text-[#ee2a7b] z-10 relative px-2 py-1 bg-[#ee2a7b]/10 rounded-lg border border-[#ee2a7b]/20 hover:bg-[#ee2a7b] hover:text-white transition-colors">
                                     <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.332 3.608 1.308.975.975 1.247 2.242 1.308 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.061 1.366-.333 2.633-1.308 3.608-.975.975-2.242 1.247-3.608 1.308-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.061-2.633-.333-3.608-1.308-.975-.975-1.247-2.242-1.308-3.608-.058-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c.061-1.366.333-2.633 1.308-3.608.975-.975 2.242-1.247 3.608-1.308 1.266-.058 1.646-.07 4.85-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-1.62.074-2.812.333-3.846 1.367-1.037 1.034-1.295 2.225-1.369 3.846-.058 1.28-.072 1.688-.072 4.947s.014 3.667.072 4.947c.074 1.621.332 2.812 1.369 3.846 1.034 1.037 2.225 1.295 3.846 1.369 1.28.058 1.688.072 4.947.072s3.667-.014 4.947-.072c1.621-.074 2.812-.332 3.846-1.369 1.037-1.034 1.295-2.225 1.369-3.846.058-1.28.072-1.688.072-4.947s-.014-3.667-.072-4.947c-.074-1.621-.332-2.812-1.369-3.846-1.034-1.037-2.225-1.295-3.846-1.369-1.28-.058-1.688-.072-4.947-.072zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
                                     <span class="text-[8px] font-black uppercase">Buka IG</span>
                                 </button>
@@ -625,8 +625,8 @@
         <!-- Desktop Grid -->
         <div class="hidden md:grid grid-cols-4 gap-8">
             @foreach ($news as $item)
-                <a href="{{ $item->instagram_url ? '#' : route('portal.news.show', $item->slug) }}"
-                   @if($item->instagram_url) onclick="event.preventDefault(); openInstaModal('{{ $item->instagram_url }}')" @endif
+                <a href="{{ $item->instagram_url ? $item->instagram_url : route('portal.news.show', $item->slug) }}"
+                   @if($item->instagram_url) target="_blank" @endif
                    class="news-card-elite group cursor-pointer flex flex-col reveal-on-scroll overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 rounded-3xl border border-white/5" style="transition-delay: {{ $loop->index * 150 }}ms;">
                     <div class="relative aspect-[4/3] w-full overflow-hidden shrink-0">
                         <img src="{{ asset('storage/' . $item->thumbnail) }}" class="h-full w-full object-cover group-hover:scale-110 transition-transform duration-700" alt="">
@@ -828,8 +828,10 @@
             @foreach ($bagians as $sec)
                 <div x-data="{ open: false }">
                     <div @click="open = true" class="flex gap-5 bg-slate-800/40 p-5 rounded-[2.5rem] border border-white/5 shadow-2xl reveal-on-scroll group transition-all duration-300 transform hover:scale-[1.03] hover:-translate-x-2 hover:shadow-[0_20px_40px_rgba(245,158,11,0.15)] hover:border-amber-500/30 hover:bg-slate-800 active:scale-95 cursor-pointer">
-                        <div class="w-16 h-16 rounded-2xl bg-slate-900 flex items-center justify-center text-amber-500 border border-amber-500/10 animate-float-soft transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3 shrink-0" style="animation-delay: {{ $loop->index * 300 }}ms">
-                            <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+                        <div class="w-16 h-16 rounded-2xl bg-slate-900 flex items-center justify-center text-red-500 border border-red-500/20 animate-float-soft transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 shrink-0 group-hover:text-amber-500 group-hover:border-amber-500/30" style="animation-delay: {{ $loop->index * 300 }}ms">
+                            <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                            </svg>
                         </div>
                         <div class="flex-1 flex flex-col justify-center">
                             <div class="flex justify-between items-center mb-1">
@@ -846,8 +848,10 @@
                                 <button @click="open = false" class="absolute top-4 right-4 h-10 w-10 bg-slate-800 rounded-full flex items-center justify-center text-slate-400 hover:text-white transition-colors">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
                                 </button>
-                                <div class="w-16 h-16 rounded-2xl bg-slate-800 border border-white/5 flex items-center justify-center text-amber-500 mb-6 shadow-inner">
-                                    <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+                                <div class="w-16 h-16 rounded-2xl bg-slate-800 border border-red-500/20 flex items-center justify-center text-red-500 mb-6 shadow-inner">
+                                    <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                    </svg>
                                 </div>
                                 <h3 class="text-xl font-black text-white uppercase tracking-widest mb-4">{{ $sec->name }}</h3>
                                 <p class="text-sm text-slate-300 font-medium italic leading-relaxed">{{ $sec->description ?? 'Deskripsi belum ditambahkan.' }}</p>
@@ -864,11 +868,21 @@
                 <span class="text-red-500 font-black uppercase tracking-[0.4em] text-[10px] mb-4 block">Tugas Pokok & Fungsi</span>
                 <h2 class="text-5xl font-black text-white uppercase font-outfit italic">Bagian/Fungsi</h2>
             </div>
-            <div class="grid grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 @foreach ($bagians as $sec)
-                    <div class="bg-slate-800/40 p-10 rounded-[3rem] border border-white/5 shadow-sm hover:shadow-2xl hover:bg-slate-800/80 transition-all duration-500 group">
-                        <h5 class="text-red-500 font-black uppercase tracking-widest text-xs mb-6 border-b border-white/10 pb-5 group-hover:text-amber-500 transition-colors">{{ $sec->name }}</h5>
-                        <p class="text-slate-300 text-sm leading-relaxed font-medium italic">{{ $sec->description ?? 'Deskripsi belum ditambahkan.' }}</p>
+                    <div class="bg-slate-800/40 p-10 rounded-[3rem] border border-white/5 shadow-sm hover:shadow-2xl hover:bg-slate-800/80 transition-all duration-500 group relative overflow-hidden flex flex-col h-full">
+                        <div class="absolute -right-4 -top-4 w-32 h-32 bg-red-500/5 rounded-full blur-3xl group-hover:bg-red-500/20 transition-colors pointer-events-none"></div>
+                        
+                        <div class="flex items-center gap-5 border-b border-white/10 pb-5 mb-5 relative z-10">
+                            <div class="w-14 h-14 rounded-xl bg-slate-900/80 flex items-center justify-center text-red-500 border border-red-500/20 shadow-inner group-hover:scale-110 group-hover:text-amber-500 group-hover:border-amber-500/30 transition-all duration-500 shrink-0">
+                                <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                </svg>
+                            </div>
+                            <h5 class="text-red-500 font-black uppercase tracking-widest text-sm m-0 leading-snug group-hover:text-amber-500 transition-colors">{{ $sec->name }}</h5>
+                        </div>
+
+                        <p class="text-slate-300 text-sm leading-relaxed font-medium italic relative z-10 flex-1">{{ $sec->description ?? 'Deskripsi belum ditambahkan.' }}</p>
                     </div>
                 @endforeach
             </div>
@@ -953,7 +967,7 @@
 
 
 <!-- SEKSI TENTANG KAMI -->
-<section id="tentang" class="pt-6 md:pt-16 pb-10 md:pb-24 bg-[#0f172a] px-6 md:px-8 relative overflow-hidden">
+<section id="tentang" class="pt-6 md:pt-16 pb-10 md:pb-24 bg-[#0f172a] px-6 md:px-8 relative overflow-hidden lg:hidden">
     <div class="absolute top-0 right-0 w-1/2 h-full bg-amber-500/5 -skew-x-12 translate-x-1/4"></div>
     <div class="max-w-[1200px] mx-auto relative z-10 w-full">
         <!-- Header Mobile -->
