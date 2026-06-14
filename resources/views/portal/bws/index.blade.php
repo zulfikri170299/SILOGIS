@@ -57,7 +57,7 @@
 </section>
 
 <!-- Form Section -->
-<section class="bg-[#0f172a] py-16 px-4 md:px-8 min-h-screen relative -mt-10" x-data="{ 
+<section id="form-section" class="bg-[#0f172a] py-16 px-4 md:px-8 min-h-screen relative -mt-10" x-data="{ 
     step: {{ session('success') || $errors->any() ? 2 : 1 }}, 
     bagian: '{{ old('bagian') }}' 
 }">
@@ -142,7 +142,7 @@
                 </div>
 
                 <div class="mt-8 md:mt-12 flex justify-center border-t border-slate-800 pt-6 md:pt-8">
-                    <button type="button" @click="if(bagian) step = 2" :disabled="!bagian" 
+                    <button type="button" @click="if(bagian) { step = 2; $nextTick(() => { document.getElementById('form-section').scrollIntoView({ behavior: 'smooth' }) }) }" :disabled="!bagian" 
                             class="px-6 md:px-10 py-3 md:py-4 rounded-xl font-black uppercase tracking-wider text-xs md:text-sm transition-all shadow-xl flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed group w-full md:w-auto justify-center"
                             :class="bagian ? 'bg-amber-500 text-slate-900 hover:bg-amber-400 hover:shadow-[0_0_20px_rgba(245,158,11,0.4)] hover:-translate-y-1' : 'bg-slate-800 text-slate-500'">
                         Lanjutkan Isi Form

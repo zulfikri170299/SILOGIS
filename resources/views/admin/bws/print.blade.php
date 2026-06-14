@@ -108,6 +108,31 @@
             text-align: center; font-size: 9px; color: #94a3b8; margin-top: 30px; 
             border-top: 1px solid #e2e8f0; padding-top: 12px;
         }
+
+        /* Mobile Responsiveness for Preview */
+        @media screen and (max-width: 640px) {
+            body { padding-top: 130px; }
+            .print-bar { flex-direction: column; padding: 12px; gap: 10px; }
+            .print-bar > span { font-size: 11px; }
+            .print-bar > div { width: 100%; justify-content: center; }
+            .print-bar button { padding: 10px; font-size: 10px; flex: 1; letter-spacing: 0.5px; }
+            
+            .page { padding: 15px !important; }
+            .page:first-of-type { margin-top: 0 !important; }
+            
+            .summary-row { flex-wrap: wrap; gap: 8px; }
+            .summary-card { flex: 1 1 45%; padding: 10px; }
+            .summary-card .value { font-size: 18px; }
+            
+            .chart-section { flex-direction: column; align-items: center; gap: 20px; }
+            .chart-donut { width: 160px; height: 160px; }
+            .chart-legend { width: 100%; overflow-x: auto; }
+            .chart-legend th, .chart-legend td { padding: 8px 4px; font-size: 8px; }
+            
+            .report-header h1 { font-size: 14px; letter-spacing: 1px; }
+            
+            .data-table { display: block; overflow-x: auto; white-space: nowrap; }
+        }
     </style>
 </head>
 <body>

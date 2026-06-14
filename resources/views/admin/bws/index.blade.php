@@ -202,7 +202,7 @@
     <div x-show="detailModalOpen" class="fixed inset-0 z-[100] overflow-y-auto" style="display: none;" aria-labelledby="modal-title" role="dialog" aria-modal="true">
         <div class="flex items-center justify-center min-h-screen px-4 py-4 text-center">
             <!-- Background overlay -->
-            <div x-show="detailModalOpen" x-transition.opacity class="fixed inset-0 transition-opacity bg-slate-900/80 backdrop-blur-sm" aria-hidden="true" @click="detailModalOpen = false"></div>
+            <div x-show="detailModalOpen" x-transition.opacity class="fixed inset-0 transition-opacity bg-slate-900/90" aria-hidden="true" @click="detailModalOpen = false"></div>
 
             <!-- Modal panel -->
             <div x-show="detailModalOpen" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" class="relative z-10 w-full max-w-2xl p-6 overflow-hidden text-left align-middle transition-all transform bg-slate-800 border border-white/10 shadow-2xl rounded-2xl">
