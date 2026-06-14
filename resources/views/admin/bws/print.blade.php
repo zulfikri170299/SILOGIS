@@ -16,15 +16,15 @@
 
         @page {
             size: A4 portrait;
-            margin: 15mm;
+            margin: 0; /* Removes default browser header/footer */
         }
 
         @media print {
             body { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
             .no-print { display: none !important; }
             .page-break { page-break-before: always; }
-            .page { padding: 0; max-width: none; margin: 0; }
-            .page:first-of-type { margin-top: 0; }
+            .page { padding: 0mm 15mm 15mm 15mm; max-width: none; margin: 0; box-sizing: border-box; }
+            .page:first-of-type { margin-top: 0; padding-top: 0; }
         }
 
         /* Print Button Bar */
@@ -133,21 +133,19 @@
 
 <!-- PAGE 1: Summary & Chart -->
 <div class="page">
-    <div class="report-header">
-        <h1>Laporan Pengaduan WBS</h1>
-        <h2>Biro Logistik Whistleblowing System — SILOGIS</h2>
-        <div class="meta">
-            Dicetak: {{ now()->translatedFormat('d F Y, H:i') }} WIB
-            @if($request->filled('dari') || $request->filled('sampai'))
-                &nbsp;|&nbsp; Periode: {{ $request->dari ?? '...' }} s/d {{ $request->sampai ?? '...' }}
-            @endif
-            @if($request->filled('bagian'))
-                &nbsp;|&nbsp; Bagian: {{ $request->bagian }}
-            @endif
-            @if($request->filled('jenis_laporan'))
-                &nbsp;|&nbsp; Jenis: {{ $request->jenis_laporan }}
-            @endif
+    <!-- KOP SURAT -->
+    <div style="display: inline-block; text-align: center; margin-bottom: 30px; margin-top: -20px;">
+        <img src="{{ asset('OIP (3).jpg') }}" alt="Logo Logistik Polri" style="width: 60px; height: auto; margin-bottom: 8px;">
+        <div style="font-family: Arial, sans-serif; font-size: 13px; font-weight: bold; line-height: 1.3;">
+            KEPOLISIAN NEGARA REPUBLIK INDONESIA<br>
+            DAERAH NUSA TENGGARA BARAT<br>
+            BIRO LOGISTIK
         </div>
+        <div style="border-bottom: 2px solid #000; margin-top: 5px;"></div>
+    </div>
+
+    <div class="report-header" style="border-bottom: none;">
+        <h1 style="font-size:16px; text-decoration: underline;">WHISTLEBLOWING SYSTEM</h1>
     </div>
 
     <!-- Summary Cards -->
@@ -224,9 +222,19 @@
 
 <!-- PAGE 2+: Data Table -->
 <div class="page page-break">
-    <div class="report-header">
-        <h1 style="font-size:16px;">Detail Data Pengaduan WBS</h1>
-        <div class="meta">Total {{ $totalReports }} pengaduan</div>
+    <!-- KOP SURAT -->
+    <div style="display: inline-block; text-align: center; margin-bottom: 30px; margin-top: -20px;">
+        <img src="{{ asset('OIP (3).jpg') }}" alt="Logo Logistik Polri" style="width: 60px; height: auto; margin-bottom: 8px;">
+        <div style="font-family: Arial, sans-serif; font-size: 13px; font-weight: bold; line-height: 1.3;">
+            KEPOLISIAN NEGARA REPUBLIK INDONESIA<br>
+            DAERAH NUSA TENGGARA BARAT<br>
+            BIRO LOGISTIK
+        </div>
+        <div style="border-bottom: 2px solid #000; margin-top: 5px;"></div>
+    </div>
+
+    <div class="report-header" style="border-bottom: none;">
+        <h1 style="font-size:16px; text-decoration: underline;">WHISTLEBLOWING SYSTEM</h1>
     </div>
 
     <table class="data-table">
