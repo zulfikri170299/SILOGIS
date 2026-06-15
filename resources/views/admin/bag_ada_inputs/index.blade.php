@@ -3,7 +3,7 @@
 @section('title', 'Data Pengadaan Bag Ada')
 
 @section('content')
-<div x-data="{ 
+<div @open-edit.window="selectedData = $event.detail; editModalOpen = true" x-data="{ 
     createModalOpen: false, 
     editModalOpen: false, 
     importModalOpen: {{ $errors->has('file_excel') ? 'true' : 'false' }}, 
@@ -672,15 +672,4 @@
     </template>
 </div>
 
-<script>
-    document.addEventListener('alpine:init', () => {
-        window.addEventListener('open-edit', (e) => {
-            const container = document.querySelector('[x-data]');
-            if(container && container.__x) {
-                container.__x.$data.selectedData = e.detail;
-                container.__x.$data.editModalOpen = true;
-            }
-        });
-    });
-</script>
 @endsection

@@ -3,7 +3,8 @@
 @section('title', 'Kelola Pelaku Pengadaan')
 
 @section('content')
-<div class="mb-8 flex justify-between items-center" x-data="{ createModalOpen: false, editModalOpen: false, selectedData: {} }">
+<div x-data="{ createModalOpen: false, editModalOpen: false, selectedData: {} }" @open-edit.window="selectedData = $event.detail; editModalOpen = true">
+<div class="mb-8 flex justify-between items-center">
     <div>
         <h2 class="text-2xl font-black text-white font-outfit uppercase tracking-tight">Pelaku Pengadaan</h2>
         <p class="text-[10px] text-slate-500 mt-2 font-black uppercase tracking-widest">Master Data Peran Pelaku Pengadaan</p>
@@ -80,7 +81,7 @@
 </div>
 @endif
 
-<div class="bg-slate-900/50 backdrop-blur-2xl rounded-3xl border border-white/5 shadow-2xl overflow-hidden" x-data="{ editModalOpen: false, selectedData: {} }">
+<div class="bg-slate-900/50 backdrop-blur-2xl rounded-3xl border border-white/5 shadow-2xl overflow-hidden">
     <div class="overflow-x-auto">
         <table class="w-full text-left text-sm text-slate-300">
             <thead class="bg-slate-900/80 text-[10px] uppercase tracking-widest font-black text-slate-500 border-b border-white/5">
@@ -122,15 +123,5 @@
     </div>
 </div>
 
-<script>
-    document.addEventListener('alpine:init', () => {
-        window.addEventListener('open-edit', (e) => {
-            const container = document.querySelector('[x-data="{ createModalOpen: false, editModalOpen: false, selectedData: {} }"]');
-            if(container && container.__x) {
-                container.__x.$data.selectedData = e.detail;
-                container.__x.$data.editModalOpen = true;
-            }
-        });
-    });
-</script>
+</div>
 @endsection
