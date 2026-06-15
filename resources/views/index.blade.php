@@ -6,6 +6,7 @@
     showAllDocs: false, 
     searchService: '', 
     searchDoc: '',
+    viewMode: 'gallery',
     lockScroll(val) {
         if (val) document.body.classList.add('overflow-hidden');
         else document.body.classList.remove('overflow-hidden');
@@ -925,20 +926,28 @@
                 <span class="block text-[9px] font-bold text-amber-500/60 uppercase tracking-[0.3em] mt-2 ml-5">Command Center</span>
             </div>
             <div class="flex items-center gap-2">
-                <button type="button" onclick="document.getElementById('struktur-scroll').scrollBy({ left: -window.innerWidth, behavior: 'smooth' })" class="flex items-center justify-center h-10 w-10 bg-white/5 rounded-2xl text-white shadow-xl shrink-0 active:scale-95 transition-all border border-white/10">
+                <button type="button" @click="viewMode === 'gallery' ? document.getElementById('struktur-scroll').scrollBy({ left: -window.innerWidth, behavior: 'smooth' }) : $refs.chartScroll.scrollBy({ left: -window.innerWidth/1.5, behavior: 'smooth' })" class="flex items-center justify-center h-10 w-10 bg-white/5 rounded-2xl text-white shadow-xl shrink-0 active:scale-95 transition-all border border-white/10">
                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"/></svg>
                 </button>
-                <button type="button" onclick="document.getElementById('struktur-scroll').scrollBy({ left: window.innerWidth, behavior: 'smooth' })" class="flex items-center justify-center h-10 w-10 bg-amber-500 rounded-2xl text-[#0f172a] shadow-xl shrink-0 active:scale-95 transition-all">
+                <button type="button" @click="viewMode === 'gallery' ? document.getElementById('struktur-scroll').scrollBy({ left: window.innerWidth, behavior: 'smooth' }) : $refs.chartScroll.scrollBy({ left: window.innerWidth/1.5, behavior: 'smooth' })" class="flex items-center justify-center h-10 w-10 bg-amber-500 rounded-2xl text-[#0f172a] shadow-xl shrink-0 active:scale-95 transition-all">
                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"/></svg>
                 </button>
             </div>
         </div>
 
         <!-- Header Desktop -->
-        <div class="hidden md:flex items-center justify-between mb-12">
+        <div class="hidden md:flex items-center justify-between mb-8">
             <div class="space-y-2">
                 <span class="text-amber-500 font-black uppercase tracking-[0.4em] text-[10px]">Command Center</span>
                 <h2 class="text-6xl font-black text-white uppercase font-outfit leading-none">Struktur</h2>
+            </div>
+        </div>
+
+        <!-- Toggle Galeri / Bagan -->
+        <div class="flex justify-center mb-10">
+            <div class="bg-slate-800/50 p-1.5 rounded-2xl border border-white/10 flex items-center shadow-lg backdrop-blur-sm">
+                <button @click="viewMode = 'gallery'" :class="viewMode === 'gallery' ? 'bg-amber-500 text-[#0f172a] shadow-md' : 'text-slate-400 hover:text-white hover:bg-white/5'" class="px-8 py-2.5 rounded-xl font-black uppercase text-[11px] tracking-widest transition-all duration-300">Galeri</button>
+                <button @click="viewMode = 'chart'" :class="viewMode === 'chart' ? 'bg-amber-500 text-[#0f172a] shadow-md' : 'text-slate-400 hover:text-white hover:bg-white/5'" class="px-8 py-2.5 rounded-xl font-black uppercase text-[11px] tracking-widest transition-all duration-300">Bagan</button>
             </div>
         </div>
 
@@ -947,41 +956,213 @@
             $colors = ['bg-[#fbbf24]', 'bg-[#dc2626]', 'bg-[#0f172a]'];
         @endphp
 
-        <!-- Mobile Scroll (Discovery Style) -->
-        <div id="struktur-scroll" class="md:hidden -mx-6 px-6 flex gap-5 overflow-x-auto pb-10 snap-x no-scrollbar">
-            @foreach($allPersonnels as $index => $person)
-                <div class="flex-shrink-0 w-[calc(100vw-3rem)] h-[450px] rounded-[3.5rem] relative overflow-hidden snap-center {{ $colors[$index % 3] }} shadow-2xl border border-white/5">
-                    <div class="absolute inset-0">
-                         @if($person->photo)
-                            <img src="{{ asset('storage/' . $person->photo) }}" class="w-full h-full object-cover" alt="{{ $person->name }}">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div>
-                         @else
-                            <div class="w-full h-full flex items-center justify-center bg-black/40 backdrop-blur-md">
-                                <div class="text-center">
-                                    <svg class="w-24 h-24 text-white/10 mx-auto mb-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-                                    <span class="text-[10px] text-white/20 font-black uppercase tracking-widest">No Identity Photo</span>
+        <!-- GALLERY VIEW -->
+        <div x-show="viewMode === 'gallery'" x-transition:enter="transition ease-out duration-500" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100">
+            <!-- Mobile Scroll (Discovery Style) -->
+            <div id="struktur-scroll" class="md:hidden -mx-6 px-6 flex gap-5 overflow-x-auto pb-10 snap-x no-scrollbar">
+                @foreach($allPersonnels as $index => $person)
+                    <div class="flex-shrink-0 w-[calc(100vw-3rem)] h-[450px] rounded-[3.5rem] relative overflow-hidden snap-center {{ $colors[$index % 3] }} shadow-2xl border border-white/5">
+                        <div class="absolute inset-0">
+                             @if($person->photo)
+                                <img src="{{ asset('storage/' . $person->photo) }}" class="w-full h-full object-cover" alt="{{ $person->name }}">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div>
+                             @else
+                                <div class="w-full h-full flex items-center justify-center bg-black/40 backdrop-blur-md">
+                                    <div class="text-center">
+                                        <svg class="w-24 h-24 text-white/10 mx-auto mb-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                                        <span class="text-[10px] text-white/20 font-black uppercase tracking-widest">No Identity Photo</span>
+                                    </div>
                                 </div>
-                            </div>
-                         @endif
+                             @endif
+                        </div>
+                        <div class="absolute bottom-12 inset-x-0 px-10 text-center">
+                            @if($person->rank)
+                                <div class="text-amber-400 font-black uppercase tracking-[0.2em] text-[10px] mb-1 drop-shadow-lg">{{ $person->rank }}</div>
+                            @endif
+                            <h5 class="text-white font-black uppercase text-2xl drop-shadow-2xl font-outfit leading-tight mb-2">{{ $person->name }}</h5>
+                            <div class="inline-block px-4 py-1.5 bg-amber-500 rounded-full text-[#0f172a] text-[10px] font-black uppercase tracking-widest">{{ $person->position }}</div>
+                        </div>
                     </div>
-                    <div class="absolute bottom-12 inset-x-0 px-10 text-center">
-                        @if($person->rank)
-                            <div class="text-amber-400 font-black uppercase tracking-[0.2em] text-[10px] mb-1 drop-shadow-lg">{{ $person->rank }}</div>
-                        @endif
-                        <h5 class="text-white font-black uppercase text-2xl drop-shadow-2xl font-outfit leading-tight mb-2">{{ $person->name }}</h5>
-                        <div class="inline-block px-4 py-1.5 bg-amber-500 rounded-full text-[#0f172a] text-[10px] font-black uppercase tracking-widest">{{ $person->position }}</div>
+                @endforeach
+            </div>
+
+            <!-- Desktop Grid -->
+            <div class="hidden md:grid grid-cols-7 gap-x-2 gap-y-16">
+                @foreach($allPersonnels as $person)
+                    <div class="reveal-on-scroll">
+                        @include('components.org-card', ['node' => $person])
                     </div>
-                </div>
-            @endforeach
+                @endforeach
+            </div>
         </div>
 
-        <!-- Desktop Grid -->
-        <div class="hidden md:grid grid-cols-7 gap-x-2 gap-y-16">
-            @foreach($allPersonnels as $person)
-                <div class="reveal-on-scroll">
-                    @include('components.org-card', ['node' => $person])
+        <!-- CHART VIEW -->
+        <div x-show="viewMode === 'chart'" style="display: none;" 
+             x-transition:enter="transition ease-out duration-500" 
+             x-transition:enter-start="opacity-0 scale-95" 
+             x-transition:enter-end="opacity-100 scale-100"
+             x-init="$watch('viewMode', val => { 
+                 if(val === 'chart') {
+                     setTimeout(() => {
+                         const container = $refs.chartScroll;
+                         if(container && container.scrollWidth > container.clientWidth) {
+                             container.scrollLeft = (container.scrollWidth - container.clientWidth) / 2;
+                         }
+                     }, 50);
+                 }
+             })">
+            
+            <!-- Mobile Swipe Helper -->
+            <div class="md:hidden flex justify-center pb-4 text-slate-400 text-[10px] uppercase font-bold tracking-widest gap-2 items-center animate-pulse">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                Geser ke kiri / kanan untuk navigasi
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </div>
+
+            <div x-ref="chartScroll" class="w-full overflow-x-auto pb-16 custom-scrollbar scroll-smooth touch-pan-x" style="-webkit-overflow-scrolling: touch;">
+                <div class="w-max mx-auto min-w-[1800px] flex flex-col items-center pt-8 pb-16 font-sans px-12">
+                    @php
+                        if (!function_exists('renderNode')) {
+                            function renderNode($node, $headerClass) {
+                                if(!$node) return '';
+                                $photo = $node->photo ? asset('storage/' . $node->photo) : asset('log polri.png');
+                                $name = $node->name !== '-' ? $node->name : 'NAMA';
+                                $rank = $node->rank !== '-' ? $node->rank : 'PANGKAT NRP 99101111';
+                                return "
+                                <div class='bg-slate-800 border border-white/10 w-[240px] shrink-0 rounded-xl shadow-2xl text-white relative z-10 overflow-hidden group hover:border-amber-500/50 transition-colors'>
+                                    <div class='{$headerClass} font-black text-[12px] p-2 uppercase text-center border-b border-white/10 shadow-inner'>{$node->position}</div>
+                                    <div class='flex p-3 min-h-[84px] items-center'>
+                                        <div class='w-12 h-14 shrink-0 rounded-lg border border-white/10 flex items-center justify-center bg-slate-900 overflow-hidden'>
+                                            " . ($node->photo ? "<img src='{$photo}' class='w-full h-full object-cover' alt='FOTO'>" : "<span class='text-[9px] font-bold text-slate-500'>FOTO</span>") . "
+                                        </div>
+                                        <div class='flex-1 pl-3 flex flex-col justify-center text-left'>
+                                            <div class='text-[11px] font-black leading-tight line-clamp-2 uppercase group-hover:text-amber-500 transition-colors'>{$name}</div>
+                                            <div class='text-[9px] text-slate-400 mt-1 uppercase tracking-wide'>{$rank}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                ";
+                            }
+
+                            function renderSubNode($node, $headerClass) {
+                                if(!$node) return '';
+                                $photo = $node->photo ? asset('storage/' . $node->photo) : asset('log polri.png');
+                                $name = $node->name !== '-' ? $node->name : 'NAMA';
+                                $rank = $node->rank !== '-' ? $node->rank : 'BRIPTU NRP 99101111';
+                                return "
+                                <div class='bg-slate-800 border border-white/10 w-[120px] shrink-0 rounded-lg shadow-xl text-white relative z-10 overflow-hidden group hover:border-amber-500/50 transition-colors'>
+                                    <div class='{$headerClass} font-black text-[9px] p-1.5 uppercase text-center border-b border-white/10 truncate'>{$node->position}</div>
+                                    <div class='flex p-2 min-h-[64px] items-center'>
+                                        <div class='w-8 h-10 shrink-0 rounded border border-white/10 flex items-center justify-center bg-slate-900 overflow-hidden'>
+                                            " . ($node->photo ? "<img src='{$photo}' class='w-full h-full object-cover' alt='FOTO'>" : "<span class='text-[6px] font-bold text-slate-500'>FOTO</span>") . "
+                                        </div>
+                                        <div class='flex-1 pl-2 flex flex-col justify-center text-left'>
+                                            <div class='text-[9px] font-black leading-tight line-clamp-2 uppercase group-hover:text-amber-500 transition-colors'>{$name}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                ";
+                            }
+                        }
+                    @endphp
+
+                    <!-- KAROLOG -->
+                    <div class="relative flex flex-col items-center">
+                        {!! renderNode($allPersonnels->where('id', 1)->first(), 'bg-[#dc2626]') !!}
+                        <div class="w-1 h-6 bg-white/20"></div>
+                    </div>
+
+                    <!-- Split to RENMIN -->
+                    <div class="w-full flex justify-center relative h-[320px]">
+                        <!-- Main Trunk -->
+                        <div class="absolute left-1/2 top-0 w-1 h-full bg-white/20 -ml-[2px]"></div>
+                        
+                        <!-- Branch to RENMIN -->
+                        <div class="absolute left-1/2 top-0 w-[300px] h-1 bg-white/20"></div>
+                        <div class="absolute left-[calc(50%+300px)] top-0 w-1 h-6 bg-white/20 -ml-[2px]"></div>
+
+                        <!-- RENMIN Block -->
+                        <div class="absolute left-[calc(50%+300px)] top-6 -translate-x-1/2 flex flex-col items-center">
+                            {!! renderNode($allPersonnels->where('id', 2)->first(), 'bg-[#10b981]') !!}
+                            
+                            <div class="w-1 h-6 bg-white/20"></div>
+                            <div class="flex justify-center relative w-[376px]">
+                                <div class="absolute top-0 left-[60px] right-[60px] h-1 bg-white/20"></div>
+                                <div class="flex gap-2 pt-6">
+                                    @foreach($allPersonnels->where('parent_id', 2) as $renmin_child)
+                                        <div class="relative flex flex-col items-center w-[120px] shrink-0">
+                                            <div class="absolute top-[-24px] w-1 h-6 bg-white/20"></div>
+                                            {!! renderSubNode($renmin_child, 'bg-[#10b981]') !!}
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kabags Row -->
+                    <div class="w-full flex justify-center relative pt-6 h-[240px]">
+                        <div class="absolute top-0 left-[calc(50%-656px)] right-[calc(50%-400px)] h-1 bg-white/20"></div>
+                        <!-- Main trunk crossing down to Gudang -->
+                        <div class="absolute left-1/2 top-0 w-1 h-[270px] bg-white/20 -ml-[2px]"></div>
+                        
+                        <div class="flex w-full">
+                            <!-- Left Side (3 Kabags) -->
+                            <div class="flex-1 flex justify-end gap-4 pr-[24px]">
+                                @foreach([6,7,8] as $kabag_id)
+                                    @php $kabag = $allPersonnels->where('id', $kabag_id)->first(); @endphp
+                                    <div class="w-[240px] shrink-0 relative flex flex-col items-center">
+                                        <div class="absolute top-[-24px] w-1 h-6 bg-white/20"></div>
+                                        {!! renderNode($kabag, 'bg-[#4c1d95]') !!}
+                                        
+                                        <div class="w-1 h-6 bg-white/20"></div>
+                                        <div class="flex justify-center relative w-full">
+                                            <div class="absolute top-0 left-[60px] right-[60px] h-1 bg-white/20"></div>
+                                            <div class="flex gap-2 pt-6">
+                                                @foreach($allPersonnels->where('parent_id', $kabag_id) as $ksb)
+                                                    <div class="relative flex flex-col items-center w-[120px] shrink-0">
+                                                        <div class="absolute top-[-24px] w-1 h-6 bg-white/20"></div>
+                                                        {!! renderSubNode($ksb, 'bg-[#2563eb]') !!}
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+
+                            <!-- Right Side (2 Kabags) -->
+                            <div class="flex-1 flex justify-start gap-4 pl-[24px]">
+                                @foreach([9,10] as $kabag_id)
+                                    @php $kabag = $allPersonnels->where('id', $kabag_id)->first(); @endphp
+                                    <div class="w-[240px] shrink-0 relative flex flex-col items-center">
+                                        <div class="absolute top-[-24px] w-1 h-6 bg-white/20"></div>
+                                        {!! renderNode($kabag, 'bg-[#4c1d95]') !!}
+                                        
+                                        <div class="w-1 h-6 bg-white/20"></div>
+                                        <div class="flex justify-center relative w-full">
+                                            <div class="absolute top-0 left-[60px] right-[60px] h-1 bg-white/20"></div>
+                                            <div class="flex gap-2 pt-6">
+                                                @foreach($allPersonnels->where('parent_id', $kabag_id) as $ksb)
+                                                    <div class="relative flex flex-col items-center w-[120px] shrink-0">
+                                                        <div class="absolute top-[-24px] w-1 h-6 bg-white/20"></div>
+                                                        {!! renderSubNode($ksb, 'bg-[#2563eb]') !!}
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- KAUR GUDANG -->
+                    <div class="relative flex flex-col items-center mt-6">
+                        {!! renderNode($allPersonnels->where('id', 21)->first(), 'bg-[#f59e0b]') !!}
+                    </div>
                 </div>
-            @endforeach
+            </div>
         </div>
     </div>
 </section>
