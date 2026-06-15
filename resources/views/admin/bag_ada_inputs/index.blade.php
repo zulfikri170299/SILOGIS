@@ -24,7 +24,7 @@
         formData.append('file_excel', file);
         formData.append('_token', '{{ csrf_token() }}');
         
-        fetch('{{ route('admin.bag-ada-inputs.import-validate') }}', {
+        fetch('{{ route('admin.bag-ada-inputs.import-validate', [], false) }}', {
             method: 'POST',
             body: formData,
             headers: { 'Accept': 'application/json' }
@@ -571,7 +571,7 @@
                             </a>
                         </div>
 
-                        <form action="{{ route('admin.bag-ada-inputs.import-process') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('admin.bag-ada-inputs.import-process', [], false) }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <input type="hidden" name="path" x-model="tempPath">
                             
