@@ -29,7 +29,20 @@
             body: formData,
             headers: { 'Accept': 'application/json' }
         })
-        .then(res => res.json())
+        .then(async res => {
+            if (!res.ok) {
+                // Try to parse error message if any
+                let errMsg = 'Terjadi kesalahan pada server (HTTP ' + res.status + ').';
+                try {
+                    const errData = await res.json();
+                    if (errData.message) errMsg = errData.message;
+                } catch(e) {
+                    if (res.status === 413) errMsg = 'Ukuran file terlalu besar. (Payload Too Large)';
+                }
+                throw new Error(errMsg);
+            }
+            return res.json();
+        })
         .then(data => {
             this.isValidating = false;
             if(data.status === 'ok') {
@@ -53,10 +66,15 @@
         })
         .catch(err => {
             this.isValidating = false;
+            console.error('Fetch Error:', err);
+            let errorMessage = err.message || 'Gagal menghubungi server.';
+            if (errorMessage.includes('Unexpected token')) {
+                errorMessage = 'Sistem menerima format data yang tidak sesuai dari server (Bukan JSON). Ini biasanya disebabkan oleh ukuran file terlalu besar atau sesi telah berakhir.';
+            }
             Swal.fire({
                 icon: 'error',
-                title: 'Error Jaringan',
-                text: 'Gagal menghubungi server.',
+                title: 'Gagal Memproses',
+                text: errorMessage,
                 background: '#0f172a',
                 color: '#f8fafc'
             });

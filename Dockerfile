@@ -47,6 +47,13 @@ EXPOSE 80
 # Use the default production configuration
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
+# Increase PHP upload limits for Excel import
+RUN echo "upload_max_filesize = 64M" >> "$PHP_INI_DIR/php.ini" \
+    && echo "post_max_size = 64M" >> "$PHP_INI_DIR/php.ini" \
+    && echo "max_execution_time = 300" >> "$PHP_INI_DIR/php.ini" \
+    && echo "max_input_time = 300" >> "$PHP_INI_DIR/php.ini" \
+    && echo "memory_limit = 512M" >> "$PHP_INI_DIR/php.ini"
+
 # Set entrypoint
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
