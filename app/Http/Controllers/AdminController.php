@@ -264,6 +264,7 @@ class AdminController extends Controller
             'vision' => 'nullable|string',
             'mission' => 'nullable|string',
             'whatsapp' => 'nullable|string',
+            'instagram' => 'nullable|url',
         ]);
 
         if ($request->has('whatsapp') && !empty($validated['whatsapp'])) {

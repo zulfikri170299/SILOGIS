@@ -99,9 +99,9 @@
                     
                     <div class="w-full">
                         <p class="text-[10px] text-slate-400 font-bold leading-relaxed mb-5">QR ini otomatis beradaptasi. Cetak dan tempel di area layanan publik.</p>
-                        <a href="https://api.qrserver.com/v1/create-qr-code/?size=1000x1000&data={{ urlencode(route('portal.bws.index')) }}&ecc=H" target="_blank" class="block w-full py-4 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-emerald-500 hover:text-white transition-all text-center">
+                        <button type="button" onclick="downloadHighResQR(this)" class="block w-full py-4 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-emerald-500 hover:text-white transition-all text-center">
                             Unduh Resolusi Tinggi
-                        </a>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -139,7 +139,7 @@
                     </div>
                 </div>
 
-                <div class="bg-slate-800/30 p-8 rounded-3xl border border-white/5 shadow-inner">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 bg-slate-800/30 p-8 rounded-3xl border border-white/5 shadow-inner">
                     <div class="space-y-4 max-w-xl">
                         <label for="whatsapp" class="text-[10px] font-black uppercase tracking-widest text-slate-500 flex items-center gap-2">
                             <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.099.824zm-3.423-14.416c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm.029 18.88c-1.161 0-2.305-.292-3.318-.844l-3.677.964.984-3.595c-.607-1.052-.927-2.246-.926-3.468.001-3.825 3.113-6.937 6.937-6.937 3.825.001 6.938 3.113 6.939 6.938-.001 3.825-3.114 6.938-6.939 6.938z"/></svg>
@@ -148,6 +148,16 @@
                         <input type="text" id="whatsapp" name="whatsapp" value="{{ old('whatsapp', $profile->whatsapp ?? '') }}" placeholder="Cth: 08123456789" class="w-full bg-slate-900 border border-white/10 rounded-2xl px-5 py-4 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition-all shadow-inner hover:border-white/20">
                         <p class="text-[9px] text-slate-500 font-bold italic mt-2">Nomor ini akan digunakan sebagai tombol hubungi kami / rujukan konsultasi.</p>
                         @error('whatsapp') <p class="text-[10px] text-rose-500 font-bold mt-1">{{ $message }}</p> @enderror
+                    </div>
+
+                    <div class="space-y-4 max-w-xl">
+                        <label for="instagram" class="text-[10px] font-black uppercase tracking-widest text-slate-500 flex items-center gap-2">
+                            <svg class="w-4 h-4 text-pink-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                            Link URL Instagram
+                        </label>
+                        <input type="url" id="instagram" name="instagram" value="{{ old('instagram', $profile->instagram ?? '') }}" placeholder="Cth: https://instagram.com/birologistik" class="w-full bg-slate-900 border border-white/10 rounded-2xl px-5 py-4 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500 transition-all shadow-inner hover:border-white/20">
+                        <p class="text-[9px] text-slate-500 font-bold italic mt-2">Link menuju profil Instagram institusi untuk diakses dari tombol navigasi bawah.</p>
+                        @error('instagram') <p class="text-[10px] text-rose-500 font-bold mt-1">{{ $message }}</p> @enderror
                     </div>
                 </div>
 
@@ -162,7 +172,111 @@
     </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
 <script>
+    async function downloadHighResQR(btn) {
+        if(typeof QRious === 'undefined') {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Tunggu Sebentar',
+                text: 'Pustaka pembuat QR Code sedang dimuat, coba lagi dalam beberapa detik.',
+                background: '#1e293b',
+                color: '#fff',
+                confirmButtonColor: '#10b981'
+            });
+            return;
+        }
+        
+        btn.innerHTML = 'Memproses...';
+        btn.disabled = true;
+
+        try {
+            const qrData = "{{ route('portal.bws.index') }}";
+            const logoUrl = document.getElementById('qr-logo-preview').src;
+            
+            const canvas = document.createElement('canvas');
+            canvas.width = 1000;
+            canvas.height = 1000;
+            const ctx = canvas.getContext('2d');
+            
+            const qr = new QRious({
+                value: qrData,
+                size: 1000,
+                level: 'H'
+            });
+            
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, 1000, 1000);
+            ctx.drawImage(qr.canvas, 0, 0, 1000, 1000);
+            
+            const logo = new Image();
+            logo.crossOrigin = "Anonymous";
+            logo.src = logoUrl;
+            
+            logo.onload = function() {
+                const logoSize = 250;
+                const x = (canvas.width - logoSize) / 2;
+                const y = (canvas.height - logoSize) / 2;
+                
+                ctx.fillStyle = '#ffffff';
+                const r = 20;
+                const rx = x - 20;
+                const ry = y - 20;
+                const rw = logoSize + 40;
+                const rh = logoSize + 40;
+                
+                ctx.beginPath();
+                ctx.moveTo(rx + r, ry);
+                ctx.lineTo(rx + rw - r, ry);
+                ctx.quadraticCurveTo(rx + rw, ry, rx + rw, ry + r);
+                ctx.lineTo(rx + rw, ry + rh - r);
+                ctx.quadraticCurveTo(rx + rw, ry + rh, rx + rw - r, ry + rh);
+                ctx.lineTo(rx + r, ry + rh);
+                ctx.quadraticCurveTo(rx, ry + rh, rx, ry + rh - r);
+                ctx.lineTo(rx, ry + r);
+                ctx.quadraticCurveTo(rx, ry, rx + r, ry);
+                ctx.closePath();
+                ctx.fill();
+
+                ctx.drawImage(logo, x, y, logoSize, logoSize);
+                
+                const link = document.createElement('a');
+                link.download = 'QR_Layanan_WBS.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                
+                btn.innerHTML = 'Unduh Resolusi Tinggi';
+                btn.disabled = false;
+            };
+            
+            logo.onerror = function() {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal',
+                    text: 'Gagal memuat logo untuk QR Code. Pastikan URL logo dapat diakses.',
+                    background: '#1e293b',
+                    color: '#fff',
+                    confirmButtonColor: '#ef4444'
+                });
+                btn.innerHTML = 'Unduh Resolusi Tinggi';
+                btn.disabled = false;
+            };
+
+        } catch (e) {
+            console.error(e);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Terjadi kesalahan saat membuat QR Code beresolusi tinggi.',
+                background: '#1e293b',
+                color: '#fff',
+                confirmButtonColor: '#ef4444'
+            });
+            btn.innerHTML = 'Unduh Resolusi Tinggi';
+            btn.disabled = false;
+        }
+    }
+
     function previewLogo(event) {
         const reader = new FileReader();
         reader.onload = function(){

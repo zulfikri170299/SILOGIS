@@ -21,6 +21,7 @@ class Profile extends Model
         'ecosystem_description',
         'whatsapp',
         'bws_logo',
-        'logo'
+        'logo',
+        'instagram'
     ];
 }
