@@ -190,7 +190,7 @@
                 <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
                 <div x-show="createModalOpen" class="inline-block p-6 my-8 text-left align-middle transition-all transform bg-slate-800 border border-white/10 shadow-2xl rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
                     <h3 class="text-lg font-black text-white uppercase tracking-wider mb-6 pb-4 border-b border-white/10">Tambah Data Pengadaan</h3>
-                    <form action="{{ route('admin.bag-ada-inputs.store') }}" method="POST">
+                    <form action="{{ route('admin.bag-ada-inputs.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             @if(!Auth::user()->isAdminSatker())
@@ -267,7 +267,7 @@
                                 </select>
                             </div>
                             <div>
-                                <label class="block text-xs font-bold text-slate-400 mb-2">Nama Penyedia</label>
+                                <label class="block text-xs font-bold text-slate-400 mb-2">Nama Perusahaan Penyedia</label>
                                 <input type="text" name="nama_penyedia" class="w-full bg-slate-900 border border-white/10 rounded-xl px-4 py-3 text-white">
                             </div>
 
@@ -284,6 +284,10 @@
                                 <div>
                                     <label class="block text-[10px] font-bold text-slate-400 mb-2">Tanggal Selesai</label>
                                     <input type="date" name="kontrak_tanggal_selesai" class="w-full bg-slate-800 border border-white/10 rounded-lg px-3 py-2 text-white text-sm">
+                                </div>
+                                <div class="col-span-1 md:col-span-3">
+                                    <label class="block text-[10px] font-bold text-slate-400 mb-2">Dokumen Kontrak (PDF)</label>
+                                    <input type="file" name="file_kontrak" accept="application/pdf" class="block w-full text-sm text-slate-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-l-lg file:border-0 file:text-xs file:font-bold file:bg-blue-500/20 file:text-blue-400 hover:file:bg-blue-500 hover:file:text-white file:transition-all file:cursor-pointer bg-slate-800 border border-white/10 rounded-lg cursor-pointer focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary">
                                 </div>
                             </div>
 
@@ -311,7 +315,7 @@
                 <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
                 <div x-show="editModalOpen" class="inline-block p-6 my-8 text-left align-middle transition-all transform bg-slate-800 border border-white/10 shadow-2xl rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
                     <h3 class="text-lg font-black text-white uppercase tracking-wider mb-6 pb-4 border-b border-white/10">Edit Data Pengadaan</h3>
-                    <form :action="`/admin/bag-ada-inputs/${selectedData.id}`" method="POST">
+                    <form :action="`/admin/bag-ada-inputs/${selectedData.id}`" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -389,7 +393,7 @@
                                 </select>
                             </div>
                             <div>
-                                <label class="block text-xs font-bold text-slate-400 mb-2">Nama Penyedia</label>
+                                <label class="block text-xs font-bold text-slate-400 mb-2">Nama Perusahaan Penyedia</label>
                                 <input type="text" name="nama_penyedia" x-model="selectedData.nama_penyedia" class="w-full bg-slate-900 border border-white/10 rounded-xl px-4 py-3 text-white">
                             </div>
 
@@ -406,6 +410,15 @@
                                 <div>
                                     <label class="block text-[10px] font-bold text-slate-400 mb-2">Tanggal Selesai</label>
                                     <input type="date" name="kontrak_tanggal_selesai" x-model="selectedData.kontrak_tanggal_selesai ? selectedData.kontrak_tanggal_selesai.split('T')[0] : ''" class="w-full bg-slate-800 border border-white/10 rounded-lg px-3 py-2 text-white text-sm">
+                                </div>
+                                <div class="col-span-1 md:col-span-3">
+                                    <label class="block text-[10px] font-bold text-slate-400 mb-2">Dokumen Kontrak (PDF)</label>
+                                    <input type="file" name="file_kontrak" accept="application/pdf" class="block w-full text-sm text-slate-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-l-lg file:border-0 file:text-xs file:font-bold file:bg-blue-500/20 file:text-blue-400 hover:file:bg-blue-500 hover:file:text-white file:transition-all file:cursor-pointer bg-slate-800 border border-white/10 rounded-lg cursor-pointer focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary">
+                                    <template x-if="selectedData.file_kontrak">
+                                        <div class="mt-2">
+                                            <a :href="'/storage/' + selectedData.file_kontrak" target="_blank" class="text-xs text-blue-400 hover:text-blue-300 underline">Lihat Dokumen Saat Ini</a>
+                                        </div>
+                                    </template>
                                 </div>
                             </div>
 
@@ -461,7 +474,7 @@
                         <th scope="col" rowspan="2" class="px-4 py-3 border-r border-white/5 bg-slate-900">MENANGANI PAKET</th>
                         <th scope="col" colspan="2" class="px-4 py-2 border-b border-r border-white/5 text-center text-emerald-500 bg-slate-900">NILAI</th>
                         <th scope="col" rowspan="2" class="px-4 py-3 border-r border-white/5 bg-slate-900">METODE PENGADAAN</th>
-                        <th scope="col" rowspan="2" class="px-4 py-3 border-r border-white/5 bg-slate-900">NAMA PENYEDIA</th>
+                        <th scope="col" rowspan="2" class="px-4 py-3 border-r border-white/5 bg-slate-900">NAMA PERUSAHAAN PENYEDIA</th>
                         <th scope="col" colspan="3" class="px-4 py-2 border-b border-r border-white/5 text-center text-blue-500 bg-slate-900">KONTRAK</th>
                         <th scope="col" rowspan="2" class="px-4 py-3 border-r border-white/5 bg-slate-900">KETERANGAN</th>
                         <th scope="col" rowspan="2" class="px-4 py-3 bg-slate-900 text-center sticky right-0 shadow-[-10px_0_15px_-5px_rgba(0,0,0,0.5)]">AKSI</th>
@@ -512,7 +525,16 @@
                             <td class="px-4 py-3 border-r border-white/5 text-right tabular-nums">{{ $item->nilai_kontrak ? number_format($item->nilai_kontrak, 0, ',', '.') : '-' }}</td>
                             <td class="px-4 py-3 font-bold border-r border-white/5">{{ $item->metodePengadaan->nama_metode ?? '-' }}</td>
                             <td class="px-4 py-3 border-r border-white/5 whitespace-nowrap">{{ $item->nama_penyedia ?? '-' }}</td>
-                            <td class="px-4 py-3 border-r border-white/5 whitespace-nowrap">{{ $item->kontrak_nomor ?? '-' }}</td>
+                            <td class="px-4 py-3 border-r border-white/5 whitespace-nowrap">
+                                {{ $item->kontrak_nomor ?? '-' }}
+                                @if($item->file_kontrak)
+                                    <br>
+                                    <a href="{{ Storage::url($item->file_kontrak) }}" target="_blank" class="text-[10px] text-blue-400 hover:text-blue-300 underline flex items-center gap-1 mt-1">
+                                        <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" /></svg>
+                                        Dokumen
+                                    </a>
+                                @endif
+                            </td>
                             <td class="px-4 py-3 border-r border-white/5 whitespace-nowrap">{{ $item->kontrak_tanggal_mulai ? $item->kontrak_tanggal_mulai->format('d/m/Y') : '-' }}</td>
                             <td class="px-4 py-3 border-r border-white/5 whitespace-nowrap">{{ $item->kontrak_tanggal_selesai ? $item->kontrak_tanggal_selesai->format('d/m/Y') : '-' }}</td>
                             <td class="px-4 py-3 border-r border-white/5 whitespace-nowrap" title="{{ $item->keterangan }}">{{ $item->keterangan ?? '-' }}</td>

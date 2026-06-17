@@ -24,7 +24,7 @@ class TemplateImportPengadaanExport implements WithHeadings, ShouldAutoSize, Wit
             'NILAI PAGU',
             'NILAI KONTRAK',
             'METODE PENGADAAN',
-            'NAMA PENYEDIA',
+            'NAMA PERUSAHAAN PENYEDIA',
             'NOMOR KONTRAK',
             'TANGGAL MULAI KONTRAK',
             'TANGGAL SELESAI KONTRAK',
@@ -44,10 +44,10 @@ class TemplateImportPengadaanExport implements WithHeadings, ShouldAutoSize, Wit
                 'KEP/123/I/2026', // NOMOR KEP/SPRIN
                 '2026-01-10', // TANGGAL KEP/SPRIN
                 'PENGADAAN KENDARAAN DINAS', // MENANGANI PAKET
-                '150000000', // NILAI PAGU
-                '145000000', // NILAI KONTRAK
+                '150.000.000', // NILAI PAGU
+                '145.000.000', // NILAI KONTRAK
                 'TENDER', // METODE PENGADAAN
-                'PT. MAJU MUNDUR', // NAMA PENYEDIA
+                'PT. MAJU MUNDUR', // NAMA PERUSAHAAN PENYEDIA
                 'KONTRAK/456/II/2026', // NOMOR KONTRAK
                 '2026-02-01', // TANGGAL MULAI KONTRAK
                 '2026-12-31', // TANGGAL SELESAI KONTRAK

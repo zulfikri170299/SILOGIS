@@ -23,7 +23,8 @@ class BagAdaInput extends Model
         'kontrak_nomor',
         'kontrak_tanggal_mulai',
         'kontrak_tanggal_selesai',
-        'keterangan'
+        'keterangan',
+        'file_kontrak'
     ];
 
     protected $casts = [

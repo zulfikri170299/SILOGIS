@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\BagAdaInputImport;
+use Illuminate\Support\Facades\Storage;
 
 class BagAdaInputController extends Controller
 {
@@ -66,6 +67,7 @@ class BagAdaInputController extends Controller
             'nama' => 'required|string|max:255',
             'metode_pengadaan_id' => 'required|exists:master_metode_pengadaans,id',
             'satker_id' => Auth::user()->isAdminSatker() ? 'nullable' : 'required|exists:satkers,id',
+            'file_kontrak' => 'nullable|file|mimes:pdf|max:10240',
         ]);
 
         $data = $request->all();
@@ -73,6 +75,10 @@ class BagAdaInputController extends Controller
 
         if (Auth::user()->isAdminSatker()) {
             $data['satker_id'] = Auth::user()->satker_id;
+        }
+
+        if ($request->hasFile('file_kontrak')) {
+            $data['file_kontrak'] = $request->file('file_kontrak')->store('kontrak_pdfs', 'public');
         }
 
         BagAdaInput::create($data);
@@ -87,11 +93,19 @@ class BagAdaInputController extends Controller
             'nama' => 'required|string|max:255',
             'metode_pengadaan_id' => 'required|exists:master_metode_pengadaans,id',
             'satker_id' => Auth::user()->isAdminSatker() ? 'nullable' : 'required|exists:satkers,id',
+            'file_kontrak' => 'nullable|file|mimes:pdf|max:10240',
         ]);
 
         $data = $request->all();
         if (Auth::user()->isAdminSatker()) {
             $data['satker_id'] = Auth::user()->satker_id;
+        }
+
+        if ($request->hasFile('file_kontrak')) {
+            if ($bag_ada_input->file_kontrak) {
+                Storage::disk('public')->delete($bag_ada_input->file_kontrak);
+            }
+            $data['file_kontrak'] = $request->file('file_kontrak')->store('kontrak_pdfs', 'public');
         }
 
         $bag_ada_input->update($data);
@@ -101,6 +115,9 @@ class BagAdaInputController extends Controller
 
     public function destroy(BagAdaInput $bag_ada_input)
     {
+        if ($bag_ada_input->file_kontrak) {
+            Storage::disk('public')->delete($bag_ada_input->file_kontrak);
+        }
         $bag_ada_input->delete();
         return redirect()->route('admin.bag-ada-inputs.index')->with('success', 'Data Pengadaan berhasil dihapus.');
     }
@@ -112,7 +129,12 @@ class BagAdaInputController extends Controller
             'ids.*' => 'exists:bag_ada_inputs,id'
         ]);
 
-        BagAdaInput::whereIn('id', $request->ids)->delete();
+        BagAdaInput::whereIn('id', $request->ids)->get()->each(function($input) {
+            if ($input->file_kontrak) {
+                Storage::disk('public')->delete($input->file_kontrak);
+            }
+            $input->delete();
+        });
         return redirect()->route('admin.bag-ada-inputs.index')->with('success', 'Data yang dipilih berhasil dihapus.');
     }
 

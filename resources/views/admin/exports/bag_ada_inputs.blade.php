@@ -19,7 +19,7 @@
             <td rowspan="2">MENANGANI PAKET</td>
             <td colspan="2">NILAI</td>
             <td rowspan="2">METODE PENGADAAN</td>
-            <td rowspan="2">NAMA PENYEDIA</td>
+            <td rowspan="2">NAMA PERUSAHAAN PENYEDIA</td>
             <td colspan="3">KONTRAK</td>
             <td rowspan="2">KETERANGAN</td>
         </tr>
