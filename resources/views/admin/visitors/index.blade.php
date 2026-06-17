@@ -31,7 +31,6 @@
                 <tr>
                     <th scope="col" class="px-6 py-5">No</th>
                     <th scope="col" class="px-6 py-5">Nama</th>
-                    <th scope="col" class="px-6 py-5 hidden md:table-cell">Email (Google)</th>
                     <th scope="col" class="px-6 py-5">Satuan Kerja</th>
                     <th scope="col" class="px-6 py-5 hidden md:table-cell">Total Kunjungan</th>
                     <th scope="col" class="px-6 py-5 hidden md:table-cell">Terakhir Kunjung</th>
@@ -53,7 +52,6 @@
                 <tr class="hover:bg-white/[0.02] transition-colors">
                     <td class="px-6 py-4">{{ $visitors->firstItem() + $index }}</td>
                     <td class="px-6 py-4 font-bold text-white">{{ $visitor->nama }}</td>
-                    <td class="px-6 py-4 text-slate-400 hidden md:table-cell">{{ $visitor->email }}</td>
                     <td class="px-6 py-4 text-slate-400">{{ $visitor->satuan_kerja ?? '-' }}</td>
                     <td class="px-6 py-4 hidden md:table-cell">
                         <span class="px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 text-xs font-black uppercase tracking-widest">{{ $visitor->logs_count }} kali</span>
@@ -99,10 +97,6 @@
             </div>
             
             <div class="space-y-5">
-                <div>
-                    <label class="block text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1.5">Email (Google)</label>
-                    <div class="text-sm text-slate-200 font-medium break-all" x-text="detail.email"></div>
-                </div>
                 <div>
                     <label class="block text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1.5">Satuan Kerja</label>
                     <div class="text-sm text-slate-200 font-medium break-words" x-text="detail.satker"></div>

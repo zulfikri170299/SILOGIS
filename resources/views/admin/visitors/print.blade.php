@@ -148,7 +148,6 @@
             <tr>
                 <th style="width:30px">No</th>
                 <th>Nama</th>
-                <th>Email (Google)</th>
                 <th>Satuan Kerja</th>
                 <th style="text-align: center;">Total Kunjungan</th>
                 <th>Terakhir Kunjung</th>
@@ -164,13 +163,12 @@
             <tr>
                 <td style="font-weight:700;">{{ $loop->iteration }}</td>
                 <td style="font-weight:700;">{{ $visitor->nama }}</td>
-                <td>{{ $visitor->email }}</td>
                 <td>{{ $visitor->satuan_kerja ?? '-' }}</td>
                 <td style="text-align: center; font-weight: 700;">{{ $visitor->logs_count }} kali</td>
                 <td style="white-space:nowrap;">{{ $terakhirKunjung }}</td>
             </tr>
             @empty
-            <tr><td colspan="6" style="text-align:center; padding:30px; color:#94a3b8;">Tidak ada data pengunjung.</td></tr>
+            <tr><td colspan="5" style="text-align:center; padding:30px; color:#94a3b8;">Tidak ada data pengunjung.</td></tr>
             @endforelse
         </tbody>
     </table>

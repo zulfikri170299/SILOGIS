@@ -12,16 +12,21 @@ class VisitorController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'email' => 'required|email',
             'nama' => 'required|string|max:255',
             'satuan_kerja' => 'nullable|string|max:255',
         ]);
 
-        $visitor = Visitor::where('email', $request->email)->first();
+        $visitorId = Cookie::get('visitor_id');
+        $visitor = null;
+
+        if ($visitorId) {
+            $visitor = Visitor::where('email', $visitorId)->first();
+        }
 
         if (!$visitor) {
+            $visitorId = (string) \Illuminate\Support\Str::uuid();
             $visitor = Visitor::create([
-                'email' => $request->email,
+                'email' => $visitorId, // Using UUID instead of real email since form field is removed
                 'nama' => $request->nama,
                 'satuan_kerja' => $request->satuan_kerja,
             ]);
@@ -48,7 +53,7 @@ class VisitorController extends Controller
         session(['visitor_logged_in' => true]);
 
         // Set cookie for 1 year (525600 minutes)
-        Cookie::queue('visitor_email', $visitor->email, 525600);
+        Cookie::queue('visitor_id', $visitorId, 525600);
 
         return redirect()->route('portal.index')->with('success', 'Selamat datang, ' . $visitor->nama . '!');
     }
